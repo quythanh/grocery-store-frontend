@@ -1,6 +1,7 @@
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { StyleSheet } from "react-native";
+import { StyleSheet } from "react-native"
+
+import { ThemedText } from "@/components/ThemedText"
+import { ThemedView } from "@/components/ThemedView"
 
 const CartScreen = () => {
   return (
@@ -8,10 +9,10 @@ const CartScreen = () => {
       <ThemedText style={styles.title}>Cart</ThemedText>
       <ThemedText style={styles.text}>You can view your cart here</ThemedText>
     </ThemedView>
-  );
-};
+  )
+}
 
-export default CartScreen;
+export default CartScreen
 
 const styles = StyleSheet.create({
   container: {
@@ -26,4 +27,4 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
   },
-});
+})
