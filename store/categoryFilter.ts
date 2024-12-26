@@ -7,6 +7,7 @@ interface CategoryFilterState {
   priceFrom: number
   priceTo: number
   star: number
+  searchKey: string
   open: () => void
   close: () => void
   toggleBrand: (brand: string) => void
@@ -14,6 +15,7 @@ interface CategoryFilterState {
   setPriceTo: (price: number) => void
   setStar: (star: number) => void
   toggleAvailabel: () => void
+  setSearchKey: (key: string) => void
 }
 
 export const useCategoryFilterStore = create<CategoryFilterState>()((set) => ({
@@ -23,6 +25,7 @@ export const useCategoryFilterStore = create<CategoryFilterState>()((set) => ({
   priceFrom: 0,
   priceTo: 100,
   star: 5,
+  searchKey: "",
   open: () => set(() => ({ isOpen: true })),
   close: () => set(() => ({ isOpen: false })),
   toggleBrand: (brand: string) =>
@@ -35,8 +38,8 @@ export const useCategoryFilterStore = create<CategoryFilterState>()((set) => ({
   setPriceTo: (price: number) => set(() => ({ priceTo: price })),
   setStar: (star: number) => set(() => ({ star })),
   toggleAvailabel: () => set((state) => ({ available: !state.available })),
+  setSearchKey: (key: string) => set(() => ({ searchKey: key })),
 }))
-
 
 export const allBrands = [
   "Nestlé",
