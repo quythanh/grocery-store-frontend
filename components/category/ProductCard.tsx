@@ -33,20 +33,20 @@ const ProductCard = ({
         className="mb-2 w-full h-36 rounded-md"
         alt="image"
       />
-      <Heading size="md" className="mb-2">
+      <Heading size="md" className="h-14 mb-2 line-clamp-2 overflow-ellipsis">
         {product.name}
       </Heading>
-      <HStack className="items-end justify-between mt-2">
+      <HStack className="items-end justify-between">
         <VStack>
           <Text className="flex-1 font-bold text-lg ">
-            {product.price}.000 đ
+            {product.price}.000đ
           </Text>
           <HStack className="flex-1 items-center gap-1">
             <Icon as={Weight} size={"sm"} />
             <Text>{product.qty}gram</Text>
           </HStack>
         </VStack>
-        <Button size="sm" className="bg-mainGreen">
+        <Button size="sm" className="bg-mainGreen active:!bg-green-700">
           <ButtonIcon as={Plus} />
           <ButtonIcon as={ShoppingCart} />
         </Button>

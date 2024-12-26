@@ -27,7 +27,7 @@ const SortPopover = () => {
         <Button
           size="lg"
           variant="outline"
-          className="bg-background-0 rounded-lg border-mainGreen"
+          className="bg-background-0 rounded-lg border-mainGreen active:!bg-background-200"
           {...triggerProps}
         >
           <ButtonIcon className="text-typography-500" as={ArrowDownUp} />

@@ -62,7 +62,7 @@ const ProfileScreen = () => {
             <Button
               variant="outline"
               size="lg"
-              className="bg-background-0 rounded-lg border-mainGreen"
+              className="bg-background-0 rounded-lg border-mainGreen active:!bg-background-200"
               onPress={open}
             >
               <ButtonIcon className="text-typography-500" as={LayoutGrid} />

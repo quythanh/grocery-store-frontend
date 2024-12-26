@@ -102,15 +102,11 @@ const FilterModal = () => {
                       <SelectDragIndicatorWrapper>
                         <SelectDragIndicator />
                       </SelectDragIndicatorWrapper>
-                      <SelectItem label="UX " value="ux" />
-                      <SelectItem label="Web " value="web" />
-                      <SelectItem label="Cross " value="Cross " />
-                      <SelectItem
-                        label="UI Designing"
-                        value="ui"
-                        isDisabled={true}
-                      />
-                      <SelectItem label="Backend Development" value="backend" />
+                      <SelectItem label="5" value="5" />
+                      <SelectItem label="10" value="10" />
+                      <SelectItem label="15" value="15 " />
+                      <SelectItem label="20" value="20" />
+                      <SelectItem label="25" value="25" />
                     </SelectContent>
                   </SelectPortal>
                 </Select>
@@ -128,11 +124,11 @@ const FilterModal = () => {
                       <SelectDragIndicatorWrapper>
                         <SelectDragIndicator />
                       </SelectDragIndicatorWrapper>
-                      <SelectItem label="UX " value="ux" />
-                      <SelectItem label="Web " value="web" />
-                      <SelectItem label="Process" value="Process" />
-                      <SelectItem label="UI" value="ui" isDisabled={true} />
-                      <SelectItem label="Backend Development" value="backend" />
+                      <SelectItem label="5" value="5" />
+                      <SelectItem label="10" value="10" />
+                      <SelectItem label="15" value="15 " />
+                      <SelectItem label="20" value="20" />
+                      <SelectItem label="25" value="25" />
                     </SelectContent>
                   </SelectPortal>
                 </Select>
@@ -150,9 +146,7 @@ const FilterModal = () => {
                   >
                     <Text
                       className={
-                        brands.includes(item)
-                          ? "text-typography-0"
-                          : ""
+                        brands.includes(item) ? "text-typography-0" : ""
                       }
                     >
                       {item}
