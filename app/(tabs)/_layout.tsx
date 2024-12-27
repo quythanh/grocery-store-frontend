@@ -1,15 +1,15 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import React from "react"
+import { Colors } from "@/constants/Colors"
+import { Feather } from "@expo/vector-icons"
+import { Tabs } from "expo-router"
+import { Platform } from "react-native"
 
-import { HapticTab } from '@/components/HapticTab';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { Feather } from '@expo/vector-icons';
+import { useColorScheme } from "@/hooks/useColorScheme"
+import TabBarBackground from "@/components/ui/TabBarBackground"
+import { HapticTab } from "@/components/HapticTab"
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme()
 
   return (
     <Tabs
@@ -63,6 +63,16 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="category"
+        options={{
+          title: "Category",
+          tabBarIcon: ({ color }) => (
+            <Feather size={26} name="grid" color={color} />
+          ),
+        }}
+      />
     </Tabs>
-  );
+  )
 }
