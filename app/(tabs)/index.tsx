@@ -1,4 +1,5 @@
 import Header from "@/components/home/Header"
+import SearchBar from "@/components/home/SearchBar"
 import React, { useRef, useState } from "react"
 import {
   Animated,
@@ -44,6 +45,7 @@ const HomeScreen = () => {
             { useNativeDriver: false }
           )}
         >
+          <SearchBar />
           
         </ScrollView>
       </View>
