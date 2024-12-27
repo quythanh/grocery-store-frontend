@@ -1,3 +1,4 @@
+import CategoryList from "@/components/home/CategoryList"
 import Header from "@/components/home/Header"
 import SearchBar from "@/components/home/SearchBar"
 import React, { useRef, useState } from "react"
@@ -47,6 +48,7 @@ const HomeScreen = () => {
         >
           <SearchBar />
           
+          <CategoryList onCategorySelect={handleCategorySelect} />
         </ScrollView>
       </View>
     </SafeAreaView>
