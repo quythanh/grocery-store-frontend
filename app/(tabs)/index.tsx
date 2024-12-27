@@ -4,6 +4,7 @@ import HorizontalProductList from "@/components/home/HorizontalProductList"
 import OfferSection from "@/components/home/OfferSection"
 import SearchBar from "@/components/home/SearchBar"
 import SeeAllButton from "@/components/home/SeeAllButton"
+import VerticalProductList from "@/components/home/VerticalProductList"
 import { products } from "@/components/ProductData"
 import React, { useRef, useState } from "react"
 import {
@@ -59,6 +60,8 @@ const HomeScreen = () => {
           <SeeAllButton />
 
           <OfferSection products={products} />
+
+          <VerticalProductList products={products} />
         </ScrollView>
       </View>
     </SafeAreaView>
