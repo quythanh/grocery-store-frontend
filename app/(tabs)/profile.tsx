@@ -1,6 +1,8 @@
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { StyleSheet } from "react-native";
+import { User } from "lucide-react-native"
+import { StyleSheet } from "react-native"
+
+import { ThemedText } from "@/components/ThemedText"
+import { ThemedView } from "@/components/ThemedView"
 
 const ProfileScreen = () => {
   return (
@@ -10,10 +12,10 @@ const ProfileScreen = () => {
         You can view your profile here
       </ThemedText>
     </ThemedView>
-  );
-};
+  )
+}
 
-export default ProfileScreen;
+export default ProfileScreen
 
 const styles = StyleSheet.create({
   container: {
@@ -28,4 +30,4 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
   },
-});
+})
