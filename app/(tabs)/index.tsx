@@ -1,6 +1,7 @@
 import CategoryList from "@/components/home/CategoryList"
 import Header from "@/components/home/Header"
 import HorizontalProductList from "@/components/home/HorizontalProductList"
+import OfferSection from "@/components/home/OfferSection"
 import SearchBar from "@/components/home/SearchBar"
 import { products } from "@/components/ProductData"
 import React, { useRef, useState } from "react"
@@ -53,6 +54,8 @@ const HomeScreen = () => {
           <CategoryList onCategorySelect={handleCategorySelect} />
 
           <HorizontalProductList products={products} />
+
+          <OfferSection products={products} />
         </ScrollView>
       </View>
     </SafeAreaView>
