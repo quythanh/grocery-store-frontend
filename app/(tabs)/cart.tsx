@@ -2,8 +2,9 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { StyleSheet, View } from "react-native";
 import CartItem, { type CartItemProps } from "@/components/CartItem";
+import { useState } from "react";
 
-const cartItems: CartItemProps[] = [
+const mockItems: Omit<CartItemProps, "quantityAdjustFn">[] = [
     {
         name: "Potato",
         imgUrl: "https://images.squarespace-cdn.com/content/v1/5b5b5824f2e6b10639fdaf09/a277eae9-bf1a-4e66-9daf-dd2e60209073/Produce+Storage+Tips+icons+%289%29.png",
@@ -21,6 +22,22 @@ const cartItems: CartItemProps[] = [
 ];
 
 const CartScreen = () => {
+    const [cartItems, setCartItems] = useState(mockItems);
+
+    const handleAdjustQuantity = (pos: number) => {
+        return (quantity: number) => {
+            const newCartItems = [...cartItems];
+
+            newCartItems[pos].quantity = quantity;
+
+            if (quantity === 0) {
+                newCartItems.splice(pos, 1);
+            }
+
+            setCartItems(newCartItems);
+        }
+    }
+
     return (
         <ParallaxScrollView
             headerImage={
@@ -31,7 +48,7 @@ const CartScreen = () => {
             }
             headerBackgroundColor={{ light: "#64A86B", dark: "#1D3D47" }}
         >
-            {cartItems.map(item => (
+            {cartItems.map((item, i) => (
                 <CartItem
                     key={item.name}
                     name={item.name}
@@ -39,6 +56,7 @@ const CartScreen = () => {
                     price={item.price}
                     unit={item.unit}
                     quantity={item.quantity}
+                    quantityAdjustFn={handleAdjustQuantity(i)}
                 />
             ))}
         </ParallaxScrollView>

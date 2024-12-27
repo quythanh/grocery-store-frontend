@@ -1,6 +1,9 @@
 import { Image, StyleSheet, View } from "react-native";
 import { ThemedText } from "./ThemedText"
 import { ThemedView } from "./ThemedView"
+import { Button, ButtonIcon } from "./ui/button";
+import { AddIcon, RemoveIcon } from "./ui/icon";
+import { useState } from "react";
 
 export interface CartItemProps {
     name: string;
@@ -8,9 +11,10 @@ export interface CartItemProps {
     unit: string;
     quantity: number;
     imgUrl: string;
+    quantityAdjustFn: (quantity: number) => void;
 }
 
-export default function CartItem({ name, price, quantity, imgUrl, unit }: CartItemProps) {
+export default function CartItem({ name, price, quantity, imgUrl, unit, quantityAdjustFn }: CartItemProps) {
     return (
         <ThemedView style={styles.wrapper}>
             <Image style={styles.image} src={imgUrl} />
@@ -22,7 +26,29 @@ export default function CartItem({ name, price, quantity, imgUrl, unit }: CartIt
             </View>
 
             <View style={styles.quantityAdjustmentWrapper}>
+                <Button
+                    size="sm"
+                    variant="outline"
+                    className="rounded-full w-3 h-3 p-3"
+                    onPress={() => {
+                        quantityAdjustFn(quantity + 1)
+                    }}
+                >
+                    <ButtonIcon as={AddIcon} />
+                </Button>
+
                 <ThemedText style={styles.quantity}>{quantity}</ThemedText>
+
+                <Button
+                    size="sm"
+                    variant="outline"
+                    className="rounded-full w-3 h-3 p-3"
+                    onPress={() => {
+                        quantityAdjustFn(quantity - 1)
+                    }}
+                >
+                    <ButtonIcon as={RemoveIcon} />
+                </Button>
             </View>
         </ThemedView>
     );
@@ -58,6 +84,9 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     quantityAdjustmentWrapper: {
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
         padding: 16
     },
     quantity: {
