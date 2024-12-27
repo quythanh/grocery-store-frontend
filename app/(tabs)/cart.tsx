@@ -1,6 +1,24 @@
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { StyleSheet, View } from "react-native";
+import CartItem, { type CartItemProps } from "@/components/CartItem";
+
+const cartItems: CartItemProps[] = [
+    {
+        name: "Potato",
+        imgUrl: "https://images.squarespace-cdn.com/content/v1/5b5b5824f2e6b10639fdaf09/a277eae9-bf1a-4e66-9daf-dd2e60209073/Produce+Storage+Tips+icons+%289%29.png",
+        price: 15,
+        unit: "2 Kgs",
+        quantity: 2,
+    },
+    {
+        name: "Onion",
+        imgUrl: "https://produits.bienmanger.com/36700-0w470h470_Organic_Red_Onion_From_Italy.jpg",
+        price: 15,
+        unit: "2 Kgs",
+        quantity: 1,
+    },
+];
 
 const CartScreen = () => {
     return (
@@ -8,11 +26,21 @@ const CartScreen = () => {
             headerImage={
                 <View style={styles.headerContainer}>
                     <ThemedText style={styles.headerText}>Shopping Cart</ThemedText>
-                    <ThemedText style={styles.headerSubText}>A total of 2 pieces</ThemedText>
+                    <ThemedText style={styles.headerSubText}>A total of {cartItems.length} pieces</ThemedText>
                 </View>
             }
             headerBackgroundColor={{ light: "#64A86B", dark: "#1D3D47" }}
         >
+            {cartItems.map(item => (
+                <CartItem
+                    key={item.name}
+                    name={item.name}
+                    imgUrl={item.imgUrl}
+                    price={item.price}
+                    unit={item.unit}
+                    quantity={item.quantity}
+                />
+            ))}
         </ParallaxScrollView>
     );
 };
