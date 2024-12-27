@@ -1,7 +1,8 @@
 import { useEffect } from "react"
+
 import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import {
+import {.
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
@@ -14,6 +15,7 @@ import { StatusBar } from "expo-status-bar"
 import "react-native-reanimated"
 
 import { useColorScheme } from "@/hooks/useColorScheme"
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider"
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()

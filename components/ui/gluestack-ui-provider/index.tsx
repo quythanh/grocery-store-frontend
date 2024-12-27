@@ -1,43 +1,42 @@
-import React from "react"
-import { OverlayProvider } from "@gluestack-ui/overlay"
-import { ToastProvider } from "@gluestack-ui/toast"
-import { colorScheme as colorSchemeNW } from "nativewind"
-import { ColorSchemeName, useColorScheme, View, ViewProps } from "react-native"
+import React from 'react';
+import { config } from './config';
+import { ColorSchemeName, useColorScheme, View, ViewProps } from 'react-native';
+import { OverlayProvider } from '@gluestack-ui/overlay';
+import { ToastProvider } from '@gluestack-ui/toast';
+import { colorScheme as colorSchemeNW } from 'nativewind';
 
-import { config } from "./config"
-
-type ModeType = "light" | "dark" | "system"
+type ModeType = 'light' | 'dark' | 'system';
 
 const getColorSchemeName = (
   colorScheme: ColorSchemeName,
   mode: ModeType
-): "light" | "dark" => {
-  if (mode === "system") {
-    return colorScheme ?? "light"
+): 'light' | 'dark' => {
+  if (mode === 'system') {
+    return colorScheme ?? 'light';
   }
-  return mode
-}
+  return mode;
+};
 
 export function GluestackUIProvider({
-  mode = "light",
+  mode = 'light',
   ...props
 }: {
-  mode?: "light" | "dark" | "system"
-  children?: React.ReactNode
-  style?: ViewProps["style"]
+  mode?: 'light' | 'dark' | 'system';
+  children?: React.ReactNode;
+  style?: ViewProps['style'];
 }) {
-  const colorScheme = useColorScheme()
+  const colorScheme = useColorScheme();
 
-  const colorSchemeName = getColorSchemeName(colorScheme, mode)
+  const colorSchemeName = getColorSchemeName(colorScheme, mode);
 
-  colorSchemeNW.set(mode)
+  colorSchemeNW.set(mode);
 
   return (
     <View
       style={[
         config[colorSchemeName],
         // eslint-disable-next-line react-native/no-inline-styles
-        { flex: 1, height: "100%", width: "100%" },
+        { flex: 1, height: '100%', width: '100%' },
         props.style,
       ]}
     >
@@ -45,5 +44,5 @@ export function GluestackUIProvider({
         <ToastProvider>{props.children}</ToastProvider>
       </OverlayProvider>
     </View>
-  )
+  );
 }
