@@ -3,6 +3,7 @@ import Header from "@/components/home/Header"
 import HorizontalProductList from "@/components/home/HorizontalProductList"
 import OfferSection from "@/components/home/OfferSection"
 import SearchBar from "@/components/home/SearchBar"
+import SeeAllButton from "@/components/home/SeeAllButton"
 import { products } from "@/components/ProductData"
 import React, { useRef, useState } from "react"
 import {
@@ -54,6 +55,8 @@ const HomeScreen = () => {
           <CategoryList onCategorySelect={handleCategorySelect} />
 
           <HorizontalProductList products={products} />
+
+          <SeeAllButton />
 
           <OfferSection products={products} />
         </ScrollView>
