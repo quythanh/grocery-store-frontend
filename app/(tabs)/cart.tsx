@@ -1,8 +1,9 @@
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import CartItem, { type CartItemProps } from "@/components/CartItem";
 import { useState } from "react";
+import { Button, ButtonText } from "@/components/ui/button";
 
 const mockItems: Omit<CartItemProps, "quantityAdjustFn">[] = [
     {
@@ -48,17 +49,32 @@ const CartScreen = () => {
             }
             headerBackgroundColor={{ light: "#64A86B", dark: "#1D3D47" }}
         >
-            {cartItems.map((item, i) => (
-                <CartItem
-                    key={item.name}
-                    name={item.name}
-                    imgUrl={item.imgUrl}
-                    price={item.price}
-                    unit={item.unit}
-                    quantity={item.quantity}
-                    quantityAdjustFn={handleAdjustQuantity(i)}
-                />
-            ))}
+            <View style={styles.wrapper}>
+                <View style={styles.listItems}>
+                    {cartItems.map((item, i) => (
+                        <CartItem
+                            key={item.name}
+                            name={item.name}
+                            imgUrl={item.imgUrl}
+                            price={item.price}
+                            unit={item.unit}
+                            quantity={item.quantity}
+                            quantityAdjustFn={handleAdjustQuantity(i)}
+                        />
+                    ))}
+                </View>
+
+                <View style={styles.totalWrapper}>
+                    <Text style={styles.totalText}>Total:</Text>
+                    <Text style={styles.totalValue}>
+                        ${
+                            cartItems
+                                .reduce((prev, curr) => prev + curr.quantity * curr.price, 0)
+                                .toFixed(2)
+                        }
+                    </Text>
+                </View>
+            </View>
         </ParallaxScrollView>
     );
 };
@@ -86,16 +102,32 @@ const styles = StyleSheet.create({
         width: "100%",
         textAlign: "right"
     },
-    container: {
-        flex: 1,
+    wrapper: {
+        display: "flex",
+    },
+    listItems: {
+        display: "flex",
+        gap: 16,
+        overflowY: "scroll"
+    },
+    totalWrapper: {
+        backgroundColor: "#E9F6E3",
+        borderRadius: 999,
+        padding: 16,
+        marginTop: 24,
+
+        display: "flex",
+        flexDirection: "row",
         justifyContent: "center",
-        alignItems: "center",
+        gap: 4
     },
-    title: {
-        fontSize: 24,
-        fontWeight: "bold",
+    totalText: {
+        fontWeight: 700,
+        fontSize: 18
     },
-    text: {
-        fontSize: 16,
+    totalValue: {
+        color: "#34923D",
+        fontWeight: 700,
+        fontSize: 18
     },
 });
