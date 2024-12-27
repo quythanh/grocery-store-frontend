@@ -74,6 +74,10 @@ const CartScreen = () => {
                         }
                     </Text>
                 </View>
+
+                <Button size="lg" style={styles.continueWrapper}>
+                    <ButtonText style={styles.continueText} className="text-white">Continue</ButtonText>
+                </Button>
             </View>
         </ParallaxScrollView>
     );
@@ -130,4 +134,12 @@ const styles = StyleSheet.create({
         fontWeight: 700,
         fontSize: 18
     },
+    continueWrapper: {
+        backgroundColor: "#44994D",
+        borderRadius: 999,
+        marginTop: 24
+    },
+    continueText: {
+        fontSize: 18
+    }
 });
