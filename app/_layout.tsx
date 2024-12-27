@@ -1,8 +1,8 @@
 import { useEffect } from "react"
 
-import "@/global.css"
-
-import {
+import "@/global.css";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import {.
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
