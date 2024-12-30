@@ -73,6 +73,16 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      {/* <Tabs.Screen
+        name="product"
+        options={{
+          title: "Product",
+          tabBarIcon: ({ color }) => (
+            <Feather size={26} name="box" color={color} />
+          ),
+        }}
+      /> */}
     </Tabs>
   )
 }
