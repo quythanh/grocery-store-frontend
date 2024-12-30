@@ -1,9 +1,7 @@
-import React, { ReactNode, useState } from "react"
 import { allBrands, useCategoryFilterStore } from "@/store/categoryFilter"
 import { CheckIcon, ChevronDownIcon, StarIcon } from "lucide-react-native"
-import { Pressable, View } from "react-native"
+import { View } from "react-native"
 
-import { Box } from "../ui/box"
 import { Button, ButtonIcon, ButtonText } from "../ui/button"
 import {
   Checkbox,
@@ -44,9 +42,6 @@ const FilterModal = () => {
     close,
     star,
     brands,
-    priceFrom,
-    priceTo,
-    available,
     setPriceFrom,
     setPriceTo,
     setStar,
@@ -175,7 +170,6 @@ const FilterModal = () => {
                             : "fill-gray-200 text-gray-200"
                         }
                       />
-                      <Icon></Icon>
                     </Button>
                   ))}
               </HStack>

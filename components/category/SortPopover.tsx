@@ -1,10 +1,8 @@
-import React, { ReactElement, ReactNode } from "react"
 import {
   ArrowDownFromLine,
   ArrowDownUp,
   ArrowUpFromLine,
 } from "lucide-react-native"
-import { Pressable } from "react-native"
 
 import { Button, ButtonIcon } from "../ui/button"
 import { HStack } from "../ui/hstack"

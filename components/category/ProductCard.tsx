@@ -1,4 +1,6 @@
 import React, { useState } from "react"
+import { useNavigation } from "@react-navigation/native"
+import { Link } from "expo-router"
 import {
   MinusIcon,
   Plus,
@@ -6,6 +8,7 @@ import {
   ShoppingCart,
   Weight,
 } from "lucide-react-native"
+import { Pressable } from "react-native"
 
 import { Button, ButtonIcon, ButtonText } from "../ui/button"
 import { Card } from "../ui/card"
@@ -27,6 +30,7 @@ export type Product = {
   price: number
   qty: number
   image: string
+  id: number
 }
 
 const ProductCard = ({
@@ -45,77 +49,86 @@ const ProductCard = ({
   }
 
   return (
-    <Card className={`p-3 rounded-xl w-full ${className || ""}`}>
-      <Image
-        source={{
-          uri: product.image,
-        }}
-        className="mb-2 w-full h-36 rounded-md"
-        alt="image"
-      />
-      <Heading size="md" className="h-14 mb-2 line-clamp-2 overflow-ellipsis">
-        {product.name}
-      </Heading>
-      <HStack className="items-end justify-between">
-        <VStack>
-          <Text className="flex-1 font-bold text-lg ">
-            {product.price}.000đ
-          </Text>
-          <HStack className="flex-1 items-center gap-1">
-            <Icon as={Weight} size={"sm"} />
-            <Text>{product.qty}gram</Text>
-          </HStack>
-        </VStack>
-
-        <Popover
-          placement="top right"
-          size="md"
-          trigger={(triggerProps) => {
-            return (
-              <Button
-                size="sm"
-                className="bg-mainGreen active:!bg-green-700"
-                {...triggerProps}
-              >
-                <ButtonIcon as={Plus} />
-                <ButtonIcon as={ShoppingCart} />
-              </Button>
-            )
+    <Link
+      href={{
+        pathname: "/product/[id]",
+        params: {
+          id: product.id,
+        },
+      }}
+    >
+      <Card className={`p-3 rounded-xl w-full h-full ${className || ""}`}>
+        <Image
+          source={{
+            uri: product.image,
           }}
-        >
-          <PopoverBackdrop />
-          <PopoverContent className="p-2 mb-2">
-            <PopoverBody>
-              <HStack className="gap-2 items-center shadow-md justify-between mb-2 px-2">
+          className="mb-2 w-full h-36 rounded-md"
+          alt="image"
+        />
+        <Heading size="md" className="h-14 line-clamp-2 overflow-ellipsis">
+          {product.name}
+        </Heading>
+        <HStack className="items-end justify-between flex-1">
+          <VStack>
+            <Text className="flex-1 font-bold text-lg">
+              {product.price}.000đ
+            </Text>
+            <HStack className=" items-center gap-1">
+              <Icon as={Weight} size={"sm"} />
+              <Text>{product.qty}gram</Text>
+            </HStack>
+          </VStack>
+
+          <Popover
+            placement="top right"
+            size="md"
+            trigger={(triggerProps) => {
+              return (
                 <Button
-                  size="xs"
-                  variant="outline"
-                  className="size-6 rounded-full"
-                  onPress={adjustQuantity.bind(this, -1)}
+                  size="sm"
+                  className="bg-mainGreen active:!bg-green-700"
+                  {...triggerProps}
                 >
-                  <ButtonIcon as={MinusIcon} />
+                  <ButtonIcon as={Plus} />
+                  <ButtonIcon as={ShoppingCart} />
                 </Button>
-                <Text>{quantityToCart}</Text>
+              )
+            }}
+          >
+            <PopoverBackdrop />
+            <PopoverContent className="p-2 mb-2">
+              <PopoverBody>
+                <HStack className="gap-2 items-center shadow-md justify-between mb-2 px-2">
+                  <Button
+                    size="xs"
+                    variant="outline"
+                    className="size-6 rounded-full"
+                    onPress={adjustQuantity.bind(this, -1)}
+                  >
+                    <ButtonIcon as={MinusIcon} />
+                  </Button>
+                  <Text>{quantityToCart}</Text>
+                  <Button
+                    size="xs"
+                    variant="outline"
+                    className="size-4 rounded-full"
+                    onPress={adjustQuantity.bind(this, 1)}
+                  >
+                    <ButtonIcon as={PlusIcon} />
+                  </Button>
+                </HStack>
                 <Button
-                  size="xs"
-                  variant="outline"
-                  className="size-4 rounded-full"
-                  onPress={adjustQuantity.bind(this, 1)}
+                  onPress={handleAddToCart}
+                  className="bg-mainGreen active:!bg-green-700"
                 >
-                  <ButtonIcon as={PlusIcon} />
+                  <ButtonText>Add to cart</ButtonText>
                 </Button>
-              </HStack>
-              <Button
-                onPress={handleAddToCart}
-                className="bg-mainGreen active:!bg-green-700"
-              >
-                <ButtonText>Add to cart</ButtonText>
-              </Button>
-            </PopoverBody>
-          </PopoverContent>
-        </Popover>
-      </HStack>
-    </Card>
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
+        </HStack>
+      </Card>
+    </Link>
   )
 }
 
