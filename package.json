@@ -31,6 +31,7 @@
     "@gluestack-ui/popover": "^0.1.43",
     "@gluestack-ui/react-native-aria": "^0.1.6",
     "@gluestack-ui/select": "^0.1.30",
+    "@gluestack-ui/slider": "^0.1.26",
     "@gluestack-ui/switch": "^0.1.23",
     "@gluestack-ui/themed": "^1.1.62",
     "@gluestack-ui/toast": "^1.0.8",
