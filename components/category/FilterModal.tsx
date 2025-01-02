@@ -1,9 +1,8 @@
-import React, { ReactNode, useState } from "react"
 import { allBrands, useCategoryFilterStore } from "@/store/categoryFilter"
 import { CheckIcon, ChevronDownIcon, StarIcon } from "lucide-react-native"
-import { Pressable, View } from "react-native"
+import { View } from "react-native"
 
-import { Box } from "../ui/box"
+import Stars from "../common/Stars"
 import { Button, ButtonIcon, ButtonText } from "../ui/button"
 import {
   Checkbox,
@@ -39,20 +38,8 @@ import { Text } from "../ui/text"
 import { VStack } from "../ui/vstack"
 
 const FilterModal = () => {
-  const {
-    isOpen,
-    close,
-    star,
-    brands,
-    priceFrom,
-    priceTo,
-    available,
-    setPriceFrom,
-    setPriceTo,
-    setStar,
-    toggleAvailabel,
-    toggleBrand,
-  } = useCategoryFilterStore((state) => state)
+  const { isOpen, close, star, brands, setStar, toggleBrand } =
+    useCategoryFilterStore((state) => state)
 
   return (
     <Modal
@@ -158,26 +145,7 @@ const FilterModal = () => {
             <View>
               <Heading size="sm">Rating from</Heading>
               <HStack className="justify-around mt-3 px-10">
-                {Array(5)
-                  .fill(0)
-                  .map((_, i) => (
-                    <Button
-                      size="xl"
-                      key={i}
-                      variant="link"
-                      onPress={() => setStar(i + 1)}
-                    >
-                      <ButtonIcon
-                        as={StarIcon}
-                        className={
-                          i + 1 <= star
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "fill-gray-200 text-gray-200"
-                        }
-                      />
-                      <Icon></Icon>
-                    </Button>
-                  ))}
+                <Stars count={star} onPress={(index) => setStar(index + 1)} />
               </HStack>
             </View>
           </VStack>
