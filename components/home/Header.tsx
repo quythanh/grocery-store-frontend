@@ -1,3 +1,4 @@
+import { P, S } from "@expo/html-elements";
 import { Animated, Platform, StatusBar, StyleSheet, Text, View } from "react-native";
 
 interface HeaderProps {
@@ -7,7 +8,7 @@ interface HeaderProps {
 
 const Header = ({ headerValue, children }: HeaderProps) => {
   const max_header_height = 150
-  const min_header_height = 0
+  const min_header_height = Platform.OS === "ios" ? 0 : (StatusBar.currentHeight || 0)
   const scroll_distance = max_header_height - min_header_height
 
   const animatedHeaderHeight = headerValue.interpolate({
