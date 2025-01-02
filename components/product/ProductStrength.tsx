@@ -1,16 +1,12 @@
 import React from "react"
+import { Colors } from "@/constants/Colors"
+import Slider from "@react-native-community/slider"
 import { View } from "react-native"
 
 import { ProductToCart } from "@/app/product/[id]"
 
 import { Heading } from "../ui/heading"
 import { HStack } from "../ui/hstack"
-import {
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
-} from "../ui/slider"
 import { Text } from "../ui/text"
 
 const ProductStrength = ({
@@ -26,18 +22,14 @@ const ProductStrength = ({
 
       <HStack className="items-center gap-3">
         <Slider
-          className="mt-6 mb-4 w-3/4"
-          minValue={1}
-          maxValue={5}
-          value={strength}
-          onChange={(value) => handleChange("strength", value)}
-        >
-          <SliderTrack className="bg-lightGreen">
-            <SliderFilledTrack className="bg-mainGreen active:bg-mainGreen" />
-          </SliderTrack>
-          <SliderThumb className="bg-mainGreen active:bg-mainGreen" />
-        </Slider>
-
+          style={{ width: 300, height: 40 }}
+          minimumValue={0}
+          maximumValue={5}
+          step={1}
+          onValueChange={(value) => handleChange("strength", value)}
+          minimumTrackTintColor={Colors.light.tint}
+          maximumTrackTintColor="#ccc"
+        />
         <Text>{strength}/5</Text>
       </HStack>
     </View>
