@@ -30,7 +30,7 @@ const ProfileScreen = () => {
 
   return (
     <Fragment>
-      <VStack className="gap-6 mt-10 flex-1 bg-mainGreen">
+      <VStack className="gap-6 pt-10 flex-1 bg-mainGreen">
         <View className="px-4">
           <Heading size="2xl" className="text-white mt-6">
             Fruits
