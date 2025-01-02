@@ -1,5 +1,12 @@
-import { P, S } from "@expo/html-elements";
-import { Animated, Platform, StatusBar, StyleSheet, Text, View } from "react-native";
+import { P, S } from "@expo/html-elements"
+import {
+  Animated,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native"
 
 interface HeaderProps {
   headerValue: Animated.Value
@@ -8,7 +15,8 @@ interface HeaderProps {
 
 const Header = ({ headerValue, children }: HeaderProps) => {
   const max_header_height = 150
-  const min_header_height = Platform.OS === "ios" ? 0 : (StatusBar.currentHeight || 0)
+  const min_header_height =
+    Platform.OS === "ios" ? 0 : StatusBar.currentHeight || 0
   const scroll_distance = max_header_height - min_header_height
 
   const animatedHeaderHeight = headerValue.interpolate({
@@ -25,9 +33,7 @@ const Header = ({ headerValue, children }: HeaderProps) => {
         },
       ]}
     >
-      <View style={styles.header}>
-        {children}
-      </View>
+      <View style={styles.header}>{children}</View>
     </Animated.View>
   )
 }
@@ -39,9 +45,9 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     paddingHorizontal: 30,
     paddingVertical: 20,
+    marginTop: Platform.OS === "ios" ? 0 : StatusBar.currentHeight || 0,
     backgroundColor: "#74a671",
     height: 150,
     zIndex: 1,
   },
-  
 })
