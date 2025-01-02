@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#F6F6F6",
-    padding: 10,
     height: 50,
+    paddingHorizontal: 10,
     borderRadius: 100,
     marginBottom: 20,
   },
@@ -40,5 +40,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 17,
     color: "#5D5D5D",
+    lineHeight: 40,
   },
 })
