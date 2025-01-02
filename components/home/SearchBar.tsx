@@ -40,6 +40,5 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 17,
     color: "#5D5D5D",
-    lineHeight: 40,
   },
 })

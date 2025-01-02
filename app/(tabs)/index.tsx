@@ -1,11 +1,3 @@
-import CategoryList from "@/components/home/CategoryList"
-import Header from "@/components/home/Header"
-import HorizontalProductList from "@/components/home/HorizontalProductList"
-import OfferSection from "@/components/home/OfferSection"
-import SearchBar from "@/components/home/SearchBar"
-import SeeAllButton from "@/components/home/SeeAllButton"
-import VerticalProductList from "@/components/home/VerticalProductList"
-import { products } from "@/components/ProductData"
 import React, { useRef, useState } from "react"
 import {
   Animated,
@@ -16,6 +8,15 @@ import {
   Text,
   View,
 } from "react-native"
+
+import CategoryList from "@/components/home/CategoryList"
+import Header from "@/components/home/Header"
+import HorizontalProductList from "@/components/home/HorizontalProductList"
+import OfferSection from "@/components/home/OfferSection"
+import SearchBar from "@/components/home/SearchBar"
+import SeeAllButton from "@/components/home/SeeAllButton"
+import VerticalProductList from "@/components/home/VerticalProductList"
+import { products } from "@/components/ProductData"
 
 const HomeScreen = () => {
   const scrollOffsetY = useRef(new Animated.Value(0)).current
@@ -52,7 +53,7 @@ const HomeScreen = () => {
           )}
         >
           <SearchBar />
-          
+
           <CategoryList onCategorySelect={handleCategorySelect} />
 
           <HorizontalProductList products={products} />
