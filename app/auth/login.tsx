@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors"
 import { useHidePasswordStore } from "@/store/hidePassword"
-import { Feather } from "@expo/vector-icons"
+import { Feather, FontAwesome6 } from "@expo/vector-icons"
 import { useRouter } from "expo-router"
 import {
   StyleSheet,
@@ -56,7 +56,7 @@ const Login = () => {
           <View style={styles.authInputContainer}>
             <TextInput style={styles.authInputField} placeholder="Username" />
           </View>
-          <View style={[styles.authInputContainer, { marginTop: 20 }]}>
+          <View style={[styles.authInputContainer, { marginTop: 30 }]}>
             <TextInput
               style={[styles.authInputField, { paddingRight: 30 }]}
               placeholder="Password"
@@ -80,6 +80,33 @@ const Login = () => {
             <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
           </TouchableOpacity>
           <AuthButton text="Log In" style={{ marginTop: 40 }} />
+
+          <View style={styles.loginOptionContainer}>
+            <TouchableOpacity style={styles.loginOption}>
+              <FontAwesome6 name="google" size={24} color="black" />
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: "#000",
+                  marginLeft: 10,
+                }}
+              >
+                Continue with Google
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.loginOption, { marginTop: 20 }]}>
+              <FontAwesome6 name="facebook-f" size={24} color="black" />
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: "#000",
+                  marginLeft: 10,
+                }}
+              >
+                Continue with Facebook
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
@@ -138,5 +165,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
     fontWeight: "400",
+  },
+
+  loginOptionContainer: {
+    marginTop: 60,
+  },
+  loginOption: {
+    flexDirection: "row",
+    backgroundColor: Colors.lightGreen,
+    width: "100%",
+    height: 60,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
   },
 })
