@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 20,
+    paddingBottom: 0
   },
   bodyText: {
     fontSize: 16,

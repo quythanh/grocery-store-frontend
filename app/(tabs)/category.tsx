@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react"
 import { useCategoryFilterStore } from "@/store/categoryFilter"
 import { LayoutGrid, Search } from "lucide-react-native"
-import { ScrollView, View } from "react-native"
+import { Platform, ScrollView, View } from "react-native"
 
 import useDebouce from "@/hooks/useDebounce"
 import { Box } from "@/components/ui/box"
@@ -90,7 +90,7 @@ const ProfileScreen = () => {
               ))}
             </Grid>
             <Pagination first={1} last={4} current={3} onChange={() => {}} />
-            <Box className="h-4"></Box>
+            <Box className={Platform.OS === "ios" ? "h-28" : "h-4"}></Box>
           </ScrollView>
         </View>
       </VStack>

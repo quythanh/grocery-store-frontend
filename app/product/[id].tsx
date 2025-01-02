@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Stack, useLocalSearchParams } from "expo-router"
-import { View } from "react-native"
+import { Platform, View } from "react-native"
 
 import { HStack } from "@/components/ui/hstack"
 import { Text } from "@/components/ui/text"
@@ -51,7 +51,9 @@ const ProductScreen = () => {
       ></Stack.Screen>
       <VStack className="bg-mainGreen flex-1 ">
         <ProductDetail product={product} />
-        <VStack className="bg-background-0 flex-1 px-6 rounded-t-3xl">
+        <VStack
+          className={`bg-background-0 flex-1 px-6 rounded-t-3xl ${Platform.OS === "ios" ? "pb-6" : ""}`}
+        >
           <VStack className="flex-1 ">
             <HStack className="justify-between items-end">
               <ProductImage product={product} />

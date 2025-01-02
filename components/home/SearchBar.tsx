@@ -16,6 +16,7 @@ const SearchBar = () => {
         <TextInput
           placeholder="Search fresh fruits and vegetables ..."
           placeholderTextColor="#B0B0B0"
+          className="py-1"
           style={styles.searchInput}
         />
       </View>
