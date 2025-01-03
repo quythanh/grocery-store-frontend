@@ -29,6 +29,7 @@ const ProductStrength = ({
           onValueChange={(value) => handleChange("strength", value)}
           minimumTrackTintColor={Colors.light.tint}
           maximumTrackTintColor="#ccc"
+          thumbTintColor={Colors.light.tint}
         />
         <Text>{strength}/5</Text>
       </HStack>
