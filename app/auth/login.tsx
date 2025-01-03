@@ -19,7 +19,7 @@ const Login = () => {
   const { hidePassword, handleHidePassword } = useHidePasswordStore()
 
   const handleBack = () => {
-    route.navigate("/")
+    route.back()
   }
 
   return (
