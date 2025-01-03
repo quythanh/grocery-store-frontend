@@ -1,4 +1,11 @@
-import { Animated, Platform, StatusBar, StyleSheet, Text, View } from "react-native";
+import {
+  Animated,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native"
 
 interface HeaderProps {
   headerValue: Animated.Value
@@ -7,7 +14,8 @@ interface HeaderProps {
 
 const Header = ({ headerValue, children }: HeaderProps) => {
   const max_header_height = 150
-  const min_header_height = 0
+  const min_header_height =
+    Platform.OS === "android" ? StatusBar.currentHeight || 0 : 0
   const scroll_distance = max_header_height - min_header_height
 
   const animatedHeaderHeight = headerValue.interpolate({
@@ -24,9 +32,7 @@ const Header = ({ headerValue, children }: HeaderProps) => {
         },
       ]}
     >
-      <View style={styles.header}>
-        {children}
-      </View>
+      <View style={styles.header}>{children}</View>
     </Animated.View>
   )
 }
@@ -42,5 +48,4 @@ const styles = StyleSheet.create({
     height: 150,
     zIndex: 1,
   },
-  
 })
