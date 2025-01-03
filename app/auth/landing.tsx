@@ -5,9 +5,16 @@ import { ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View
 import background from "../../assets/images/auth/landing-bg-image.jpg";
 import { Colors } from "@/constants/Colors";
 import AuthButton from "@/components/auth/AuthButton";
+import { useRouter } from "expo-router";
 
 
 const Landing = () => {
+  const route = useRouter();
+
+  const handleLogin = () => {
+    route.navigate("/auth/login");
+  }
+
   return (
     <ImageBackground
       source={background}
@@ -23,7 +30,7 @@ const Landing = () => {
         </View>
 
         <View style={styles.authButtons}>
-          <AuthButton text="Log in" style={{ marginBottom: 20 }} />
+          <AuthButton text="Log in" style={{ marginBottom: 20 }} onClick={handleLogin} />
           <AuthButton text="Sign up" />
         </View>
       </SafeAreaView>
