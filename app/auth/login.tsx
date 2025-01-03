@@ -31,9 +31,6 @@ const Login = () => {
   }
 
   const handleLogin = async () => {
-    console.log("Email: ", email)
-    console.log("Password: ", password)
-
     try {
       const response = await generateCustomerToken({
         variables: {
@@ -47,9 +44,7 @@ const Login = () => {
       Toast.show({
         type: ALERT_TYPE.SUCCESS,
         title: "Success",
-        textBody:
-          "Congrats! This is your token: " +
-          response.data.generateCustomerToken.token,
+        textBody: "Congrats! You have successfully logged in.",
       })
 
       route.navigate("/")
