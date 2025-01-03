@@ -22,6 +22,10 @@ const Login = () => {
     route.back()
   }
 
+  const handleSignUp = () => {
+    route.navigate("/auth/signup")
+  }
+
   return (
     <View style={[styles.container, { paddingTop: inset.top }]}>
       <View style={styles.header}>
@@ -45,6 +49,7 @@ const Login = () => {
               justifyContent: "center",
               alignItems: "center",
             }}
+            onPress={handleSignUp}
           >
             <Text style={styles.headerOptionText}>Sign Up</Text>
           </TouchableOpacity>

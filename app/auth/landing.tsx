@@ -1,18 +1,27 @@
-import { ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Colors } from "@/constants/Colors"
+import { useRouter } from "expo-router"
+import {
+  ImageBackground,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native"
 
+import AuthButton from "@/components/auth/AuthButton"
 
-
-import background from "../../assets/images/auth/landing-bg-image.jpg";
-import { Colors } from "@/constants/Colors";
-import AuthButton from "@/components/auth/AuthButton";
-import { useRouter } from "expo-router";
-
+import background from "../../assets/images/auth/landing-bg-image.jpg"
 
 const Landing = () => {
-  const route = useRouter();
+  const route = useRouter()
 
   const handleLogin = () => {
-    route.navigate("/auth/login");
+    route.navigate("/auth/login")
+  }
+
+  const handleSignUp = () => {
+    route.navigate("/auth/signup")
   }
 
   return (
@@ -30,8 +39,12 @@ const Landing = () => {
         </View>
 
         <View style={styles.authButtons}>
-          <AuthButton text="Log in" style={{ marginBottom: 20 }} onClick={handleLogin} />
-          <AuthButton text="Sign up" />
+          <AuthButton
+            text="Log in"
+            style={{ marginBottom: 20 }}
+            onClick={handleLogin}
+          />
+          <AuthButton text="Sign up" onClick={handleSignUp} />
         </View>
       </SafeAreaView>
     </ImageBackground>
