@@ -24,5 +24,5 @@ export const Colors = {
     tabIconSelected: tintColorDark,
   },
   green: "#74a671",
-  lightGreen: "#cae7a8",
+  lightGreen: "#eef7e6",
 }
