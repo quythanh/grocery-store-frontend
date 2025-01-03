@@ -16,6 +16,9 @@ import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider"
 
 import "react-native-reanimated"
 
+import client from "@/api/apolloClient"
+import { ApolloProvider } from "@apollo/client"
+
 import { useColorScheme } from "@/hooks/useColorScheme"
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -38,32 +41,36 @@ export default function RootLayout() {
   }
 
   return (
-    <GluestackUIProvider mode="light">
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen
-            name="auth/landing"
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="auth/login"
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="auth/signup"
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </GluestackUIProvider>
+    <ApolloProvider client={client}>
+      <GluestackUIProvider mode="light">
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack>
+            <Stack.Screen
+              name="auth/landing"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="auth/login"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="auth/signup"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </GluestackUIProvider>
+    </ApolloProvider>
   )
 }
