@@ -51,6 +51,8 @@ const Login = () => {
           "Congrats! This is your token: " +
           response.data.generateCustomerToken.token,
       })
+
+      route.navigate("/")
     } catch (error) {
       console.log("Error: ", (error as any).message)
       Toast.show({
