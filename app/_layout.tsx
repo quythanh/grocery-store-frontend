@@ -11,6 +11,7 @@ import { useFonts } from "expo-font"
 import { Stack } from "expo-router"
 import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
+import { AlertNotificationRoot } from "react-native-alert-notification"
 
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider"
 
@@ -43,33 +44,35 @@ export default function RootLayout() {
   return (
     <ApolloProvider client={client}>
       <GluestackUIProvider mode="light">
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <Stack>
-            <Stack.Screen
-              name="auth/landing"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="auth/login"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="auth/signup"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style="auto" />
-        </ThemeProvider>
+        <AlertNotificationRoot>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack>
+              <Stack.Screen
+                name="auth/landing"
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="auth/login"
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="auth/signup"
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="auto" />
+          </ThemeProvider>
+        </AlertNotificationRoot>
       </GluestackUIProvider>
     </ApolloProvider>
   )
