@@ -19,7 +19,11 @@ const Login = () => {
   const { hidePassword, handleHidePassword } = useHidePasswordStore()
 
   const handleBack = () => {
-    route.navigate("/")
+    route.back()
+  }
+
+  const handleSignUp = () => {
+    route.navigate("/auth/signup")
   }
 
   return (
@@ -45,6 +49,7 @@ const Login = () => {
               justifyContent: "center",
               alignItems: "center",
             }}
+            onPress={handleSignUp}
           >
             <Text style={styles.headerOptionText}>Sign Up</Text>
           </TouchableOpacity>
