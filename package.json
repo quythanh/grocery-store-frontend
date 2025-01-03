@@ -16,6 +16,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@apollo/client": "^3.12.4",
     "@expo/html-elements": "^0.4.2",
     "@expo/vector-icons": "^14.0.2",
     "@gluestack-ui/actionsheet": "^0.2.46",
@@ -37,6 +38,7 @@
     "@gluestack-ui/toast": "^1.0.8",
     "@legendapp/motion": "^2.4.0",
     "@react-native-community/slider": "4.5.5",
+    "@react-native-picker/picker": "2.9.0",
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/native": "^7.0.0",
     "@tanstack/react-query": "^5.62.10",
@@ -54,6 +56,7 @@
     "expo-system-ui": "~4.0.6",
     "expo-web-browser": "~14.0.1",
     "feather-icons": "^4.29.2",
+    "graphql": "^16.10.0",
     "lightningcss": "^1.28.2",
     "lucide-react-native": "^0.469.0",
     "nativewind": "^4.1.23",
@@ -61,6 +64,7 @@
     "react-dom": "18.3.1",
     "react-native": "0.76.5",
     "react-native-css-interop": "^0.1.22",
+    "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-neat-date-picker": "^1.4.14",
     "react-native-picker-select": "^9.3.1",
@@ -72,7 +76,7 @@
     "react-native-webview": "13.12.5",
     "tailwindcss": "^3.4.17",
     "zustand": "^5.0.2",
-    "@react-native-picker/picker": "2.9.0"
+    "expo-secure-store": "~14.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
