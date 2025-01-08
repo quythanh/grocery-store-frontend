@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react"
+import React, { ReactNode, useEffect, useState } from "react"
 import {
   Banknote,
   CreditCard,
@@ -6,7 +6,7 @@ import {
   LucideIcon,
   Truck,
 } from "lucide-react-native"
-import { Pressable, View } from "react-native"
+import { Keyboard, Pressable, View } from "react-native"
 
 import { Grid, GridItem } from "@/components/ui/grid"
 import { Heading } from "@/components/ui/heading"
@@ -81,61 +81,79 @@ const Payment = () => {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
     paymentMethods[0]
   )
+
+  const [kbShow, setKbShow] = useState(false)
+  useEffect(() => {
+    const keyboardShowListener = Keyboard.addListener("keyboardDidShow", () => {
+      setKbShow(true)
+    })
+
+    const keyboardHideListener = Keyboard.addListener("keyboardDidHide", () => {
+      setKbShow(false)
+    })
+
+    return () => {
+      keyboardShowListener.remove()
+      keyboardHideListener.remove()
+    }
+  }, [])
   return (
     <View className="w-full">
-      <Heading size="md" className="mt-2 text-typography-600">
-        Shipping method
-      </Heading>
-      <HStack className="justify-between  gap-4 mt-2 items-center">
-        {shippingMethods.map((med) => (
-          <Pressable
-            key={med.value}
-            onPress={() => setMethod(med.value)}
-            className="block flex-1"
-          >
-            <HStack
-              className={`  items-center gap-4 p-2 rounded-lg bg-background-0 ${method === med.value ? "border border-mainGreen" : ""}`}
+      <View className={kbShow ? "hidden" : ""}>
+        <Heading size="md" className="mt-2 text-typography-600">
+          Shipping method
+        </Heading>
+        <HStack className="justify-between  gap-4 mt-2 items-center">
+          {shippingMethods.map((med) => (
+            <Pressable
+              key={med.value}
+              onPress={() => setMethod(med.value)}
+              className="block flex-1"
             >
-              <Icon className="text-mainGreen" size="xl" as={med.icon} />
-              <View className="flex-1 ">
-                <Text className="font-semibold">{med.label}</Text>
-                <Text>
-                  <Text className="font-medium">${med.cost}</Text> -{" "}
-                  <Text>{med.time}</Text>
-                </Text>
-              </View>
-            </HStack>
-          </Pressable>
-        ))}
-      </HStack>
-
-      <Heading size="md" className="mt-6 text-typography-600">
-        Shipping method
-      </Heading>
-
-      <Grid
-        className="gap-4 mt-2"
-        _extra={{
-          className: "grid-cols-2",
-        }}
-      >
-        {paymentMethods.map((method) => (
-          <GridItem
-            key={method.value}
-            className={`bg-background-0 rounded-md  ${paymentMethod?.value == method.value ? "border border-mainGreen" : ""}`}
-            _extra={{
-              className: "col-span-1",
-            }}
-          >
-            <Pressable onPress={() => setPaymentMethod(method)}>
-              <HStack className="gap-2 items-center h-16 px-4">
-                {method.icon}
-                <Text>{method.label}</Text>
+              <HStack
+                className={`  items-center gap-4 p-2 rounded-lg bg-background-0 ${method === med.value ? "border border-mainGreen" : ""}`}
+              >
+                <Icon className="text-mainGreen" size="xl" as={med.icon} />
+                <View className="flex-1 ">
+                  <Text className="font-semibold">{med.label}</Text>
+                  <Text>
+                    <Text className="font-medium">${med.cost}</Text> -{" "}
+                    <Text>{med.time}</Text>
+                  </Text>
+                </View>
               </HStack>
             </Pressable>
-          </GridItem>
-        ))}
-      </Grid>
+          ))}
+        </HStack>
+
+        <Heading size="md" className="mt-6 text-typography-600">
+          Shipping method
+        </Heading>
+
+        <Grid
+          className="gap-4 mt-2"
+          _extra={{
+            className: "grid-cols-2",
+          }}
+        >
+          {paymentMethods.map((method) => (
+            <GridItem
+              key={method.value}
+              className={`bg-background-0 rounded-md  ${paymentMethod?.value == method.value ? "border border-mainGreen" : ""}`}
+              _extra={{
+                className: "col-span-1",
+              }}
+            >
+              <Pressable onPress={() => setPaymentMethod(method)}>
+                <HStack className="gap-2 items-center h-16 px-4">
+                  {method.icon}
+                  <Text>{method.label}</Text>
+                </HStack>
+              </Pressable>
+            </GridItem>
+          ))}
+        </Grid>
+      </View>
 
       <VStack className="mt-6 gap-4">
         <View>
