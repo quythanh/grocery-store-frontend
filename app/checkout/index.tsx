@@ -105,9 +105,11 @@ const Checkout = () => {
           variant="outline"
           className="border-mainGreen active:!border-green-700 mx-8 rounded-full bg-background-0"
           size="lg"
-          onPress={handlePrev}
         >
-          <ButtonText className="text-mainGreen active:!text-green-700 ">
+          <ButtonText
+            className="text-mainGreen active:!text-green-700 w-full text-center"
+            onPress={handlePrev}
+          >
             Previous
           </ButtonText>
         </Button>
