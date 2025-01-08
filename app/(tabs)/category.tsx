@@ -39,14 +39,17 @@ const ProfileScreen = () => {
             Fruits Lorem ipsum, dolor sit amet consectetur adipisicing elit.
             Aliquid, ad?
           </Text>
-          <HStack className="gap-2 items-center mt-4">
+        </View>
+
+        <View className="flex-1 bg-background-100  rounded-tl-3xl rounded-tr-3xl">
+          <HStack className="gap-2 items-center py-10 pb-4 px-4">
             <Input
               variant="outline"
               isDisabled={false}
               isInvalid={false}
               isReadOnly={false}
               size="lg"
-              className="flex-1 pr-2 border border-white bg-white rounded-lg"
+              className="flex-1 pr-2 border border-white bg-white rounded-full"
             >
               <InputField
                 placeholder="Search anything..."
@@ -68,12 +71,9 @@ const ProfileScreen = () => {
               <ButtonIcon className="text-typography-500" as={LayoutGrid} />
             </Button>
           </HStack>
-        </View>
-
-        <View className="flex-1 bg-background-100 pt-10 rounded-tl-3xl rounded-tr-3xl">
           <ScrollView>
             <Grid
-              className="gap-2 px-4 "
+              className="gap-2 px-4"
               _extra={{
                 className: "col-span-12",
               }}
