@@ -7,3 +7,32 @@ export const GENERATE_CUSTOMER_TOKEN = gql`
     }
   }
 `
+export const CREATE_CUSTOMER_MUTATION = gql`
+  mutation CreateCustomer(
+    $firstname: String!
+    $lastname: String!
+    $email: String!
+    $password: String!
+    $gender: Int!
+    $date_of_birth: String!
+  ) {
+    createCustomerV2(
+      input: {
+        firstname: $firstname
+        lastname: $lastname
+        email: $email
+        password: $password
+        gender: $gender
+        date_of_birth: $date_of_birth
+      }
+    ) {
+      customer {
+        firstname
+        lastname
+        email
+        gender
+        date_of_birth
+      }
+    }
+  }
+`
