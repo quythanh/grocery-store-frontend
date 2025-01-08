@@ -1,4 +1,8 @@
+import { useState } from "react"
+import { CREATE_CUSTOMER_MUTATION } from "@/api/graphqlString/auth"
 import { Colors } from "@/constants/Colors"
+import { useSignUpFormStore } from "@/store/auth/signUpFormStore"
+import { useMutation } from "@apollo/client"
 import { Feather } from "@expo/vector-icons"
 import { useRouter } from "expo-router"
 import {
@@ -12,6 +16,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native"
+import { ALERT_TYPE, Dialog, Toast } from "react-native-alert-notification"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import AuthButton from "@/components/auth/AuthButton"
@@ -23,6 +28,11 @@ import PasswordInputField from "@/components/auth/PasswordInputField"
 const SignUp = () => {
   const inset = useSafeAreaInsets()
   const route = useRouter()
+  const { formState, setFormState } = useSignUpFormStore()
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [createCustomer, { data, loading, error }] = useMutation(
+    CREATE_CUSTOMER_MUTATION
+  )
 
   const handleBack = () => {
     route.back()
@@ -30,6 +40,81 @@ const SignUp = () => {
 
   const handleLogIn = () => {
     route.navigate("/auth/login")
+  }
+
+  const handleChange = (field: string, value: string | number) => {
+    setFormState(field, value)
+  }
+
+  const isPasswordConfirmed = () => {
+    return formState.password === confirmPassword
+  }
+
+  const isFormValid = () => {
+    return (
+      formState.firstname &&
+      formState.lastname &&
+      formState.email &&
+      formState.date_of_birth &&
+      formState.gender &&
+      formState.password &&
+      confirmPassword
+    )
+  }
+
+  const handleSignUp = async () => {
+    if (!isFormValid()) {
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: "Error",
+        textBody: "Please fill out all fields.",
+        button: "Okay",
+      })
+      return
+    }
+
+    if (!isPasswordConfirmed()) {
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: "Error",
+        textBody: "Passwords do not match.",
+        button: "Okay",
+      })
+      return
+    }
+
+    try {
+      console.log("Form State: ", formState)
+
+      const response = await createCustomer({
+        variables: {
+          firstname: formState.firstname,
+          lastname: formState.lastname,
+          email: formState.email,
+          password: formState.password,
+          gender: formState.gender,
+          date_of_birth: formState.date_of_birth,
+        },
+      })
+
+      console.log("Response: ", response.data)
+
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: "Success",
+        textBody: "Congrats! You have successfully signed up.",
+      })
+
+      route.navigate("/auth/login")
+    } catch (error) {
+      console.log("Error: ", (error as any).message)
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: "Error",
+        textBody: (error as any).message,
+        button: "Okay",
+      })
+    }
   }
 
   return (
@@ -76,52 +161,49 @@ const SignUp = () => {
             <View style={styles.form}>
               <InputField
                 placeholder="First name"
-                onChangeText={(text) => console.log(text)}
+                onChangeText={(text) => handleChange("firstname", text)}
               />
 
               <InputField
                 style={{ marginTop: 30 }}
                 placeholder="Last name"
-                onChangeText={(text) => console.log(text)}
+                onChangeText={(text) => handleChange("lastname", text)}
               />
 
               <DatePickerInput
                 style={{ marginTop: 30 }}
-                onChangeText={(text) => console.log(text)}
+                onChangeText={(text) => handleChange("date_of_birth", text)}
               />
 
               <GenderPickerInput
                 style={{ marginTop: 30 }}
-                onChange={(gender) => console.log(gender)}
-              />
-
-              <InputField
-                style={{ marginTop: 30 }}
-                placeholder="Phone number"
-                keyboardType="phone-pad"
-                onChangeText={(text) => console.log(text)}
+                onChange={(gender) => handleChange("gender", Number(gender))}
               />
 
               <InputField
                 style={{ marginTop: 30 }}
                 placeholder="Email"
-                onChangeText={(text) => console.log(text)}
+                onChangeText={(text) => handleChange("email", text)}
                 keyboardType="email-address"
               />
 
               <PasswordInputField
                 style={{ marginTop: 30 }}
                 placeholder="Password"
-                onChangeText={(text) => console.log(text)}
+                onChangeText={(text) => handleChange("password", text)}
               />
 
               <PasswordInputField
                 style={{ marginTop: 30 }}
                 placeholder="Confirm password"
-                onChangeText={(text) => console.log(text)}
+                onChangeText={(text) => setConfirmPassword(text)}
               />
             </View>
-            <AuthButton text="Sign Up" style={{ marginTop: 40 }} />
+            <AuthButton
+              text="Sign Up"
+              style={{ marginTop: 40 }}
+              onClick={handleSignUp}
+            />
 
             <View style={{ height: 70 }} />
           </ScrollView>

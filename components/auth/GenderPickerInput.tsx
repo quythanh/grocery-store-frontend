@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Colors } from "@/constants/Colors"
 import { Feather } from "@expo/vector-icons"
 import {
@@ -16,13 +16,34 @@ interface GenderPickerInputProps {
   onChange: (value: string) => void
 }
 
+const gender = [
+  {
+    label: "Male",
+    value: "1",
+  },
+  {
+    label: "Female",
+    value: "2",
+  },
+]
+
 const GenderPickerInput = ({ style, onChange }: GenderPickerInputProps) => {
   const [selectedGender, setSelectedGender] = useState<string | null>(null)
   const [isPickerVisible, setPickerVisible] = useState(false)
 
+  useEffect(() => {
+    handleGenderSelect(gender[0].value)
+  }, [])
+
   const handleGenderSelect = (gender: string) => {
     onChange(gender)
-    setSelectedGender(gender)
+
+    if (gender === "1") {
+      setSelectedGender("Male")
+    } else {
+      setSelectedGender("Female")
+    }
+
     setPickerVisible(false)
   }
 
@@ -59,31 +80,18 @@ const GenderPickerInput = ({ style, onChange }: GenderPickerInputProps) => {
               <View style={styles.modalContent}>
                 <TouchableOpacity
                   style={styles.optionButton}
-                  onPress={() => handleGenderSelect("Male")}
+                  onPress={() => handleGenderSelect(gender[0].value)}
                 >
-                  <Text style={styles.optionText}>Male</Text>
+                  <Text style={styles.optionText}>{gender[0].label}</Text>
                 </TouchableOpacity>
-
                 <View
                   style={{ height: 1, backgroundColor: "#ccc", opacity: 0.7 }}
                 />
-
                 <TouchableOpacity
                   style={styles.optionButton}
-                  onPress={() => handleGenderSelect("Female")}
+                  onPress={() => handleGenderSelect(gender[1].value)}
                 >
-                  <Text style={styles.optionText}>Female</Text>
-                </TouchableOpacity>
-
-                <View
-                  style={{ height: 1, backgroundColor: "#ccc", opacity: 0.7 }}
-                />
-
-                <TouchableOpacity
-                  style={styles.optionButton}
-                  onPress={() => handleGenderSelect("Other")}
-                >
-                  <Text style={styles.optionText}>Other</Text>
+                  <Text style={styles.optionText}>{gender[1].label}</Text>
                 </TouchableOpacity>
               </View>
             </View>
