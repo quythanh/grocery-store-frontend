@@ -1,25 +1,61 @@
+import { useState } from "react"
+import { GENERATE_CUSTOMER_TOKEN } from "@/api/graphqlString/auth"
 import { Colors } from "@/constants/Colors"
-import { useHidePasswordStore } from "@/store/hidePassword"
+import { getSecureStore, setSecureStore } from "@/store/secureStore"
+import { useMutation } from "@apollo/client"
 import { Feather, FontAwesome6 } from "@expo/vector-icons"
 import { useRouter } from "expo-router"
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import AuthButton from "@/components/auth/AuthButton"
+import InputField from "@/components/auth/InputField"
+import PasswordInputField from "@/components/auth/PasswordInputField"
 
 const Login = () => {
   const inset = useSafeAreaInsets()
   const route = useRouter()
-  const { hidePassword, handleHidePassword } = useHidePasswordStore()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [generateCustomerToken, { data, loading, error }] = useMutation(
+    GENERATE_CUSTOMER_TOKEN
+  )
 
   const handleBack = () => {
-    route.navigate("/")
+    route.back()
+  }
+
+  const handleSignUp = () => {
+    route.navigate("/auth/signup")
+  }
+
+  const handleLogin = async () => {
+    try {
+      const response = await generateCustomerToken({
+        variables: {
+          email,
+          password,
+        },
+      })
+
+      await setSecureStore("token", response.data.generateCustomerToken.token)
+
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: "Success",
+        textBody: "Congrats! You have successfully logged in.",
+      })
+
+      route.navigate("/")
+    } catch (error) {
+      console.log("Error: ", (error as any).message)
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: "Error",
+        textBody: (error as any).message,
+      })
+    }
   }
 
   return (
@@ -45,6 +81,7 @@ const Login = () => {
               justifyContent: "center",
               alignItems: "center",
             }}
+            onPress={handleSignUp}
           >
             <Text style={styles.headerOptionText}>Sign Up</Text>
           </TouchableOpacity>
@@ -53,33 +90,28 @@ const Login = () => {
       </View>
       <View style={styles.body}>
         <View style={styles.loginForm}>
-          <View style={styles.authInputContainer}>
-            <TextInput style={styles.authInputField} placeholder="Username" />
-          </View>
-          <View style={[styles.authInputContainer, { marginTop: 30 }]}>
-            <TextInput
-              style={[styles.authInputField, { paddingRight: 30 }]}
-              placeholder="Password"
-              secureTextEntry={hidePassword}
-            />
-            <TouchableOpacity
-              style={{ position: "absolute", right: 20 }}
-              onPress={handleHidePassword}
-            >
-              <Feather
-                name={hidePassword ? "eye-off" : "eye"}
-                size={22}
-                color="#000"
-              />
-            </TouchableOpacity>
-          </View>
+          <InputField
+            placeholder="Email"
+            keyboardType="email-address"
+            style={{ marginTop: 0 }}
+            onChangeText={(text) => setEmail(text)}
+          />
+          <PasswordInputField
+            style={{ marginTop: 20 }}
+            placeholder="Password"
+            onChangeText={(text) => setPassword(text)}
+          />
           <TouchableOpacity
             style={{ marginTop: 20, alignItems: "flex-end" }}
             onPress={() => route.navigate("/")}
           >
             <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
           </TouchableOpacity>
-          <AuthButton text="Log In" style={{ marginTop: 40 }} />
+          <AuthButton
+            text="Log In"
+            style={{ marginTop: 40 }}
+            onClick={handleLogin}
+          />
 
           <View style={styles.loginOptionContainer}>
             <TouchableOpacity style={styles.loginOption}>
