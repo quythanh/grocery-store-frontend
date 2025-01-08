@@ -80,16 +80,18 @@ const Checkout = () => {
             toast.show({
               placement: "top right",
               render: () => (
-                <Toast
-                  action="success"
-                  variant="outline"
-                  className="mt-10 mr-10 w-full border border-mainGreen"
-                >
-                  <ToastTitle>Notification</ToastTitle>
-                  <ToastDescription>
-                    Place order successfully!!
-                  </ToastDescription>
-                </Toast>
+                <View className="px-6 pt-10">
+                  <Toast
+                    action="success"
+                    variant="outline"
+                    className="w-full px-10 border border-mainGreen"
+                  >
+                    <ToastTitle>Notification</ToastTitle>
+                    <ToastDescription>
+                      Place order successfully!!
+                    </ToastDescription>
+                  </Toast>
+                </View>
               ),
             })
           }, 3000)
