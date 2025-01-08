@@ -65,7 +65,7 @@ const ProductScreen = () => {
               </View>
             </HStack>
 
-            <VStack className="gap-4 mt-12">
+            <VStack className="gap-6 mt-16">
               <ProductQuantity qty={infor.qty} handleChange={handleChange} />
 
               <ProductCount count={infor.count} handleChange={handleChange} />
