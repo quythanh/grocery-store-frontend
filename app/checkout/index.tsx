@@ -91,10 +91,7 @@ const Checkout = () => {
   return (
     <View className={`flex-1 ${Platform.OS === "ios" ? "pb-8" : "pb-4"}`}>
       <HStack
-        className="bg-mainGreen px-6 py-3 gap-3 items-center mb-6"
-        style={{
-          paddingTop: StatusBar.currentHeight,
-        }}
+        className={`bg-mainGreen px-6 py-3 gap-3 items-center mb-6 ${Platform.OS === "ios" ? "pt-16" : "pt-12"}`}
       >
         <BackButton />
         <Heading className="text-typography-0">Checkout</Heading>
