@@ -2,7 +2,7 @@ import React from "react"
 import { Check } from "lucide-react-native"
 import { View } from "react-native"
 
-import { Step, steps } from "@/app/checkout"
+import { Step } from "@/app/checkout"
 
 import { HStack } from "../ui/hstack"
 import { Icon } from "../ui/icon"
@@ -10,7 +10,13 @@ import { Text } from "../ui/text"
 
 type State = "completed" | "doing" | "pending"
 
-const CheckoutProgress = ({ current }: { current: number }) => {
+const CheckoutProgress = ({
+  current,
+  steps,
+}: {
+  current: number
+  steps: Step[]
+}) => {
   return (
     <View className="relative">
       <View className="relative px-10">
@@ -33,7 +39,7 @@ const CheckoutProgress = ({ current }: { current: number }) => {
       </View>
       <HStack className="justify-between w-full px-10">
         {steps.map((item) => (
-          <Text key={item.value}>{item.label}</Text>
+          <Text key={item.value} className="text-typography-500">{item.label}</Text>
         ))}
       </HStack>
     </View>

@@ -5,7 +5,7 @@ import {
   PackageCheck,
   Truck,
 } from "lucide-react-native"
-import { Platform, SafeAreaView, StatusBar, View } from "react-native"
+import { Platform, View } from "react-native"
 
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button"
 import { Heading } from "@/components/ui/heading"
@@ -30,7 +30,7 @@ export type Step = {
   content: ReactNode
 }
 
-export const steps: Step[] = [
+const steps: Step[] = [
   {
     icon: Truck,
     label: "Shipping",
@@ -97,7 +97,7 @@ const Checkout = () => {
         <Heading className="text-typography-0">Checkout</Heading>
       </HStack>
 
-      <CheckoutProgress current={currentStep} />
+      <CheckoutProgress current={currentStep} steps={steps} />
 
       <View className="flex-1 px-8 mt-4">{steps[currentStep].content}</View>
       {currentStep ? (
