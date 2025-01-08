@@ -5,7 +5,7 @@ import {
   PackageCheck,
   Truck,
 } from "lucide-react-native"
-import { Platform, SafeAreaView, View } from "react-native"
+import { Platform, SafeAreaView, StatusBar, View } from "react-native"
 
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button"
 import { Heading } from "@/components/ui/heading"
@@ -89,10 +89,13 @@ const Checkout = () => {
   }
 
   return (
-    <SafeAreaView
-      className={`pt-8 flex-1 ${Platform.OS === "ios" ? "pb-8" : "pb-4"}`}
-    >
-      <HStack className="bg-mainGreen px-6 py-3 gap-3 items-center mb-6">
+    <View className={`flex-1 ${Platform.OS === "ios" ? "pb-8" : "pb-4"}`}>
+      <HStack
+        className="bg-mainGreen px-6 py-3 gap-3 items-center mb-6"
+        style={{
+          paddingTop: StatusBar.currentHeight,
+        }}
+      >
         <BackButton />
         <Heading className="text-typography-0">Checkout</Heading>
       </HStack>
@@ -107,7 +110,9 @@ const Checkout = () => {
           size="lg"
           onPress={handlePrev}
         >
-          <ButtonText className="text-mainGreen active:!text-green-700 ">Previous</ButtonText>
+          <ButtonText className="text-mainGreen active:!text-green-700 ">
+            Previous
+          </ButtonText>
         </Button>
       ) : null}
       <Button
@@ -118,7 +123,7 @@ const Checkout = () => {
         {loading && <ButtonSpinner color={"#ccc"} />}
         <ButtonText>{currentStep == 2 ? "Place Order" : "Next"}</ButtonText>
       </Button>
-    </SafeAreaView>
+    </View>
   )
 }
 
