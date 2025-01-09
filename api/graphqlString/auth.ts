@@ -36,3 +36,41 @@ export const CREATE_CUSTOMER_MUTATION = gql`
     }
   }
 `
+
+export const GET_CUSTOMER_INFORMATION = gql`
+  query GetCustomerInformation {
+    customer {
+      firstname
+      lastname
+      email
+      gender
+      date_of_birth
+    }
+  }
+`
+
+export const UPDATE_CUSTOMER_INFORMATION = gql`
+  mutation UpdateCustomerInformation(
+    $firstname: String!
+    $lastname: String!
+    $gender: Int!
+    $date_of_birth: String!
+  ) {
+    updateCustomerV2(
+      input: {
+        firstname: $firstname
+        lastname: $lastname
+        gender: $gender
+        date_of_birth: $date_of_birth
+      }
+    ) {
+      customer {
+        firstname
+        lastname
+        email
+        gender
+        date_of_birth
+      }
+    }
+  }
+`

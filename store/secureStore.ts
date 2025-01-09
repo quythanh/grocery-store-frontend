@@ -11,3 +11,7 @@ export async function setSecureStore(
 ): Promise<void> {
   await SecureStore.setItemAsync(key, value)
 }
+
+export async function deleteSecureStore(key: string): Promise<void> {
+  await SecureStore.deleteItemAsync(key)
+}
