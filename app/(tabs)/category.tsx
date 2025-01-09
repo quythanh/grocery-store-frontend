@@ -14,9 +14,9 @@ import { Text } from "@/components/ui/text"
 import { VStack } from "@/components/ui/vstack"
 import groceryProducts from "@/components/category/data"
 import FilterModal from "@/components/category/FilterModal"
-import ProductCard from "@/components/category/ProductCard"
 import SortPopover from "@/components/category/SortPopover"
 import Pagination from "@/components/common/Pagination"
+import ProductCard from "@/components/product/ProductCard"
 
 const ProfileScreen = () => {
   const { open, searchKey, setSearchKey } = useCategoryFilterStore(
