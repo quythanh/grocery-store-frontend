@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { GENERATE_CUSTOMER_TOKEN } from "@/api/graphqlString/auth"
 import { Colors } from "@/constants/Colors"
-import { getSecureStore, setSecureStore } from "@/store/secureStore"
+import { setSecureStore } from "@/store/secureStore"
+import { useTokenStore } from "@/store/tokenStore"
 import { useMutation } from "@apollo/client"
 import { Feather, FontAwesome6 } from "@expo/vector-icons"
 import { useRouter } from "expo-router"
@@ -21,6 +22,7 @@ const Login = () => {
   const [generateCustomerToken, { data, loading, error }] = useMutation(
     GENERATE_CUSTOMER_TOKEN
   )
+  const { setToken } = useTokenStore()
 
   const handleBack = () => {
     route.back()
@@ -40,6 +42,7 @@ const Login = () => {
       })
 
       await setSecureStore("token", response.data.generateCustomerToken.token)
+      setToken(response.data.generateCustomerToken.token)
 
       Toast.show({
         type: ALERT_TYPE.SUCCESS,
