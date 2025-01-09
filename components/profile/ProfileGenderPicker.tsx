@@ -12,19 +12,19 @@ import {
 } from "react-native"
 
 interface GenderPickerInputProps {
-  value?: number | string
+  value?: number
   style?: object
-  onChange: (value: string) => void
+  onChange: (value: number) => void
 }
 
 const gender = [
   {
     label: "Male",
-    value: "1",
+    value: 1,
   },
   {
     label: "Female",
-    value: "2",
+    value: 2,
   },
 ]
 
@@ -37,17 +37,17 @@ const ProfileGenderPicker = ({
   const [isPickerVisible, setPickerVisible] = useState(false)
 
   useEffect(() => {
-    if (Number(value) === 1) {
+    if (value === 1) {
       setSelectedGender("Male")
     } else {
       setSelectedGender("Female")
     }
-  }, [])
+  }, [value])
 
-  const handleGenderSelect = (gender: string) => {
+  const handleGenderSelect = (gender: number) => {
     onChange(gender)
 
-    if (gender === "1") {
+    if (gender === 1) {
       setSelectedGender("Male")
     } else {
       setSelectedGender("Female")

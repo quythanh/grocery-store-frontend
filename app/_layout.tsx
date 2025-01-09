@@ -18,6 +18,8 @@ import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider"
 import "react-native-reanimated"
 
 import client from "@/api/apolloClient"
+import { getSecureStore } from "@/store/secureStore"
+import { useTokenStore } from "@/store/tokenStore"
 import { ApolloProvider } from "@apollo/client"
 
 import { useColorScheme } from "@/hooks/useColorScheme"
@@ -30,12 +32,24 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   })
+  const { setToken } = useTokenStore()
 
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync()
     }
   }, [loaded])
+
+  useEffect(() => {
+    const getStoredToken = async () => {
+      const storedToken = await getSecureStore("token")
+      if (storedToken) {
+        setToken(storedToken)
+      }
+    }
+
+    getStoredToken()
+  }, [])
 
   if (!loaded) {
     return null

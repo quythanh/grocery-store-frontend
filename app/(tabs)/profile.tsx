@@ -5,7 +5,7 @@ import {
 } from "@/api/graphqlString/auth"
 import { Colors } from "@/constants/Colors"
 import { useCustomerInformationStore } from "@/store/customerInformationStore"
-import { deleteSecureStore, getSecureStore } from "@/store/secureStore"
+import { deleteSecureStore } from "@/store/secureStore"
 import { useTokenStore } from "@/store/tokenStore"
 import { useMutation, useQuery } from "@apollo/client"
 import { Feather } from "@expo/vector-icons"
@@ -29,12 +29,13 @@ import AuthButton from "@/components/auth/AuthButton"
 import ProfileDatePicker from "@/components/profile/ProfileDatePicker"
 import ProfileGenderPicker from "@/components/profile/ProfileGenderPicker"
 import ProfileInputField from "@/components/profile/ProfileInputField"
+import RequireLogin from "@/components/RequireLogin"
 
 const ProfileScreen = () => {
   const route = useRouter()
   const inset = useSafeAreaInsets()
   const [isEditing, setIsEditing] = useState(false)
-  const { token, setToken, resetToken } = useTokenStore()
+  const { token, resetToken } = useTokenStore()
   const { informationState, setInformationState, resetInformationState } =
     useCustomerInformationStore()
 
@@ -45,6 +46,7 @@ const ProfileScreen = () => {
         Authorization: `Bearer ${token}`,
       },
     },
+    fetchPolicy: "no-cache",
   })
 
   const [
@@ -61,17 +63,6 @@ const ProfileScreen = () => {
   const handleBack = () => {
     route.back()
   }
-
-  const getStoredToken = async () => {
-    const storedToken = await getSecureStore("token")
-    if (storedToken) {
-      setToken(storedToken)
-    }
-  }
-
-  useEffect(() => {
-    getStoredToken()
-  }, [])
 
   useEffect(() => {
     if (data) {
@@ -119,6 +110,7 @@ const ProfileScreen = () => {
 
         const { firstname, lastname, email, gender, date_of_birth } =
           response.data.updateCustomerV2.customer
+
         setInformationState("firstname", firstname)
         setInformationState("lastname", lastname)
         setInformationState("email", email)
@@ -139,30 +131,6 @@ const ProfileScreen = () => {
         textBody: (error as any).message,
       })
     }
-  }
-
-  if (!token) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>
-          You need to log in to access this page.
-        </Text>
-        <TouchableOpacity
-          style={styles.btnNavigate}
-          onPress={() => route.navigate("/auth/landing")}
-        >
-          <Text style={styles.btnNavigateText}>Log in</Text>
-        </TouchableOpacity>
-      </View>
-    )
-  }
-
-  if (loading || updateLoading) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Loading...</Text>
-      </View>
-    )
   }
 
   return (
@@ -263,7 +231,7 @@ const ProfileScreen = () => {
   )
 }
 
-export default ProfileScreen
+export default RequireLogin(ProfileScreen)
 
 const styles = StyleSheet.create({
   container: {
@@ -319,27 +287,4 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   formContainer: {},
-
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-  },
-  errorText: {
-    fontSize: 20,
-    marginBottom: 20,
-  },
-
-  btnNavigate: {
-    paddingHorizontal: 25,
-    paddingVertical: 10,
-    backgroundColor: Colors.lightGreen,
-    borderRadius: 100,
-  },
-  btnNavigateText: {
-    color: Colors.green,
-    fontSize: 18,
-    fontWeight: "500",
-  },
 })
