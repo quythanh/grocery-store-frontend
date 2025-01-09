@@ -26,6 +26,7 @@ import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import AuthButton from "@/components/auth/AuthButton"
+import LoadingModal from "@/components/LoadingModal"
 import ProfileDatePicker from "@/components/profile/ProfileDatePicker"
 import ProfileGenderPicker from "@/components/profile/ProfileGenderPicker"
 import ProfileInputField from "@/components/profile/ProfileInputField"
@@ -134,100 +135,103 @@ const ProfileScreen = () => {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
-    >
-      <TouchableWithoutFeedback
-        onPress={() => {
-          Keyboard.dismiss()
-        }}
+    <>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
       >
-        <View style={[styles.container, { paddingTop: inset.top }]}>
-          <View style={styles.header}>
-            <View style={styles.headerOptions}>
-              <TouchableOpacity
-                style={{
-                  width: 40,
-                  height: 40,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onPress={handleBack}
+        <TouchableWithoutFeedback
+          onPress={() => {
+            Keyboard.dismiss()
+          }}
+        >
+          <View style={[styles.container, { paddingTop: inset.top }]}>
+            <View style={styles.header}>
+              <View style={styles.headerOptions}>
+                <TouchableOpacity
+                  style={{
+                    width: 40,
+                    height: 40,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  onPress={handleBack}
+                >
+                  <Feather name="chevron-left" size={30} color="#fff" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    width: 40,
+                    height: 40,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  onPress={handleLogOut}
+                >
+                  <Feather name="log-out" size={30} color="#fff" />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.body}>
+              <View style={styles.avatarContainer}>
+                <Image
+                  source={{
+                    uri: "https://static.wixstatic.com/media/53e8bb_a1e88e551162485eb4ff962437300872~mv2.jpeg/v1/crop/x_0,y_105,w_1024,h_919/fill/w_840,h_754,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Banana.jpeg",
+                  }}
+                  style={styles.avatar}
+                />
+              </View>
+              <Text style={styles.fullname}>
+                {informationState.firstname} {informationState.lastname}
+              </Text>
+
+              <View style={styles.seperateLine} />
+
+              <ScrollView
+                style={[styles.formContainer]}
+                showsVerticalScrollIndicator={false}
               >
-                <Feather name="chevron-left" size={30} color="#fff" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: 40,
-                  height: 40,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onPress={handleLogOut}
-              >
-                <Feather name="log-out" size={30} color="#fff" />
-              </TouchableOpacity>
+                <ProfileInputField
+                  label="First Name"
+                  placeholder="Enter your first name"
+                  value={informationState.firstname}
+                  onChange={(value) => handleChange("firstname", value)}
+                />
+                <ProfileInputField
+                  label="Last Name"
+                  placeholder="Enter your last name"
+                  value={informationState.lastname}
+                  onChange={(value) => handleChange("lastname", value)}
+                />
+                <ProfileInputField
+                  label="Email"
+                  placeholder="Enter your email"
+                  editable={false}
+                  value={informationState.email}
+                  onChange={(value) => handleChange("email", value)}
+                />
+                <ProfileGenderPicker
+                  value={informationState.gender}
+                  onChange={(value) => handleChange("gender", Number(value))}
+                />
+                <ProfileDatePicker
+                  value={informationState.date_of_birth}
+                  onChangeText={(value) => handleChange("date_of_birth", value)}
+                />
+                <AuthButton
+                  text="Update"
+                  onClick={handleUpdate}
+                  style={{ marginTop: 20 }}
+                />
+                <View style={{ height: Platform.OS === "ios" ? 100 : 20 }} />
+              </ScrollView>
             </View>
           </View>
-
-          <View style={styles.body}>
-            <View style={styles.avatarContainer}>
-              <Image
-                source={{
-                  uri: "https://static.wixstatic.com/media/53e8bb_a1e88e551162485eb4ff962437300872~mv2.jpeg/v1/crop/x_0,y_105,w_1024,h_919/fill/w_840,h_754,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Banana.jpeg",
-                }}
-                style={styles.avatar}
-              />
-            </View>
-            <Text style={styles.fullname}>
-              {informationState.firstname} {informationState.lastname}
-            </Text>
-
-            <View style={styles.seperateLine} />
-
-            <ScrollView
-              style={[styles.formContainer]}
-              showsVerticalScrollIndicator={false}
-            >
-              <ProfileInputField
-                label="First Name"
-                placeholder="Enter your first name"
-                value={informationState.firstname}
-                onChange={(value) => handleChange("firstname", value)}
-              />
-              <ProfileInputField
-                label="Last Name"
-                placeholder="Enter your last name"
-                value={informationState.lastname}
-                onChange={(value) => handleChange("lastname", value)}
-              />
-              <ProfileInputField
-                label="Email"
-                placeholder="Enter your email"
-                editable={false}
-                value={informationState.email}
-                onChange={(value) => handleChange("email", value)}
-              />
-              <ProfileGenderPicker
-                value={informationState.gender}
-                onChange={(value) => handleChange("gender", Number(value))}
-              />
-              <ProfileDatePicker
-                value={informationState.date_of_birth}
-                onChangeText={(value) => handleChange("date_of_birth", value)}
-              />
-              <AuthButton
-                text="Update"
-                onClick={handleUpdate}
-                style={{ marginTop: 20 }}
-              />
-              <View style={{ height: Platform.OS === "ios" ? 100 : 20 }} />
-            </ScrollView>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+      <LoadingModal visible={loading || updateLoading} />
+    </>
   )
 }
 
