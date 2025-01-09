@@ -1,7 +1,9 @@
 import { useState } from "react"
+import { useRouter } from "expo-router"
 import { Platform, ScrollView, View } from "react-native"
 
 import { Box } from "@/components/ui/box"
+import { Button, ButtonText } from "@/components/ui/button"
 import { Grid, GridItem } from "@/components/ui/grid"
 import { Heading } from "@/components/ui/heading"
 import { HStack } from "@/components/ui/hstack"
@@ -20,12 +22,7 @@ const FavoriteScreen = () => {
     if (data.includes(product)) setData(data.filter((p) => p.id != product.id))
   }
 
-  // if (data.length === 0)
-  //   return (
-  //     <View className="bg-background-0 flex-1 justify-center items-center">
-  //       <Image alt="empty" source={emptyBackground} size="2xl" />
-  //     </View>
-  //   )
+  const router = useRouter()
   return (
     <View className={`flex-1 `}>
       <HStack
@@ -38,6 +35,13 @@ const FavoriteScreen = () => {
       {data.length === 0 ? (
         <View className="bg-background-0 justify-center items-center flex-1">
           <Image alt="empty" source={emptyBackground} size="2xl" />
+          <Button
+            className="bg-mainGreen rounded-full mt-20 active:!bg-lightGreen"
+            size="lg"
+            onPress={() => router.push("/")}
+          >
+            <ButtonText>Start Shopping</ButtonText>
+          </Button>
         </View>
       ) : (
         <ScrollView>
