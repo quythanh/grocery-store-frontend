@@ -1,9 +1,9 @@
-import { Image, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { ThemedText } from "./ThemedText"
 import { ThemedView } from "./ThemedView"
 import { Button, ButtonIcon } from "./ui/button";
 import { AddIcon, RemoveIcon } from "./ui/icon";
-import { useState } from "react";
+import Image from "./Image"
 
 export interface CartItemProps {
     name: string;
