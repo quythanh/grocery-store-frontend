@@ -1,101 +1,120 @@
-import { useState } from "react"
+import { ApolloError, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "expo-router"
+import { Fragment } from "react";
 import { StyleSheet, Text, View } from "react-native"
 
+import { GET_CUSTOMER_CART, UPDATE_CART_ITEM } from "@/api/graphqlString/cart";
 import { Button, ButtonText } from "@/components/ui/button"
-import CartItem, { type CartItemProps } from "@/components/CartItem"
+import CartItem from "@/components/CartItem"
+import LoadingModal from "@/components/LoadingModal";
 import ParallaxScrollView from "@/components/ParallaxScrollView"
+import RequireLogin from "@/components/RequireLogin";
 import { ThemedText } from "@/components/ThemedText"
+import { useTokenStore } from "@/store/tokenStore"
+import type { Cart } from "@/types/cart";
 
-const mockItems: Omit<CartItemProps, "quantityAdjustFn">[] = [
-  {
-    name: "Potato",
-    imgUrl:
-      "https://images.squarespace-cdn.com/content/v1/5b5b5824f2e6b10639fdaf09/a277eae9-bf1a-4e66-9daf-dd2e60209073/Produce+Storage+Tips+icons+%289%29.png",
-    price: 15,
-    unit: "2 Kgs",
-    quantity: 2,
-  },
-  {
-    name: "Onion",
-    imgUrl:
-      "https://produits.bienmanger.com/36700-0w470h470_Organic_Red_Onion_From_Italy.jpg",
-    price: 15,
-    unit: "2 Kgs",
-    quantity: 1,
-  },
-]
+const showError = (e: ApolloError | undefined) => {
+  if (e === undefined) return
+  console.error(`${e.cause?.name}\n${e.cause?.message}`);
+}
 
 const CartScreen = () => {
-  const [cartItems, setCartItems] = useState(mockItems)
   const route = useRouter()
+  const { token } = useTokenStore()
 
-  const handleAdjustQuantity = (pos: number) => {
-    return (quantity: number) => {
-      const newCartItems = [...cartItems]
+  const { data, error: getError, loading: getLoading } = useQuery<{ customerCart: Cart }>(GET_CUSTOMER_CART, {
+    context: {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
+    pollInterval: 5000
+  })
 
-      newCartItems[pos].quantity = quantity
-
-      if (quantity === 0) {
-        newCartItems.splice(pos, 1)
+  const [updateCartItem, { error: updateError, loading: updateLoading }] = useMutation(UPDATE_CART_ITEM, {
+    context: {
+      headers: {
+        authorization: `Bearer ${token}`,
       }
+    },
+    refetchQueries: ["GetCustomerCart"],
+  })
 
-      setCartItems(newCartItems)
-    }
-  }
+  const error = getError || updateError
+  const loading = getLoading || updateLoading
 
   return (
-    <ParallaxScrollView
-      headerImage={
-        <View style={styles.headerContainer}>
-          <ThemedText style={styles.headerText}>Shopping Cart</ThemedText>
-          <ThemedText style={styles.headerSubText}>
-            A total of {cartItems.length} pieces
-          </ThemedText>
+    <Fragment>
+      <ParallaxScrollView
+        headerImage={
+          <View style={styles.headerContainer}>
+            <ThemedText style={styles.headerText}>Shopping Cart</ThemedText>
+            <ThemedText style={styles.headerSubText}>
+              A total of {data?.customerCart.itemsV2.total_count || 0} pieces
+            </ThemedText>
+          </View>
+        }
+        headerBackgroundColor={{ light: "#64A86B", dark: "#1D3D47" }}
+      >
+        <View style={styles.wrapper}>
+          <View style={styles.listItems}>
+            {data?.customerCart.itemsV2.items.map((item) => (
+              <CartItem
+                key={item.uid}
+                name={item.product.name}
+                imgUrl={item.product.image.url}
+                price={item.prices.price.value}
+                unit={item.configurable_options ? item.configurable_options[0]?.value_label : "1 Kg"}
+                quantity={item.quantity}
+                quantityAdjustFn={(number) => {
+                  updateCartItem({
+                    variables: {
+                      cartId: data.customerCart.id,
+                      cartItemUid: item.uid,
+                      quantity: number
+                    }
+                  })
+                }}
+              />
+            ))}
+          </View>
+  
+          {
+            (error)
+              ? (() => {
+                  showError(error)
+                  return null;
+                })()
+              : (
+                <Fragment>
+                  <View style={styles.totalWrapper}>
+                    <Text style={styles.totalText}>Total:</Text>
+                    <Text style={styles.totalValue}>
+                      ${data?.customerCart.prices.subtotal_excluding_tax.value}
+                    </Text>
+                  </View>
+  
+                  <Button
+                    size="lg"
+                    style={styles.continueWrapper}
+                    onPress={() => route.push("/checkout")}
+                  >
+                    <ButtonText style={styles.continueText} className="text-white">
+                      Continue
+                    </ButtonText>
+                  </Button>
+                </Fragment>
+              )
+          }
+          
         </View>
-      }
-      headerBackgroundColor={{ light: "#64A86B", dark: "#1D3D47" }}
-    >
-      <View style={styles.wrapper}>
-        <View style={styles.listItems}>
-          {cartItems.map((item, i) => (
-            <CartItem
-              key={item.name}
-              name={item.name}
-              imgUrl={item.imgUrl}
-              price={item.price}
-              unit={item.unit}
-              quantity={item.quantity}
-              quantityAdjustFn={handleAdjustQuantity(i)}
-            />
-          ))}
-        </View>
-
-        <View style={styles.totalWrapper}>
-          <Text style={styles.totalText}>Total:</Text>
-          <Text style={styles.totalValue}>
-            $
-            {cartItems
-              .reduce((prev, curr) => prev + curr.quantity * curr.price, 0)
-              .toFixed(2)}
-          </Text>
-        </View>
-
-        <Button
-          size="lg"
-          style={styles.continueWrapper}
-          onPress={() => route.push("/checkout")}
-        >
-          <ButtonText style={styles.continueText} className="text-white">
-            Continue
-          </ButtonText>
-        </Button>
-      </View>
-    </ParallaxScrollView>
+      </ParallaxScrollView>
+      <LoadingModal visible={loading} />
+    </Fragment>
   )
 }
 
-export default CartScreen
+export default RequireLogin(CartScreen)
 
 const styles = StyleSheet.create({
   headerContainer: {
