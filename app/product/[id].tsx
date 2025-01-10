@@ -24,7 +24,7 @@ export type ProductToCart = {
 
 const ProductScreen = () => {
   const { id } = useLocalSearchParams()
-  const product = groceryProducts[+id - 1]
+  const product = groceryProducts[0]
 
   const productToCart: ProductToCart = {
     qty: 0,
@@ -33,6 +33,7 @@ const ProductScreen = () => {
   }
 
   const [infor, setInfor] = useState(productToCart)
+
 
   const handleChange = (key: keyof ProductToCart, value: number) => {
     if (key == "count" && value <= 0) return
@@ -44,11 +45,6 @@ const ProductScreen = () => {
 
   return (
     <ThemedView className="flex-1 ">
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-      ></Stack.Screen>
       <VStack className="bg-mainGreen flex-1 ">
         <ProductDetail product={product} />
         <VStack
