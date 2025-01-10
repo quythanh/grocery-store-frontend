@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { ApolloError, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "expo-router"
 import { Fragment } from "react";
 import { StyleSheet, Text, View } from "react-native"
@@ -13,11 +13,16 @@ import { ThemedText } from "@/components/ThemedText"
 import { useTokenStore } from "@/store/tokenStore"
 import type { Cart } from "@/types/cart";
 
+const showError = (e: ApolloError | undefined) => {
+  if (e === undefined) return
+  console.error(`${e.cause?.name}\n${e.cause?.message}`);
+}
+
 const CartScreen = () => {
   const route = useRouter()
   const { token } = useTokenStore()
 
-  const { data, error, loading } = useQuery<{ customerCart: Cart }>(GET_CUSTOMER_CART, {
+  const { data, error: getError, loading: getLoading } = useQuery<{ customerCart: Cart }>(GET_CUSTOMER_CART, {
     context: {
       headers: {
         authorization: `Bearer ${token}`,
@@ -35,8 +40,7 @@ const CartScreen = () => {
     refetchQueries: ["GetCustomerCart"],
   })
 
-  if (error) console.error(error)
-  if (updateError) console.error(updateError)
+  const error = getError || updateError
 
   return (
     <Fragment>
@@ -74,22 +78,34 @@ const CartScreen = () => {
             ))}
           </View>
   
-          <View style={styles.totalWrapper}>
-            <Text style={styles.totalText}>Total:</Text>
-            <Text style={styles.totalValue}>
-              ${data?.customerCart.prices.subtotal_excluding_tax.value}
-            </Text>
-          </View>
+          {
+            (error)
+              ? (() => {
+                  showError(error)
+                  return null;
+                })()
+              : (
+                <Fragment>
+                  <View style={styles.totalWrapper}>
+                    <Text style={styles.totalText}>Total:</Text>
+                    <Text style={styles.totalValue}>
+                      ${data?.customerCart.prices.subtotal_excluding_tax.value}
+                    </Text>
+                  </View>
   
-          <Button
-            size="lg"
-            style={styles.continueWrapper}
-            onPress={() => route.push("/checkout")}
-          >
-            <ButtonText style={styles.continueText} className="text-white">
-              Continue
-            </ButtonText>
-          </Button>
+                  <Button
+                    size="lg"
+                    style={styles.continueWrapper}
+                    onPress={() => route.push("/checkout")}
+                  >
+                    <ButtonText style={styles.continueText} className="text-white">
+                      Continue
+                    </ButtonText>
+                  </Button>
+                </Fragment>
+              )
+          }
+          
         </View>
       </ParallaxScrollView>
       <LoadingModal visible={loading || updateLoading} />
