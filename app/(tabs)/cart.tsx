@@ -1,10 +1,12 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "expo-router"
+import { Fragment } from "react";
 import { StyleSheet, Text, View } from "react-native"
 
 import { GET_CUSTOMER_CART, UPDATE_CART_ITEM } from "@/api/graphqlString/cart";
 import { Button, ButtonText } from "@/components/ui/button"
 import CartItem from "@/components/CartItem"
+import LoadingModal from "@/components/LoadingModal";
 import ParallaxScrollView from "@/components/ParallaxScrollView"
 import RequireLogin from "@/components/RequireLogin";
 import { ThemedText } from "@/components/ThemedText"
@@ -15,7 +17,7 @@ const CartScreen = () => {
   const route = useRouter()
   const { token } = useTokenStore()
 
-  const { data, error } = useQuery<{ customerCart: Cart }>(GET_CUSTOMER_CART, {
+  const { data, error, loading } = useQuery<{ customerCart: Cart }>(GET_CUSTOMER_CART, {
     context: {
       headers: {
         authorization: `Bearer ${token}`,
@@ -24,7 +26,7 @@ const CartScreen = () => {
     pollInterval: 5000
   })
 
-  const [updateCartItem, { error: updateError }] = useMutation(UPDATE_CART_ITEM, {
+  const [updateCartItem, { error: updateError, loading: updateLoading }] = useMutation(UPDATE_CART_ITEM, {
     context: {
       headers: {
         authorization: `Bearer ${token}`,
@@ -37,58 +39,61 @@ const CartScreen = () => {
   if (updateError) console.error(updateError)
 
   return (
-    <ParallaxScrollView
-      headerImage={
-        <View style={styles.headerContainer}>
-          <ThemedText style={styles.headerText}>Shopping Cart</ThemedText>
-          <ThemedText style={styles.headerSubText}>
-            A total of {data?.customerCart.itemsV2.total_count || 0} pieces
-          </ThemedText>
+    <Fragment>
+      <ParallaxScrollView
+        headerImage={
+          <View style={styles.headerContainer}>
+            <ThemedText style={styles.headerText}>Shopping Cart</ThemedText>
+            <ThemedText style={styles.headerSubText}>
+              A total of {data?.customerCart.itemsV2.total_count || 0} pieces
+            </ThemedText>
+          </View>
+        }
+        headerBackgroundColor={{ light: "#64A86B", dark: "#1D3D47" }}
+      >
+        <View style={styles.wrapper}>
+          <View style={styles.listItems}>
+            {data?.customerCart.itemsV2.items.map((item) => (
+              <CartItem
+                key={item.uid}
+                name={item.product.name}
+                imgUrl={item.product.image.url}
+                price={item.prices.price.value}
+                unit={item.configurable_options[0]?.value_label || "1 Kg"}
+                quantity={item.quantity}
+                quantityAdjustFn={(number) => {
+                  updateCartItem({
+                    variables: {
+                      cartId: data.customerCart.id,
+                      cartItemUid: item.uid,
+                      quantity: number
+                    }
+                  })
+                }}
+              />
+            ))}
+          </View>
+  
+          <View style={styles.totalWrapper}>
+            <Text style={styles.totalText}>Total:</Text>
+            <Text style={styles.totalValue}>
+              ${data?.customerCart.prices.subtotal_excluding_tax.value}
+            </Text>
+          </View>
+  
+          <Button
+            size="lg"
+            style={styles.continueWrapper}
+            onPress={() => route.push("/checkout")}
+          >
+            <ButtonText style={styles.continueText} className="text-white">
+              Continue
+            </ButtonText>
+          </Button>
         </View>
-      }
-      headerBackgroundColor={{ light: "#64A86B", dark: "#1D3D47" }}
-    >
-      <View style={styles.wrapper}>
-        <View style={styles.listItems}>
-          {data?.customerCart.itemsV2.items.map((item) => (
-            <CartItem
-              key={item.uid}
-              name={item.product.name}
-              imgUrl={item.product.image.url}
-              price={item.prices.price.value}
-              unit={item.configurable_options[0]?.value_label || "1 Kg"}
-              quantity={item.quantity}
-              quantityAdjustFn={(number) => {
-                updateCartItem({
-                  variables: {
-                    cartId: data.customerCart.id,
-                    cartItemUid: item.uid,
-                    quantity: number
-                  }
-                })
-              }}
-            />
-          ))}
-        </View>
-
-        <View style={styles.totalWrapper}>
-          <Text style={styles.totalText}>Total:</Text>
-          <Text style={styles.totalValue}>
-            ${data?.customerCart.prices.subtotal_excluding_tax.value}
-          </Text>
-        </View>
-
-        <Button
-          size="lg"
-          style={styles.continueWrapper}
-          onPress={() => route.push("/checkout")}
-        >
-          <ButtonText style={styles.continueText} className="text-white">
-            Continue
-          </ButtonText>
-        </Button>
-      </View>
-    </ParallaxScrollView>
+      </ParallaxScrollView>
+      <LoadingModal visible={loading || updateLoading} />
+    </Fragment>
   )
 }
 
