@@ -24,6 +24,8 @@ import emptyBackground from "../../assets/images/empty-favourite.png"
 const FavoriteScreen = () => {
   const { token } = useTokenStore()
   const router = useRouter()
+  const [removedItem, setRemovedItem] = useState("")
+  const [showAlertDialog, setShowAlertDialog] = useState(false)
 
   const { data, loading, error, refetch } = useQuery(GET_FAVOURITE_PRODUCTS, {
     skip: !token,
@@ -44,8 +46,6 @@ const FavoriteScreen = () => {
     fetchPolicy: "no-cache",
   })
 
-  const [removedItem, setRemovedItem] = useState("")
-  const [showAlertDialog, setShowAlertDialog] = useState(false)
   const handleFavourite = () => {
     removeProductsFromWishlist({
       variables: {
@@ -56,7 +56,7 @@ const FavoriteScreen = () => {
     refetch()
   }
 
-  const items: any[] = data?.customer.wishlist.items
+  const items: any[] = data?.customer.wishlist.items || []
 
   if (error) {
     Toast.show({
