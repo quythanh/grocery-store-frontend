@@ -29,7 +29,7 @@ export type Product = {
   price: number
   qty: number
   image: string
-  id: number
+  id: number | string
 }
 
 const ProductCard = ({

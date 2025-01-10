@@ -1,19 +1,22 @@
-import { useEffect, useState } from "react"
-import { GET_FAVOURITE_PRODUCTS } from "@/api/graphqlString/favourite"
+import { useState } from "react"
+import {
+  GET_FAVOURITE_PRODUCTS,
+  REMOVE_ITEM_FROM_WISHLIST,
+} from "@/api/graphqlString/favourite"
 import { useTokenStore } from "@/store/tokenStore"
-import { useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { useRouter } from "expo-router"
 import { Platform, ScrollView, View } from "react-native"
+import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 
 import { Box } from "@/components/ui/box"
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button"
 import { Grid, GridItem } from "@/components/ui/grid"
 import { Heading } from "@/components/ui/heading"
 import { Image } from "@/components/ui/image"
-import { VStack } from "@/components/ui/vstack"
 import Pagination from "@/components/common/Pagination"
+import RemoveFavouriteDialog from "@/components/common/RemoveFavouriteDialog"
 import TopHeader from "@/components/common/TopHeader"
-import { Product } from "@/components/product/ProductCard"
 import ProductFavouriteCard from "@/components/product/ProductFavouriteCard"
 
 import emptyBackground from "../../assets/images/empty-favourite.png"
@@ -22,7 +25,7 @@ const FavoriteScreen = () => {
   const { token } = useTokenStore()
   const router = useRouter()
 
-  const { data, loading, error } = useQuery(GET_FAVOURITE_PRODUCTS, {
+  const { data, loading, error, refetch } = useQuery(GET_FAVOURITE_PRODUCTS, {
     skip: !token,
     context: {
       headers: {
@@ -31,25 +34,37 @@ const FavoriteScreen = () => {
     },
     fetchPolicy: "no-cache",
   })
-  const [products, setProducts] = useState<Product[]>([])
-  const handleFavourite = (product: Product) => {
-    if (products.includes(product))
-      setProducts(products.filter((p) => p.id != product.id))
+
+  const [removeProductsFromWishlist] = useMutation(REMOVE_ITEM_FROM_WISHLIST, {
+    context: {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+    fetchPolicy: "no-cache",
+  })
+
+  const [removedItem, setRemovedItem] = useState("")
+  const [showAlertDialog, setShowAlertDialog] = useState(false)
+  const handleFavourite = () => {
+    removeProductsFromWishlist({
+      variables: {
+        wishlistId: data.customer.wishlist.id,
+        wishlistItemsIds: [removedItem],
+      },
+    })
+    refetch()
   }
 
-  useEffect(() => {
-    if (!data) return
-    const mappedProducts: Product[] = Array.from(
-      data?.wishlist.items || []
-    ).map(({ product }: any) => ({
-      name: product.name,
-      id: product.uid,
-      image: product.image.url,
-      price: product.price_range.minimum_price.final_price.value,
-      qty: 1,
-    }))
-    setProducts(mappedProducts)
-  }, [data])
+  const items: any[] = data?.customer.wishlist.items
+
+  if (error) {
+    Toast.show({
+      type: ALERT_TYPE.DANGER,
+      textBody: error.message,
+      title: error.name,
+    })
+  }
 
   if (!token)
     return (
@@ -82,7 +97,7 @@ const FavoriteScreen = () => {
     <View className={`flex-1 `}>
       <TopHeader>Favourite</TopHeader>
 
-      {error || products.length === 0 ? (
+      {items.length === 0 ? (
         <View className="bg-background-0 justify-center items-center flex-1">
           <Image alt="empty" source={emptyBackground} size="2xl" />
           <Button
@@ -101,7 +116,7 @@ const FavoriteScreen = () => {
               className: "col-span-12",
             }}
           >
-            {products.map((product) => (
+            {items.map(({ id, product }) => (
               <GridItem
                 key={product.id}
                 _extra={{
@@ -109,8 +124,18 @@ const FavoriteScreen = () => {
                 }}
               >
                 <ProductFavouriteCard
-                  product={product}
-                  onPress={handleFavourite.bind(this, product)}
+                  product={{
+                    id: product.sku,
+                    image: product.image.url,
+                    name: product.name,
+                    price:
+                      product.price_range.minimum_price.regular_price.value,
+                    qty: 1,
+                  }}
+                  onPress={() => {
+                    setRemovedItem(id)
+                    setShowAlertDialog(true)
+                  }}
                 />
               </GridItem>
             ))}
@@ -119,6 +144,12 @@ const FavoriteScreen = () => {
           <Box className={Platform.OS === "ios" ? "h-28" : "h-4"}></Box>
         </ScrollView>
       )}
+
+      <RemoveFavouriteDialog
+        show={showAlertDialog}
+        handleRemove={handleFavourite}
+        handleClose={setShowAlertDialog.bind(this, false)}
+      />
     </View>
   )
 }
