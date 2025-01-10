@@ -82,8 +82,9 @@ const ProfileScreen = () => {
                 <GridItem
                   key={i}
                   _extra={{
-                    className: "col-span-6 ",
+                    className: "col-span-6",
                   }}
+                  className="h-[260px]"
                 >
                   <ProductCard product={product} />
                 </GridItem>

@@ -52,6 +52,7 @@ const ProductCard = ({
 
   return (
     <Link
+      className="h-full"
       href={{
         pathname: "/product/[id]",
         params: {
@@ -59,7 +60,7 @@ const ProductCard = ({
         },
       }}
     >
-      <Card className={`p-3 rounded-xl w-full h-full ${className || ""}`}>
+      <Card className={`p-3 rounded-xl w-full ${className || ""}`}>
         <Image
           source={{
             uri: product.image,
@@ -75,7 +76,7 @@ const ProductCard = ({
             <Text className="flex-1 font-bold text-lg">
               {product.price}.000đ
             </Text>
-            <HStack className=" items-center gap-1">
+            <HStack className="items-center gap-1">
               <Icon as={Weight} size={"sm"} />
               <Text>{product.qty}gram</Text>
             </HStack>
