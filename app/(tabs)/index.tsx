@@ -67,7 +67,7 @@ const HomeScreen = () => {
             />
           </View>
 
-          <VerticalProductList products={products} />
+          <VerticalProductList />
         </ScrollView>
       </View>
     </SafeAreaView>
