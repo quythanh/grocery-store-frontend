@@ -2,16 +2,9 @@ import React, { useEffect } from "react"
 import { GET_PRODUCT_LIST } from "@/api/graphqlString/home"
 import { useQuery } from "@apollo/client"
 import { Feather } from "@expo/vector-icons"
-import {
-  Dimensions,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native"
+import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native"
 
-import { products } from "../ProductData"
+import Image from "../Image"
 import { Product } from "./HorizontalProductList"
 
 const VerticalProductList = () => {
@@ -40,10 +33,7 @@ const VerticalProductList = () => {
             style={[styles.productItem, { width: productWidth }]}
           >
             <View style={{ alignItems: "center" }}>
-              <Image
-                source={{ uri: products[1].image }}
-                style={styles.productImage}
-              />
+              <Image src={product.image.url} style={styles.productImage} />
             </View>
             <Text style={styles.productName}>{product.name}</Text>
             <View style={styles.productDetails}>

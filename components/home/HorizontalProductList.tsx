@@ -3,9 +3,9 @@ import { GET_PRODUCT_LIST_BY_CATEGORY_ID } from "@/api/graphqlString/home"
 import { useCategoryStore } from "@/store/home/categoryStore"
 import { useQuery } from "@apollo/client"
 import { Feather } from "@expo/vector-icons"
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native"
+import { ScrollView, StyleSheet, Text, View } from "react-native"
 
-import { products } from "../ProductData"
+import Image from "../Image"
 
 export interface Product {
   id: number
@@ -46,10 +46,7 @@ const HorizontalProductList = () => {
       <View style={styles.productContainer}>
         {productList.map((product) => (
           <View key={product.id} style={styles.productItem}>
-            <Image
-              source={{ uri: products[1].image }}
-              style={styles.productImage}
-            />
+            <Image src={product.image.url} style={styles.productImage} />
             <View style={styles.nameContainer}>
               <Text
                 style={styles.productName}
