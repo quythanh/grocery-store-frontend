@@ -1,12 +1,4 @@
-import CategoryList from "@/components/home/CategoryList"
-import Header from "@/components/home/Header"
-import HorizontalProductList from "@/components/home/HorizontalProductList"
-import OfferSection from "@/components/home/OfferSection"
-import SearchBar from "@/components/home/SearchBar"
-import SeeAllButton from "@/components/home/SeeAllButton"
-import VerticalProductList from "@/components/home/VerticalProductList"
-import { products } from "@/components/ProductData"
-import React, { useRef, useState } from "react"
+import React, { useRef } from "react"
 import {
   Animated,
   SafeAreaView,
@@ -17,13 +9,17 @@ import {
   View,
 } from "react-native"
 
+import CategoryList from "@/components/home/CategoryList"
+import Header from "@/components/home/Header"
+import HorizontalProductList from "@/components/home/HorizontalProductList"
+import OfferSection from "@/components/home/OfferSection"
+import SearchBar from "@/components/home/SearchBar"
+import SeeAllButton from "@/components/home/SeeAllButton"
+import VerticalProductList from "@/components/home/VerticalProductList"
+import { products } from "@/components/ProductData"
+
 const HomeScreen = () => {
   const scrollOffsetY = useRef(new Animated.Value(0)).current
-  const [selectedCategory, setSelectedCategory] = useState(0)
-
-  const handleCategorySelect = (index: number) => {
-    setSelectedCategory(index)
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,15 +47,25 @@ const HomeScreen = () => {
             { useNativeDriver: false }
           )}
         >
-          <SearchBar />
-          
-          <CategoryList onCategorySelect={handleCategorySelect} />
+          <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
+            <SearchBar />
 
-          <HorizontalProductList products={products} />
+            <CategoryList />
 
-          <SeeAllButton />
+            <HorizontalProductList />
 
-          <OfferSection products={products} />
+            <SeeAllButton />
+
+            <OfferSection products={products} />
+
+            <View
+              style={{
+                height: 2,
+                backgroundColor: "#f2f2f2",
+                marginVertical: 5,
+              }}
+            />
+          </View>
 
           <VerticalProductList products={products} />
         </ScrollView>
@@ -81,8 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    padding: 20,
-    paddingBottom: 0
+    paddingBottom: 0,
   },
   bodyText: {
     fontSize: 16,

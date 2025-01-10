@@ -1,48 +1,79 @@
-// CategoryList.tsx
 import React, { useEffect, useRef, useState } from "react"
+import { GET_CATEGORY_LIST } from "@/api/graphqlString/home"
+import { useCategoryStore } from "@/store/home/categoryStore"
+import { useQuery } from "@apollo/client"
 import {
   Animated,
   LayoutChangeEvent,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native"
 
-interface CategoryListProps {
-  onCategorySelect: (index: number) => void
-}
-const CategoryList: React.FC<CategoryListProps> = ({ onCategorySelect }) => {
-  const [selectedCategory, setSelectedCategory] = useState(0)
+const CategoryList = () => {
   const categorySliderPosition = useRef(new Animated.Value(0)).current
-  const categoryItemWidths = useRef<number[]>([]).current
+  const categoryItemWidths = useRef<number[]>([])
   const categoryItemRefs = useRef<(View | null)[]>([])
+  const [isFirstRender, setIsFirstRender] = useState(true)
+
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
+  const {
+    categoryList,
+    setCategoryList,
+    setSelectedCategoryId: setStoredSelectedCategory,
+  } = useCategoryStore()
+
+  const { data, loading, error } = useQuery(GET_CATEGORY_LIST)
+
+  useEffect(() => {
+    if (!loading && data) {
+      setCategoryList(data.categoryList[0]?.children || [])
+    }
+  }, [data, loading, setCategoryList])
+
+  useEffect(() => {
+    if (categoryList.length > 0) {
+      categoryItemRefs.current = Array(categoryList.length).fill(null)
+      categoryItemWidths.current = Array(categoryList.length).fill(0)
+      setSelectedCategory(0)
+      setStoredSelectedCategory(categoryList[0].id)
+    }
+  }, [categoryList])
+
+  useEffect(() => {
+    if (categoryList.length > 0 && !isFirstRender) {
+      measureCategoryItems()
+      handleCategorySelect(selectedCategory ?? 0)
+    }
+    if (isFirstRender && categoryList.length > 0) {
+      setIsFirstRender(false)
+    }
+  }, [categoryList, isFirstRender, selectedCategory])
 
   const measureCategoryItems = () => {
     categoryItemRefs.current.forEach((ref, index) => {
       if (ref) {
         ref.measure((_fx, _fy, width) => {
-          categoryItemWidths[index] = width
+          categoryItemWidths.current[index] = width
         })
       }
     })
   }
 
-  useEffect(() => {
-    measureCategoryItems()
-    handleCategorySelect(0)
-  }, [])
-
   const handleCategorySelect = (index: number) => {
+    if (!categoryList[index]) return
     setSelectedCategory(index)
-    onCategorySelect(index)
+    setStoredSelectedCategory(categoryList[index].id)
+
     let offset = 0
     for (let i = 0; i < index; i++) {
-      offset += categoryItemWidths[i] || 0
+      offset += categoryItemWidths.current[i] || 0
     }
 
-    const selectedItemWidth = categoryItemWidths[index] || 0
-    const newPosition = offset + selectedItemWidth / 2 - 25
+    const selectedItemWidth = categoryItemWidths.current[index] || 0
+    const newPosition = offset + selectedItemWidth / 2 - 25 // Center the slider
 
     Animated.spring(categorySliderPosition, {
       toValue: newPosition,
@@ -52,19 +83,18 @@ const CategoryList: React.FC<CategoryListProps> = ({ onCategorySelect }) => {
 
   const handleLayoutCategory = (index: number, event: LayoutChangeEvent) => {
     const { width } = event.nativeEvent.layout
-    categoryItemWidths[index] = width
+    categoryItemWidths.current[index] = width
   }
 
-  const categories = ["Fruits", "Vegetables", "Breads", "Orders"]
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <View style={styles.categoryContainer}>
-        {categories.map((category, index) => {
-          categoryItemRefs.current[index] = null
+        {categoryList.map((category, index) => {
           return (
-            <View
-              key={index}
+            <TouchableOpacity
+              key={category.id}
               style={styles.categoryItem}
+              onPress={() => handleCategorySelect(index)}
               ref={(ref) => (categoryItemRefs.current[index] = ref)}
               onLayout={(event) => handleLayoutCategory(index, event)}
             >
@@ -73,11 +103,10 @@ const CategoryList: React.FC<CategoryListProps> = ({ onCategorySelect }) => {
                   styles.categoryText,
                   selectedCategory === index && styles.selectedCategoryText,
                 ]}
-                onPress={() => handleCategorySelect(index)}
               >
-                {category}
+                {category.name}
               </Text>
-            </View>
+            </TouchableOpacity>
           )
         })}
         <Animated.View
@@ -105,15 +134,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
+  textWrapper: {
+    flex: 1,
+    justifyContent: "center",
+  },
   categoryText: {
     fontSize: 18,
     fontWeight: "500",
     color: "#000",
+    textAlign: "center",
+    lineHeight: 22,
   },
   selectedCategoryText: {
     fontSize: 18,
     fontWeight: "500",
-    color: "#000",
+    color: "#74a671",
   },
   categorySlider: {
     position: "absolute",
