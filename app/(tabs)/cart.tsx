@@ -59,7 +59,7 @@ const CartScreen = () => {
                 name={item.product.name}
                 imgUrl={item.product.image.url}
                 price={item.prices.price.value}
-                unit={item.configurable_options[0]?.value_label || "1 Kg"}
+                unit={item.configurable_options ? item.configurable_options[0]?.value_label : "1 Kg"}
                 quantity={item.quantity}
                 quantityAdjustFn={(number) => {
                   updateCartItem({

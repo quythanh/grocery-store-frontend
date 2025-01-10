@@ -23,7 +23,7 @@ export type CartItem = {
             url: string;
         }
     };
-    configurable_options: ConfigurableCartItem[];
+    configurable_options?: ConfigurableCartItem[];
 }
 
 export type Cart = {
