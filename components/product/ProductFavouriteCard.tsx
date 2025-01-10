@@ -50,7 +50,7 @@ const ProductFavouriteCard = ({
         <HStack className="items-end justify-between flex-1">
           <VStack>
             <Text className="flex-1 font-bold text-lg">
-              {product.price}.000đ
+              {product.price}
             </Text>
             <HStack className=" items-center gap-1">
               <Icon as={Weight} size={"sm"} />
