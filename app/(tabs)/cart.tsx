@@ -41,6 +41,7 @@ const CartScreen = () => {
   })
 
   const error = getError || updateError
+  const loading = getLoading || updateLoading
 
   return (
     <Fragment>
@@ -108,7 +109,7 @@ const CartScreen = () => {
           
         </View>
       </ParallaxScrollView>
-      <LoadingModal visible={loading || updateLoading} />
+      <LoadingModal visible={loading} />
     </Fragment>
   )
 }
