@@ -1,5 +1,7 @@
 import React from "react"
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native"
+import { ScrollView, StyleSheet, Text, View } from "react-native"
+
+import Image from "../Image"
 
 interface OfferSectionProps {
   products: any[]
@@ -12,12 +14,7 @@ const OfferSection: React.FC<OfferSectionProps> = ({ products }) => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {products.map((product) => (
           <View key={product.id} style={styles.offerContainer}>
-            <Image
-              source={{
-                uri: product.image,
-              }}
-              style={styles.offerImage}
-            />
+            <Image src={product.image} style={styles.offerImage} />
             <Text style={styles.offerDetailText}>Banana Just $1.99</Text>
           </View>
         ))}

@@ -93,7 +93,10 @@ export default function RootLayout() {
                   headerShown: false,
                 }}
               ></Stack.Screen>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="(tabs)"
+                options={{ headerShown: false, gestureEnabled: false }}
+              />
               <Stack.Screen name="+not-found" />
             </Stack>
             <StatusBar style="auto" />

@@ -1,32 +1,70 @@
-import React from "react";
-import { Feather } from "@expo/vector-icons";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect } from "react"
+import { GET_PRODUCT_LIST_BY_CATEGORY_ID } from "@/api/graphqlString/home"
+import { useCategoryStore } from "@/store/home/categoryStore"
+import { useQuery } from "@apollo/client"
+import { Feather } from "@expo/vector-icons"
+import { ScrollView, StyleSheet, Text, View } from "react-native"
 
+import Image from "../Image"
 
-
-
-
-interface ProductListProps {
-  products: any[]
+export interface Product {
+  id: number
+  name: string
+  image: {
+    label: string
+    url: string
+  }
+  price_range: {
+    minimum_price: {
+      final_price: {
+        currency: string
+        value: number
+      }
+    }
+  }
 }
-const HorizontalProductList: React.FC<ProductListProps> = ({ products }) => {
+
+const HorizontalProductList = () => {
+  const { selectedCategoryId } = useCategoryStore()
+  const [productList, setProductList] = React.useState<Product[]>([])
+  const { data, loading, error } = useQuery(GET_PRODUCT_LIST_BY_CATEGORY_ID, {
+    variables: {
+      categoryId: selectedCategoryId,
+      pageSize: 5,
+    },
+    skip: !selectedCategoryId,
+  })
+
+  useEffect(() => {
+    if (!loading && data) {
+      setProductList(data.products.items)
+    }
+  }, [data, loading, selectedCategoryId])
+
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <View style={styles.productContainer}>
-        {products.map((product) => (
+        {productList.map((product) => (
           <View key={product.id} style={styles.productItem}>
-            <Image
-              source={{ uri: product.image }}
-              style={styles.productImage}
-            />
-            <Text style={styles.productName}>{product.name}</Text>
+            <Image src={product.image.url} style={styles.productImage} />
+            <View style={styles.nameContainer}>
+              <Text
+                style={styles.productName}
+                numberOfLines={2}
+                ellipsizeMode="tail"
+              >
+                {product.name}
+              </Text>
+            </View>
             <View style={styles.productDetails}>
               <Feather name="dollar-sign" size={15} color="#000" />
-              <Text style={styles.productDetailText}>{product.price}</Text>
+              <Text style={styles.productDetailText}>
+                {product.price_range.minimum_price.final_price.value}
+              </Text>
             </View>
             <View style={styles.productDetails}>
               <Feather name="shopping-bag" size={15} color="#000" />
-              <Text style={styles.productDetailText}>{product.weight}</Text>
+              <Text style={styles.productDetailText}>1 Kg</Text>
             </View>
           </View>
         ))}
@@ -56,10 +94,14 @@ const styles = StyleSheet.create({
     margin: 5,
     borderRadius: 65,
   },
+  nameContainer: {
+    flex: 1,
+  },
   productName: {
     fontSize: 18,
     fontWeight: "600",
     marginTop: 10,
+    lineHeight: 20,
   },
   productDetails: {
     flexDirection: "row",
