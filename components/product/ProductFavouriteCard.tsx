@@ -1,16 +1,13 @@
 import { Link } from "expo-router"
-import {
-  Bookmark,
-  Weight,
-} from "lucide-react-native"
+import { Bookmark, Weight } from "lucide-react-native"
 
+import CustomImage from "../Image"
 import { Box } from "../ui/box"
 import { Button, ButtonIcon, ButtonText } from "../ui/button"
 import { Card } from "../ui/card"
 import { Heading } from "../ui/heading"
 import { HStack } from "../ui/hstack"
 import { Icon } from "../ui/icon"
-import { Image } from "../ui/image"
 import { Text } from "../ui/text"
 import { VStack } from "../ui/vstack"
 import { Product } from "./ProductCard"
@@ -37,7 +34,7 @@ const ProductFavouriteCard = ({
       }}
     >
       <Card className={`p-3 rounded-xl w-full h-full ${className || ""}`}>
-        <Image
+        <CustomImage
           source={{
             uri: product.image,
           }}
@@ -49,9 +46,7 @@ const ProductFavouriteCard = ({
         </Heading>
         <HStack className="items-end justify-between flex-1">
           <VStack>
-            <Text className="flex-1 font-bold text-lg">
-              ${product.price}
-            </Text>
+            <Text className="flex-1 font-bold text-lg">${product.price}</Text>
             <HStack className=" items-center gap-1">
               <Icon as={Weight} size={"sm"} />
               <Text>{product.qty}gram</Text>
