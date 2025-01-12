@@ -118,7 +118,7 @@ const FavoriteScreen = () => {
           >
             {items.map(({ id, product }) => (
               <GridItem
-                key={product.id}
+                key={id}
                 _extra={{
                   className: "col-span-6 ",
                 }}

@@ -3,7 +3,7 @@ import { Bookmark, Weight } from "lucide-react-native"
 
 import CustomImage from "../Image"
 import { Box } from "../ui/box"
-import { Button, ButtonIcon, ButtonText } from "../ui/button"
+import { Button, ButtonIcon } from "../ui/button"
 import { Card } from "../ui/card"
 import { Heading } from "../ui/heading"
 import { HStack } from "../ui/hstack"
@@ -35,9 +35,7 @@ const ProductFavouriteCard = ({
     >
       <Card className={`p-3 rounded-xl w-full h-full ${className || ""}`}>
         <CustomImage
-          source={{
-            uri: product.image,
-          }}
+          src={product.image}
           className="mb-2 w-full h-36 rounded-md"
           alt="image"
         />
