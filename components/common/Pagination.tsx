@@ -10,7 +10,7 @@ type PaginationProps = {
   current: number
   first: number
   last: number
-  onChange: () => void
+  onChange: (p:number) => void
 }
 
 const Pagination = ({ first, last, current, onChange }: PaginationProps) => {
@@ -19,7 +19,7 @@ const Pagination = ({ first, last, current, onChange }: PaginationProps) => {
     if (p < first || p > last) return
 
     setPage(p)
-    onChange()
+    onChange(p)
   }
   return (
     <View>
