@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { allBrands, useCategoryFilterStore } from "@/store/categoryFilter"
 import { CheckIcon, ChevronDownIcon, StarIcon } from "lucide-react-native"
 import { View } from "react-native"
@@ -38,8 +39,21 @@ import { Text } from "../ui/text"
 import { VStack } from "../ui/vstack"
 
 const FilterModal = () => {
-  const { isOpen, close, star, brands, setStar, toggleBrand } =
-    useCategoryFilterStore((state) => state)
+  const {
+    isOpen,
+    close,
+    star,
+    brands,
+    setStar,
+    toggleBrand,
+    priceFrom,
+    priceTo,
+    setPriceFrom,
+    setPriceTo,
+  } = useCategoryFilterStore((state) => state)
+
+  const [from, setFrom] = useState(priceFrom)
+  const [to, setTo] = useState(priceTo)
 
   return (
     <Modal
@@ -78,9 +92,13 @@ const FilterModal = () => {
             <View>
               <Heading size="sm">Price range</Heading>
               <HStack className="justify-between items-center mt-2">
-                <Select>
+                <Select onValueChange={(value) => setFrom(+value)}>
                   <SelectTrigger variant="outline" size="md">
-                    <SelectInput className="py-2" placeholder="Select option" />
+                    <SelectInput
+                      className="py-2"
+                      value={from.toString()}
+                      placeholder="Select option"
+                    />
                     <SelectIcon className="mr-3" as={ChevronDownIcon} />
                   </SelectTrigger>
                   <SelectPortal>
@@ -89,20 +107,26 @@ const FilterModal = () => {
                       <SelectDragIndicatorWrapper>
                         <SelectDragIndicator />
                       </SelectDragIndicatorWrapper>
-                      <SelectItem label="5" value="5" />
-                      <SelectItem label="10" value="10" />
-                      <SelectItem label="15" value="15 " />
-                      <SelectItem label="20" value="20" />
-                      <SelectItem label="25" value="25" />
+                      {[0, 2, 4, 6, 8, 10].map((i) => (
+                        <SelectItem
+                          label={i.toString()}
+                          value={i.toString()}
+                          key={i}
+                        />
+                      ))}
                     </SelectContent>
                   </SelectPortal>
                 </Select>
 
                 <Text>to</Text>
 
-                <Select>
+                <Select onValueChange={(value) => setTo(+value)}>
                   <SelectTrigger variant="outline" size="md">
-                    <SelectInput className="py-2" placeholder="Select option" />
+                    <SelectInput
+                      className="py-2"
+                      placeholder="Select option"
+                      value={to.toString()}
+                    />
                     <SelectIcon className="mr-3" as={ChevronDownIcon} />
                   </SelectTrigger>
                   <SelectPortal>
@@ -111,11 +135,13 @@ const FilterModal = () => {
                       <SelectDragIndicatorWrapper>
                         <SelectDragIndicator />
                       </SelectDragIndicatorWrapper>
-                      <SelectItem label="5" value="5" />
-                      <SelectItem label="10" value="10" />
-                      <SelectItem label="15" value="15 " />
-                      <SelectItem label="20" value="20" />
-                      <SelectItem label="25" value="25" />
+                      {[0, 2, 4, 6, 8, 10].map((i) => (
+                        <SelectItem
+                          label={i.toString()}
+                          value={i.toString()}
+                          key={i}
+                        />
+                      ))}
                     </SelectContent>
                   </SelectPortal>
                 </Select>
@@ -162,6 +188,8 @@ const FilterModal = () => {
           </Button>
           <Button
             onPress={() => {
+              setPriceFrom(from)
+              setPriceTo(to)
               close()
             }}
             className="bg-mainGreen hover:bg-green-700"
