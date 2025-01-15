@@ -31,6 +31,7 @@ const CartScreen = () => {
         authorization: `Bearer ${token}`,
       },
     },
+    fetchPolicy: "no-cache",
     pollInterval: 5000
   })
 
