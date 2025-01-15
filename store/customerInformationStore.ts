@@ -17,13 +17,7 @@ const DEFAULT_INFO: Customer = {
 
 export const useCustomerInformationStore = create<CustomerInfomationState>(
   (set) => ({
-    informationState: {
-      firstname: "",
-      lastname: "",
-      email: "",
-      gender: 1,
-      date_of_birth: "",
-    },
+    informationState: DEFAULT_INFO,
     setInformationState: (field, value) =>
       set((state) => ({
         informationState: {
@@ -33,13 +27,7 @@ export const useCustomerInformationStore = create<CustomerInfomationState>(
       })),
     resetInformationState: () => {
       set((state) => ({
-        informationState: {
-          firstname: "",
-          lastname: "",
-          email: "",
-          gender: 1,
-          date_of_birth: "",
-        },
+        informationState: DEFAULT_INFO,
       }))
     },
   })
