@@ -88,6 +88,12 @@ export default function RootLayout() {
                 }}
               />
               <Stack.Screen
+                name="product/[id]"
+                options={{
+                  headerShown: false,
+                }}
+              ></Stack.Screen>
+              <Stack.Screen
                 name="(tabs)"
                 options={{ headerShown: false, gestureEnabled: false }}
               />

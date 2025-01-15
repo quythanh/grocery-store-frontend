@@ -8,6 +8,7 @@ import {
   Weight,
 } from "lucide-react-native"
 
+import { Box } from "../ui/box"
 import { Button, ButtonIcon, ButtonText } from "../ui/button"
 import { Card } from "../ui/card"
 import { Heading } from "../ui/heading"
@@ -28,7 +29,7 @@ export type Product = {
   price: number
   qty: number
   image: string
-  id: number
+  id: number | string
 }
 
 const ProductCard = ({
@@ -45,6 +46,9 @@ const ProductCard = ({
     if (quantityToCart + quantity < 1) return
     setQuantityToCart(quantityToCart + quantity)
   }
+
+  if (!product)
+    return <Box className="bg-gray-200 animate-pulse rounded-xl h-52"></Box>
 
   return (
     <Link
