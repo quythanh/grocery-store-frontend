@@ -7,6 +7,14 @@ interface CustomerInfomationState {
   resetInformationState: () => void
 }
 
+const DEFAULT_INFO: Customer = {
+  firstname: "",
+  lastname: "",
+  email: "",
+  gender: 1,
+  date_of_birth: "",
+}
+
 export const useCustomerInformationStore = create<CustomerInfomationState>(
   (set) => ({
     informationState: {
