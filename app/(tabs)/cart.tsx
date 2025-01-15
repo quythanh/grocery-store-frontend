@@ -14,6 +14,7 @@ import RequireLogin from "@/components/RequireLogin";
 import { ThemedText } from "@/components/ThemedText"
 import { useTokenStore } from "@/store/tokenStore"
 import type { Cart } from "@/types/cart";
+import { ThemedView } from "@/components/ThemedView";
 
 const showError = (e: ApolloError | undefined) => {
   if (e === undefined) return
@@ -111,12 +112,8 @@ const CartScreen = () => {
           </GestureHandlerRootView>
   
           {
-            (error)
-              ? (() => {
-                  showError(error)
-                  return null;
-                })()
-              : (
+            (data?.customerCart.itemsV2.total_count)
+              ? (
                 <Fragment>
                   <View style={styles.totalWrapper}>
                     <Text style={styles.totalText}>Total:</Text>
@@ -130,14 +127,27 @@ const CartScreen = () => {
                     style={styles.continueWrapper}
                     onPress={() => route.push("/checkout")}
                   >
-                    <ButtonText style={styles.continueText} className="text-white">
+                    <ButtonText style={styles.continueText}>
                       Continue
                     </ButtonText>
                   </Button>
                 </Fragment>
               )
-          }
-          
+              : (() => (
+                <ThemedView>
+                  <ThemedText className="w-full text-center font-bold">Cart is Empty.</ThemedText>
+                  <Button
+                    size="lg"
+                    style={styles.continueWrapper}
+                    onPress={() => route.push("/")}
+                  >
+                    <ButtonText style={styles.continueText}>
+                      Shopping now
+                    </ButtonText>
+                  </Button>
+                </ThemedView>
+              ))()
+          } 
         </View>
       </ParallaxScrollView>
       <LoadingModal visible={loading} />
