@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
   GET_CUSTOMER_INFORMATION,
   UPDATE_CUSTOMER_INFORMATION,
