@@ -12,6 +12,8 @@ import {
   View,
 } from "react-native"
 
+import LoadingModal from "../LoadingModal"
+
 const CategoryList = () => {
   const categorySliderPosition = useRef(new Animated.Value(0)).current
   const categoryItemWidths = useRef<number[]>([])
@@ -87,36 +89,39 @@ const CategoryList = () => {
   }
 
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-      <View style={styles.categoryContainer}>
-        {categoryList.map((category, index) => {
-          return (
-            <TouchableOpacity
-              key={category.id}
-              style={styles.categoryItem}
-              onPress={() => handleCategorySelect(index)}
-              ref={(ref) => (categoryItemRefs.current[index] = ref)}
-              onLayout={(event) => handleLayoutCategory(index, event)}
-            >
-              <Text
-                style={[
-                  styles.categoryText,
-                  selectedCategory === index && styles.selectedCategoryText,
-                ]}
+    <>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.categoryContainer}>
+          {categoryList.map((category, index) => {
+            return (
+              <TouchableOpacity
+                key={category.id}
+                style={styles.categoryItem}
+                onPress={() => handleCategorySelect(index)}
+                ref={(ref) => (categoryItemRefs.current[index] = ref)}
+                onLayout={(event) => handleLayoutCategory(index, event)}
               >
-                {category.name}
-              </Text>
-            </TouchableOpacity>
-          )
-        })}
-        <Animated.View
-          style={[
-            styles.categorySlider,
-            { transform: [{ translateX: categorySliderPosition }] },
-          ]}
-        />
-      </View>
-    </ScrollView>
+                <Text
+                  style={[
+                    styles.categoryText,
+                    selectedCategory === index && styles.selectedCategoryText,
+                  ]}
+                >
+                  {category.name}
+                </Text>
+              </TouchableOpacity>
+            )
+          })}
+          <Animated.View
+            style={[
+              styles.categorySlider,
+              { transform: [{ translateX: categorySliderPosition }] },
+            ]}
+          />
+        </View>
+      </ScrollView>
+      <LoadingModal visible={loading} />
+    </>
   )
 }
 
