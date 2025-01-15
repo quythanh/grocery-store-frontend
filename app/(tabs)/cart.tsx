@@ -58,7 +58,7 @@ const CartScreen = () => {
   return (
     <Fragment>
       <ParallaxScrollView
-        headerImage={
+        header={
           <View style={styles.headerContainer}>
             <ThemedText style={styles.headerText}>Shopping Cart</ThemedText>
             <ThemedText style={styles.headerSubText}>
