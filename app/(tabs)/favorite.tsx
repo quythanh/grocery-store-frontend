@@ -94,7 +94,7 @@ const FavoriteScreen = () => {
     )
 
   return (
-    <View className={`flex-1 `}>
+    <View className={`flex-1 bg-background-0`}>
       <TopHeader>Favourite</TopHeader>
 
       {items.length === 0 ? (
