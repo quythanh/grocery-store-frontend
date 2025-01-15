@@ -1,21 +1,30 @@
 import React from "react"
 
-import { Button, ButtonText } from "../ui/button"
+import { Button, ButtonSpinner, ButtonText } from "../ui/button"
 
 const AddToCartButton = ({
   text,
+  loading,
+  size,
   onPress,
 }: {
   text?: string
+  size?: "sm" | "md" | "lg" | "xl" | "xs" | undefined
+  loading?: boolean
   onPress?: () => void
 }) => {
   return (
     <Button
-      size="xl"
-      className="mb-2 rounded-full bg-mainGreen"
+      size={size}
+      className="mb-2 rounded-full bg-mainGreen active:!bg-green-700"
       onPress={onPress}
+      disabled={loading}
     >
-      <ButtonText>{text || "Add to Cart"}</ButtonText>
+      {loading ? (
+        <ButtonSpinner />
+      ) : (
+        <ButtonText>{text || "Add to Cart"}</ButtonText>
+      )}
     </Button>
   )
 }
