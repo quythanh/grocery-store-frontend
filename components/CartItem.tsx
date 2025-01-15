@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         borderRadius: 50
     },
     info: {
-        flexGrow: 1
+        flex: 1,
     },
     name: {
         fontSize: 20,
