@@ -61,3 +61,18 @@ export const UPDATE_CART_ITEM = gql`
         }
     }
 `
+
+export const REMOVE_ITEM_FROM_CART = gql`
+    mutation RemoveItemFromCart($cartId: String!, $cartItemUid: ID!) {
+        removeItemFromCart(
+            input: {
+                cart_id: $cartId,
+                cart_item_uid: $cartItemUid
+            }
+        ) {
+            cart {
+                id
+            }
+        }
+    }
+`
