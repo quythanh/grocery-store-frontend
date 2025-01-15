@@ -1,8 +1,8 @@
-import { Fragment, useEffect, useLayoutEffect, useState } from "react"
+import { Fragment, useLayoutEffect, useState } from "react"
 import { GET_PRODUCTS_BY_CATEGORY } from "@/api/graphqlString/category"
 import { useCategoryFilterStore } from "@/store/categoryFilter"
 import { useQuery } from "@apollo/client"
-import { LayoutGrid, Search } from "lucide-react-native"
+import { LayoutGrid } from "lucide-react-native"
 import { Platform, ScrollView, View } from "react-native"
 import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 
@@ -13,11 +13,10 @@ import { Grid, GridItem } from "@/components/ui/grid"
 import { Heading } from "@/components/ui/heading"
 import { HStack } from "@/components/ui/hstack"
 import { Image } from "@/components/ui/image"
-import { Input, InputField, InputIcon } from "@/components/ui/input"
 import { Text } from "@/components/ui/text"
 import { VStack } from "@/components/ui/vstack"
-// import groceryProducts from "@/components/category/data"
 import FilterModal from "@/components/category/FilterModal"
+import SearchInput from "@/components/category/SearchInput"
 import SortPopover from "@/components/category/SortPopover"
 import Pagination from "@/components/common/Pagination"
 import ProductCard, { Product } from "@/components/product/ProductCard"
@@ -25,7 +24,7 @@ import ProductCard, { Product } from "@/components/product/ProductCard"
 import emptyBackground from "../../assets/images/empty-product.png"
 
 const CategoryScreen = () => {
-  const { open, searchKey, setSearchKey, sortType, priceFrom, priceTo } =
+  const { open, searchKey, sortType, priceFrom, priceTo } =
     useCategoryFilterStore((state) => state)
   const [products, setProducts] = useState<Product[]>([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -53,7 +52,7 @@ const CategoryScreen = () => {
   const mappedProducts: Product[] = items?.map((item) => ({
     name: item.name,
     price: item.price_range.minimum_price.regular_price.value,
-    id: item.uid,
+    id: item.sku,
     image: item.image.url,
     qty: 1,
   }))
@@ -94,20 +93,7 @@ const CategoryScreen = () => {
 
         <View className="flex-1 bg-background-0  rounded-tl-3xl rounded-tr-3xl">
           <HStack className="gap-2 items-center pt-10 pb-4 px-4">
-            <Input
-              variant="outline"
-              size="lg"
-              className="flex-1 pr-2 border border-mainGreen bg-white rounded-full"
-            >
-              <InputField
-                placeholder="Search anything..."
-                className="py-2 "
-                value={searchKey}
-                onChangeText={(value) => setSearchKey(value)}
-              />
-              <InputIcon as={Search} />
-            </Input>
-
+            <SearchInput />
             <SortPopover />
 
             <Button
