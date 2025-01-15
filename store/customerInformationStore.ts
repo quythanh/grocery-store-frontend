@@ -1,13 +1,8 @@
+import type { Customer } from "@/types/customer"
 import { create } from "zustand"
 
 interface CustomerInfomationState {
-  informationState: {
-    firstname: string
-    lastname: string
-    email: string
-    gender: number
-    date_of_birth: string
-  }
+  informationState: Customer
   setInformationState: (field: string, value: string | number) => void
   resetInformationState: () => void
 }
