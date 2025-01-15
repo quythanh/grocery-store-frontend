@@ -4,7 +4,7 @@ import { useCategoryStore } from "@/store/home/categoryStore"
 import { useQuery } from "@apollo/client"
 import { Feather } from "@expo/vector-icons"
 import { ScrollView, StyleSheet, Text, View } from "react-native"
-import { ALERT_TYPE, Dialog } from "react-native-alert-notification"
+import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 
 import Image from "../Image"
 import LoadingModal from "../LoadingModal"
@@ -41,17 +41,18 @@ const HorizontalProductList = () => {
     if (!loading && data) {
       setProductList(data.products.items)
     }
+  }, [data, loading, selectedCategoryId])
 
+  useEffect(() => {
     if (error) {
-      Dialog.show({
-        type: ALERT_TYPE.DANGER,
+      console.error(error)
+      Toast.show({
         title: "Error",
         textBody: "Failed to fetch products.",
-        button: "Okay",
+        type: ALERT_TYPE.DANGER,
       })
-      return
     }
-  }, [data, loading, selectedCategoryId])
+  }, [error])
 
   return (
     <>

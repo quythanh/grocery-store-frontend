@@ -1,9 +1,10 @@
 import React, { useEffect } from "react"
 import { GET_PRODUCT_LIST } from "@/api/graphqlString/home"
+import { useCategoryStore } from "@/store/home/categoryStore"
 import { useQuery } from "@apollo/client"
 import { Feather } from "@expo/vector-icons"
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native"
-import { ALERT_TYPE, Dialog } from "react-native-alert-notification"
+import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 
 import Image from "../Image"
 import LoadingModal from "../LoadingModal"
@@ -12,9 +13,10 @@ import { Product } from "./HorizontalProductList"
 const VerticalProductList = () => {
   const containerWidth = Dimensions.get("window").width
   const productWidth = (containerWidth - 50) / 2
-
+  const { selectedCategoryId } = useCategoryStore()
   const [productList, setProductList] = React.useState<Product[]>([])
   const { data, loading, error } = useQuery(GET_PRODUCT_LIST, {
+    skip: !selectedCategoryId,
     variables: {
       search: " ",
     },
@@ -24,17 +26,18 @@ const VerticalProductList = () => {
     if (!loading && data) {
       setProductList(data.products.items)
     }
+  }, [data, loading])
 
+  useEffect(() => {
     if (error) {
-      Dialog.show({
-        type: ALERT_TYPE.DANGER,
+      console.error(error)
+      Toast.show({
         title: "Error",
         textBody: "Failed to fetch products.",
-        button: "Okay",
+        type: ALERT_TYPE.DANGER,
       })
-      return
     }
-  }, [data, loading])
+  }, [error])
 
   return (
     <>

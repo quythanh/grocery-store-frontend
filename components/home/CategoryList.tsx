@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native"
-import { ALERT_TYPE, Dialog } from "react-native-alert-notification"
+import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 
 import LoadingModal from "../LoadingModal"
 
@@ -28,23 +28,27 @@ const CategoryList = () => {
     setSelectedCategoryId: setStoredSelectedCategory,
   } = useCategoryStore()
 
-  const { data, loading, error } = useQuery(GET_CATEGORY_LIST)
+  const { data, loading, error } = useQuery(GET_CATEGORY_LIST, {
+    fetchPolicy: "no-cache",
+  })
 
   useEffect(() => {
     if (!loading && data) {
       setCategoryList(data.categoryList[0]?.children || [])
     }
+  }, [data, loading, setCategoryList])
 
+  useEffect(() => {
     if (error) {
-      Dialog.show({
-        type: ALERT_TYPE.DANGER,
+      console.error(error)
+
+      Toast.show({
         title: "Error",
         textBody: "Failed to fetch categories.",
-        button: "Okay",
+        type: ALERT_TYPE.DANGER,
       })
-      return
     }
-  }, [data, loading, setCategoryList])
+  }, [error])
 
   useEffect(() => {
     if (categoryList.length > 0) {
