@@ -26,6 +26,7 @@ import {
 } from "../ui/popover"
 import { Text } from "../ui/text"
 import { VStack } from "../ui/vstack"
+import { useGetIds } from "@/hooks/useGetIds"
 
 export type Product = {
   name: string
@@ -42,10 +43,11 @@ const ProductCard = ({
   className?: string
   product?: Product
 }) => {
+  const {cartId} = useGetIds()
   const { quantityToCart, adjustQuantity, loading, handleAddToCart } =
     useAddToCart(
       product?.id.toString() || "",
-      "Six6czL5pEAjDqyH9Lqq5eoe5XzWWZJb"
+      cartId
     )
 
   if (!product)

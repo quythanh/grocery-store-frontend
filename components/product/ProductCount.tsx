@@ -9,10 +9,10 @@ import { HStack } from "../ui/hstack"
 import { Text } from "../ui/text"
 
 const ProductCount = ({
-  handleChange,
+  adjust,
   count,
 }: {
-  handleChange: (key: keyof ProductToCart, value: number) => void
+  adjust: (value: number) => void
   count: number
 }) => {
   return (
@@ -24,7 +24,7 @@ const ProductCount = ({
           size="xs"
           variant="outline"
           className="size-6 rounded-full"
-          onPress={() => handleChange("count", count - 1)}
+          onPress={() => adjust(-1)}
         >
           <ButtonIcon as={MinusIcon} />
         </Button>
@@ -33,7 +33,7 @@ const ProductCount = ({
           size="xs"
           variant="outline"
           className="size-4 rounded-full"
-          onPress={() => handleChange("count", count + 1)}
+          onPress={() => adjust(+1)}
         >
           <ButtonIcon as={PlusIcon} />
         </Button>
