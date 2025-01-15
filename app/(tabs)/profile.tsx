@@ -37,7 +37,7 @@ const ProfileScreen = () => {
   const inset = useSafeAreaInsets()
   const [isEditing, setIsEditing] = useState(false)
   const { token, resetToken } = useTokenStore()
-  const { informationState, setInformationState, resetInformationState } =
+  const { informationState, setInformationField, resetInformationState } =
     useCustomerInformationStore()
 
   const { data, loading, error } = useQuery(GET_CUSTOMER_INFORMATION, {
@@ -69,14 +69,14 @@ const ProfileScreen = () => {
     if (data) {
       const { firstname, lastname, email, gender, date_of_birth } =
         data.customer
-      setInformationState("firstname", firstname)
-      setInformationState("lastname", lastname)
-      setInformationState("email", email)
-      setInformationState("gender", gender)
-      setInformationState("date_of_birth", date_of_birth)
+      setInformationField("firstname", firstname)
+      setInformationField("lastname", lastname)
+      setInformationField("email", email)
+      setInformationField("gender", gender)
+      setInformationField("date_of_birth", date_of_birth)
       return
     }
-  }, [data, setInformationState])
+  }, [data, setInformationField])
 
   const handleLogOut = async () => {
     await deleteSecureStore("token")
@@ -87,7 +87,7 @@ const ProfileScreen = () => {
 
   const handleChange = (field: string, value: string | number) => {
     setIsEditing(true)
-    setInformationState(field, value)
+    setInformationField(field, value)
   }
 
   const handleUpdate = async () => {
@@ -112,11 +112,11 @@ const ProfileScreen = () => {
         const { firstname, lastname, email, gender, date_of_birth } =
           response.data.updateCustomerV2.customer
 
-        setInformationState("firstname", firstname)
-        setInformationState("lastname", lastname)
-        setInformationState("email", email)
-        setInformationState("gender", gender)
-        setInformationState("date_of_birth", date_of_birth)
+        setInformationField("firstname", firstname)
+        setInformationField("lastname", lastname)
+        setInformationField("email", email)
+        setInformationField("gender", gender)
+        setInformationField("date_of_birth", date_of_birth)
 
         Toast.show({
           type: ALERT_TYPE.SUCCESS,

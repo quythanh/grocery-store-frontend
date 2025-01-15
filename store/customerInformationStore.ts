@@ -3,7 +3,7 @@ import { create } from "zustand"
 
 interface CustomerInfomationState {
   informationState: Customer
-  setInformationState: (field: string, value: string | number) => void
+  setInformationField: (field: string, value: string | number) => void
   resetInformationState: () => void
 }
 
@@ -18,13 +18,14 @@ const DEFAULT_INFO: Customer = {
 export const useCustomerInformationStore = create<CustomerInfomationState>(
   (set) => ({
     informationState: DEFAULT_INFO,
-    setInformationState: (field, value) =>
+    setInformationField: (field, value) => {
       set((state) => ({
         informationState: {
           ...state.informationState,
           [field]: value,
         },
-      })),
+      }))
+    },
     resetInformationState: () => {
       set((state) => ({
         informationState: DEFAULT_INFO,
