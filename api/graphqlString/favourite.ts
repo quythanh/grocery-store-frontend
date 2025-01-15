@@ -76,3 +76,23 @@ export const REMOVE_ITEM_FROM_WISHLIST = gql`
     }
   }
 `
+
+export const ADD_PRODUCT_TO_WISHLIST = gql`
+  mutation AddProductsToWishlist(
+    $wishlistId: ID!
+    $sku: String!
+    $quantity: Float!
+  ) {
+    addProductsToWishlist(
+      wishlistId: $wishlistId
+      wishlistItems: { sku: $sku, quantity: $quantity }
+    ) {
+      wishlist {
+        id
+        items_count
+        sharing_code
+        updated_at
+      }
+    }
+  }
+`

@@ -42,6 +42,77 @@ const ProductScreen = () => {
       [key]: value,
     })
   }
+const { data, loading } = useQuery(GET_DETAIL_PRODUCT, {
+    variables: {
+      productSku: id,
+    },
+    fetchPolicy: "no-cache",
+  })
+  const product: Product | undefined = data?.products?.items[0]
+    ? {
+        id: data?.products?.items[0].sku,
+        image: data?.products?.items[0].image.url,
+        name: data?.products?.items[0].name,
+        price:
+          data?.products?.items[0].price_range.maximum_price.final_price.value,
+        qty: 1,
+      }
+    : undefined
+
+  const {
+    quantityToCart,
+    adjustQuantity,
+    handleAddToCart,
+    loading: addToCartLoading,
+  } = useAddToCart(product?.id.toString() || "", cartId)
+
+  const [addToWishlist, { error }] = useMutation(ADD_PRODUCT_TO_WISHLIST)
+
+  const handleAddToWishlist = () => {
+    try {
+      if (!token) {
+        Toast.show({
+          type: ALERT_TYPE.DANGER,
+          title: "Notification",
+          textBody: "Please login to add product to cart!!",
+        })
+        return
+      }
+
+      addToWishlist({
+        variables: {
+          wishlistId,
+          sku: product?.id.toString(),
+          quantity: 1,
+        },
+        context: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      })
+
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: "Notification",
+        textBody: "Added product to wishlist!!",
+      })
+    } catch (error) {
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: "Notification",
+        textBody: "Fetching error",
+      })
+      console.error(error)
+    }
+  }
+
+  if (loading)
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ButtonSpinner size={"large"} />
+      </View>
+    )
 
   return (
     <ThemedView className="flex-1 ">
