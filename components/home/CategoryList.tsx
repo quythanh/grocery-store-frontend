@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native"
+import { ALERT_TYPE, Dialog } from "react-native-alert-notification"
 
 import LoadingModal from "../LoadingModal"
 
@@ -32,6 +33,16 @@ const CategoryList = () => {
   useEffect(() => {
     if (!loading && data) {
       setCategoryList(data.categoryList[0]?.children || [])
+    }
+
+    if (error) {
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: "Error",
+        textBody: "Failed to fetch categories.",
+        button: "Okay",
+      })
+      return
     }
   }, [data, loading, setCategoryList])
 

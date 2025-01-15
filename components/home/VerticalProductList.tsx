@@ -3,6 +3,7 @@ import { GET_PRODUCT_LIST } from "@/api/graphqlString/home"
 import { useQuery } from "@apollo/client"
 import { Feather } from "@expo/vector-icons"
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native"
+import { ALERT_TYPE, Dialog } from "react-native-alert-notification"
 
 import Image from "../Image"
 import LoadingModal from "../LoadingModal"
@@ -22,6 +23,16 @@ const VerticalProductList = () => {
   useEffect(() => {
     if (!loading && data) {
       setProductList(data.products.items)
+    }
+
+    if (error) {
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: "Error",
+        textBody: "Failed to fetch products.",
+        button: "Okay",
+      })
+      return
     }
   }, [data, loading])
 
