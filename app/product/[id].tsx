@@ -1,13 +1,24 @@
 import { useState } from "react"
-import { Stack, useLocalSearchParams } from "expo-router"
+import { ADD_PRODUCT_TO_WISHLIST } from "@/api/graphqlString/favourite"
+import { GET_DETAIL_PRODUCT } from "@/api/graphqlString/product"
+import { useIdsStore } from "@/store/idsStore"
+import { useTokenStore } from "@/store/tokenStore"
+import { useMutation, useQuery } from "@apollo/client"
+import { useLocalSearchParams } from "expo-router"
+import { Bookmark } from "lucide-react-native"
 import { Platform, View } from "react-native"
+import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 
+import { useAddToCart } from "@/hooks/useAddToCart"
+import { Button, ButtonSpinner } from "@/components/ui/button"
 import { HStack } from "@/components/ui/hstack"
+import { Icon } from "@/components/ui/icon"
+import { Image } from "@/components/ui/image"
 import { Text } from "@/components/ui/text"
 import { VStack } from "@/components/ui/vstack"
-import groceryProducts from "@/components/category/data"
 import AddToCartButton from "@/components/common/AddToCartButton"
 import Stars from "@/components/common/Stars"
+import { Product } from "@/components/product/ProductCard"
 import ProductCount from "@/components/product/ProductCount"
 import ProductDetail from "@/components/product/ProductDetail"
 import ProductImage from "@/components/product/ProductImage"
@@ -16,25 +27,25 @@ import ProductStrength from "@/components/product/ProductStrength"
 import ProductTotal from "@/components/product/ProductTotal"
 import { ThemedView } from "@/components/ThemedView"
 
+import emptyBackground from "../../assets/images/empty-product.png"
+
 export type ProductToCart = {
   qty: number
   count: number
   strength: number
 }
+const productToCart: ProductToCart = {
+  qty: 0,
+  count: 1,
+  strength: 1,
+}
 
 const ProductScreen = () => {
   const { id } = useLocalSearchParams()
-  const product = groceryProducts[0]
-
-  const productToCart: ProductToCart = {
-    qty: 0,
-    count: 1,
-    strength: 1,
-  }
-
+  const { token } = useTokenStore()
+  const { wishlistId, cartId } = useIdsStore()
+  //** [infor, setInfor]: Just for UI */
   const [infor, setInfor] = useState(productToCart)
-
-
   const handleChange = (key: keyof ProductToCart, value: number) => {
     if (key == "count" && value <= 0) return
     setInfor({
@@ -42,7 +53,7 @@ const ProductScreen = () => {
       [key]: value,
     })
   }
-const { data, loading } = useQuery(GET_DETAIL_PRODUCT, {
+  const { data, loading } = useQuery(GET_DETAIL_PRODUCT, {
     variables: {
       productSku: id,
     },
@@ -116,43 +127,65 @@ const { data, loading } = useQuery(GET_DETAIL_PRODUCT, {
 
   return (
     <ThemedView className="flex-1 ">
-      <VStack className="bg-mainGreen flex-1 ">
-        <ProductDetail product={product} />
-        <VStack
-          className={`bg-background-0 flex-1 px-6 rounded-t-3xl ${Platform.OS === "ios" ? "pb-6" : ""}`}
-        >
-          <VStack className="flex-1 ">
-            <HStack className="justify-between items-end">
-              <ProductImage product={product} />
-              <View>
-                <HStack className="gap-1">
-                  <Stars />
-                </HStack>
-                <Text className="font-semibold mt-2 text-right">250 Likes</Text>
-              </View>
-            </HStack>
+      {!product ? (
+        <View className="flex-1 justify-center items-center">
+          <Image alt="empty" source={emptyBackground} size="2xl" />
+        </View>
+      ) : (
+        <VStack className="bg-mainGreen flex-1 ">
+          <ProductDetail product={product} />
+          <VStack
+            className={`bg-background-0 flex-1 px-6 rounded-t-3xl ${Platform.OS === "ios" ? "pb-6" : ""}`}
+          >
+            <VStack className="flex-1 ">
+              <HStack className="justify-between items-end">
+                <ProductImage product={product} />
+                <View>
+                  <HStack className="gap-1">
+                    <Stars />
+                  </HStack>
+                  <Text className="font-semibold mt-2 text-right">
+                    250 Likes
+                  </Text>
+                  <Button
+                    variant="link"
+                    className="justify-end mt-4"
+                    onPress={handleAddToWishlist}
+                  >
+                    <Icon
+                      as={Bookmark}
+                      size="xl"
+                      className="text-yellow-400 fill-yellow-400"
+                    />
+                  </Button>
+                </View>
+              </HStack>
 
-            <VStack className="gap-6 mt-16">
-              <ProductQuantity qty={infor.qty} handleChange={handleChange} />
+              <VStack className="gap-6 mt-16">
+                <ProductQuantity qty={infor.qty} handleChange={handleChange} />
 
-              <ProductCount count={infor.count} handleChange={handleChange} />
+                <ProductCount
+                  count={quantityToCart}
+                  adjust={(value) => adjustQuantity(value)}
+                />
 
-              <ProductStrength
-                strength={infor.strength}
-                handleChange={handleChange}
-              />
+                <ProductStrength
+                  strength={infor.strength}
+                  handleChange={handleChange}
+                />
 
-              <ProductTotal total={15} />
+                <ProductTotal total={15} />
+              </VStack>
             </VStack>
-          </VStack>
 
-          <AddToCartButton
+            <AddToCartButton
               onPress={handleAddToCart}
               size="xl"
               loading={addToCartLoading}
-/>
+            />
+          </VStack>
         </VStack>
-      </VStack>
+      )}
     </ThemedView>
   )
 }
