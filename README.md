@@ -1,50 +1,63 @@
 # Welcome to Grocery Store app 👋
 
+This is a cutting-edge mobile application designed to demonstrate the seamless integration of Magento 2’s GraphQL API in a modern eCommerce ecosystem. This project serves as a training tool for internship students, enabling them to gain practical experience in building robust and scalable eCommerce applications.
+
+## Table of content
+
+1.  [Features]('/#feature')
+2.  [Technology]('/#techonology')
+3.  [Installation]('/#installation')
+4.  [Contributing]('/#contributing')
+
+## Feature
+
+This application provide some feature include:
+
+- Product browsing and detailed product information.
+- Dynamic category pages with filters.
+- Fast and relevant product search powered by a Node.js microservice.
+- Secure user authentication and session management.
+- Shopping cart management and end-to-end checkout flow.
+
+## Technology
+
+- **Core**: React native
+- **UI Library**: Gluestack/ui
+- **State management**: Zustand
+- **Query API**: Appolo client
+- ...
+
+## Installation
+
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Follow these steps to set up the project on your local machine:
 
-## Get started
+**Prerequisites**
 
-1. Install dependencies
+- Node.js (>= 14.x)
+- npm or yarn
+
+**Steps**
+
+1. Clone this repo:
+   ```bash
+   git clone https://github.com/quythanh/grocery-store-frontend.git
+   cd grocery-store-frontend
+   ```
+2. Install dependencies
 
    ```bash
    npm install
    ```
 
-2. Start the app
+3. Start the app
 
    ```bash
     npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## Contributing
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Tsan Quy Thanh
+- Pham Do Minh Vuong
+- Nguyen Van Canh
