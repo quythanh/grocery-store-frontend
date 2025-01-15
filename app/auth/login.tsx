@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { GENERATE_CUSTOMER_TOKEN } from "@/api/graphqlString/auth"
 import { Colors } from "@/constants/Colors"
+import { useIdsStore } from "@/store/idsStore"
 import { setSecureStore } from "@/store/secureStore"
 import { useTokenStore } from "@/store/tokenStore"
 import { useMutation } from "@apollo/client"
@@ -10,6 +11,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { useGetIds } from "@/hooks/useGetIds"
 import AuthButton from "@/components/auth/AuthButton"
 import InputField from "@/components/auth/InputField"
 import PasswordInputField from "@/components/auth/PasswordInputField"
@@ -23,7 +25,9 @@ const Login = () => {
     GENERATE_CUSTOMER_TOKEN
   )
   const { setToken } = useTokenStore()
-
+  const { setCartId, setWishlistId } = useIdsStore()
+  const { cartId, wishlistId } = useGetIds()
+  
   const handleBack = () => {
     route.back()
   }
@@ -43,6 +47,11 @@ const Login = () => {
 
       await setSecureStore("token", response.data.generateCustomerToken.token)
       setToken(response.data.generateCustomerToken.token)
+
+      await setSecureStore("cartId", cartId)
+      await setSecureStore("wishlistId", wishlistId)
+      setCartId(cartId)
+      setWishlistId(wishlistId)
 
       Toast.show({
         type: ALERT_TYPE.SUCCESS,

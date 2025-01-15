@@ -18,7 +18,8 @@ import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider"
 import "react-native-reanimated"
 
 import client from "@/api/apolloClient"
-import { getSecureStore } from "@/store/secureStore"
+import { useIdsStore } from "@/store/idsStore"
+import { getSecureStore, setSecureStore } from "@/store/secureStore"
 import { useTokenStore } from "@/store/tokenStore"
 import { ApolloProvider } from "@apollo/client"
 
@@ -29,6 +30,7 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
+  const { setCartId, setWishlistId } = useIdsStore()
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   })
@@ -48,7 +50,15 @@ export default function RootLayout() {
       }
     }
 
+    const getIds = async () => {
+      const cartId = await getSecureStore("cartId")
+      const wishlistId = await getSecureStore("wishlistId")
+      if (cartId) setCartId(cartId)
+      if (wishlistId) setWishlistId(wishlistId)
+    }
+
     getStoredToken()
+    getIds()
   }, [])
 
   if (!loaded) {

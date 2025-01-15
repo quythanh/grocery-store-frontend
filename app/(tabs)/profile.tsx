@@ -5,6 +5,7 @@ import {
 } from "@/api/graphqlString/auth"
 import { Colors } from "@/constants/Colors"
 import { useCustomerInformationStore } from "@/store/customerInformationStore"
+import { useIdsStore } from "@/store/idsStore"
 import { deleteSecureStore } from "@/store/secureStore"
 import { useTokenStore } from "@/store/tokenStore"
 import { useMutation, useQuery } from "@apollo/client"
@@ -37,6 +38,7 @@ const ProfileScreen = () => {
   const inset = useSafeAreaInsets()
   const [isEditing, setIsEditing] = useState(false)
   const { token, resetToken } = useTokenStore()
+  const { resetIds } = useIdsStore()
   const { informationState, setInformationState, resetInformationState } =
     useCustomerInformationStore()
 
@@ -80,7 +82,11 @@ const ProfileScreen = () => {
 
   const handleLogOut = async () => {
     await deleteSecureStore("token")
+    await deleteSecureStore("cartId")
+    await deleteSecureStore("wishlistId")
     resetToken()
+    resetIds()
+
     resetInformationState()
     route.navigate("/")
   }

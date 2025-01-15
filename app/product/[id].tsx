@@ -75,7 +75,11 @@ const ProductScreen = () => {
             </VStack>
           </VStack>
 
-          <AddToCartButton />
+          <AddToCartButton
+              onPress={handleAddToCart}
+              size="xl"
+              loading={addToCartLoading}
+/>
         </VStack>
       </VStack>
     </ThemedView>
