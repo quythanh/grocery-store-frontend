@@ -1,6 +1,10 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { allBrands, useCategoryFilterStore } from "@/store/categoryFilter"
-import { CheckIcon, ChevronDownIcon, StarIcon } from "lucide-react-native"
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  RotateCcw,
+} from "lucide-react-native"
 import { View } from "react-native"
 
 import Stars from "../common/Stars"
@@ -49,11 +53,11 @@ const FilterModal = () => {
     priceFrom,
     priceTo,
     setPriceFrom,
+    isApplied,
     setPriceTo,
+    apply,
+    resetFilter,
   } = useCategoryFilterStore((state) => state)
-
-  const [from, setFrom] = useState(priceFrom)
-  const [to, setTo] = useState(priceTo)
 
   return (
     <Modal
@@ -92,11 +96,11 @@ const FilterModal = () => {
             <View>
               <Heading size="sm">Price range</Heading>
               <HStack className="justify-between items-center mt-2">
-                <Select onValueChange={(value) => setFrom(+value)}>
+                <Select onValueChange={(value) => setPriceFrom(+value)}>
                   <SelectTrigger variant="outline" size="md">
                     <SelectInput
                       className="py-2"
-                      value={from.toString()}
+                      value={priceFrom.toString()}
                       placeholder="Select option"
                     />
                     <SelectIcon className="mr-3" as={ChevronDownIcon} />
@@ -120,12 +124,12 @@ const FilterModal = () => {
 
                 <Text>to</Text>
 
-                <Select onValueChange={(value) => setTo(+value)}>
+                <Select onValueChange={(value) => setPriceTo(+value)}>
                   <SelectTrigger variant="outline" size="md">
                     <SelectInput
                       className="py-2"
                       placeholder="Select option"
-                      value={to.toString()}
+                      value={priceTo.toString()}
                     />
                     <SelectIcon className="mr-3" as={ChevronDownIcon} />
                   </SelectTrigger>
@@ -187,14 +191,22 @@ const FilterModal = () => {
             <ButtonText>Cancel</ButtonText>
           </Button>
           <Button
+            variant="outline"
+            action="secondary"
             onPress={() => {
-              setPriceFrom(from)
-              setPriceTo(to)
+              resetFilter()
+            }}
+          >
+            <ButtonIcon as={RotateCcw} />
+          </Button>
+          <Button
+            onPress={() => {
+              apply()
               close()
             }}
             className="bg-mainGreen hover:bg-green-700"
           >
-            <ButtonText>Apply</ButtonText>
+            <ButtonText>{isApplied ? "Remove filter" : "Apply"}</ButtonText>
           </Button>
         </ModalFooter>
       </ModalContent>

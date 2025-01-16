@@ -25,8 +25,15 @@ import ProductCard, { Product } from "@/components/product/ProductCard"
 import emptyBackground from "../../assets/images/empty-product.png"
 
 const CategoryScreen = () => {
-  const { open, searchKey, setSearchKey, sortType, priceFrom, priceTo } =
-    useCategoryFilterStore((state) => state)
+  const {
+    open,
+    searchKey,
+    setSearchKey,
+    sortType,
+    priceFrom,
+    priceTo,
+    isApplied,
+  } = useCategoryFilterStore((state) => state)
   const [products, setProducts] = useState<Product[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const { selectedCategoryId } = useCategoryStore()
@@ -73,8 +80,8 @@ const CategoryScreen = () => {
         (p) => p.price >= priceFrom && p.price <= priceTo
       )
 
-    setProducts(filterProducts)
-  }, [data, sortType, priceFrom, priceTo])
+    setProducts(isApplied ? filterProducts : mappedProducts)
+  }, [data, sortType, priceFrom, priceTo, isApplied])
 
   useDebouce(() => {
     setProducts(mappedProducts.filter((p) => p.name.includes(searchKey)))

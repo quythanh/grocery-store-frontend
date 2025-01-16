@@ -19,7 +19,7 @@ import { Text } from "../ui/text"
 import { VStack } from "../ui/vstack"
 
 const SortPopover = () => {
-  const { setSortType, sortType } = useCategoryFilterStore()
+  const { setSortType, sortType, apply } = useCategoryFilterStore()
 
   return (
     <Popover
@@ -40,7 +40,11 @@ const SortPopover = () => {
       <PopoverContent className="p-3 mt-1">
         <PopoverBody>
           <VStack className="gap-1">
-            <Pressable onPress={() => setSortType("asc")}>
+            <Pressable
+              onPress={() => {
+                setSortType("asc")
+              }}
+            >
               <HStack
                 className={`items-center justify-between gap-2 px-4 py-2 rounded-sm ${sortType === "asc" ? "bg-gray-100" : ""}`}
               >
@@ -48,7 +52,11 @@ const SortPopover = () => {
                 <Text>Price</Text>
               </HStack>
             </Pressable>
-            <Pressable onPress={() => setSortType("desc")}>
+            <Pressable
+              onPress={() => {
+                setSortType("desc")
+              }}
+            >
               <HStack
                 className={`items-center justify-between gap-2 px-4 py-2 rounded-sm ${sortType === "desc" ? "bg-gray-100" : ""}`}
               >
