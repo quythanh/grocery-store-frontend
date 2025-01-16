@@ -1,6 +1,5 @@
 import React, { useEffect } from "react"
 import { GET_PRODUCT_LIST } from "@/api/graphqlString/home"
-import { useCategoryStore } from "@/store/home/categoryStore"
 import { useQuery } from "@apollo/client"
 import { Feather } from "@expo/vector-icons"
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native"
@@ -13,10 +12,8 @@ import { Product } from "./HorizontalProductList"
 const VerticalProductList = () => {
   const containerWidth = Dimensions.get("window").width
   const productWidth = (containerWidth - 50) / 2
-  const { selectedCategoryId } = useCategoryStore()
   const [productList, setProductList] = React.useState<Product[]>([])
   const { data, loading, error } = useQuery(GET_PRODUCT_LIST, {
-    skip: !selectedCategoryId,
     variables: {
       search: " ",
     },
