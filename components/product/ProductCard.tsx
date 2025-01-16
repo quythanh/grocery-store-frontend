@@ -52,6 +52,7 @@ const ProductCard = ({
 
   return (
     <Link
+      className="h-full"
       href={{
         pathname: "/product/[id]",
         params: {

@@ -1,6 +1,7 @@
 import React, { useRef } from "react"
 import {
   Animated,
+  Platform,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -39,7 +40,10 @@ const HomeScreen = () => {
       <View style={styles.body}>
         <ScrollView
           style={{ flex: 1 }}
-          contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingBottom: Platform.OS === "ios" ? 40 : 0,
+          }}
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
           onScroll={Animated.event(
@@ -47,7 +51,7 @@ const HomeScreen = () => {
             { useNativeDriver: false }
           )}
         >
-          <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
+          <View style={{ paddingHorizontal: 20 }}>
             <SearchBar />
 
             <CategoryList />
@@ -87,7 +91,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    paddingBottom: 0,
+    paddingTop: 20,
   },
   bodyText: {
     fontSize: 16,

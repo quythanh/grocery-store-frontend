@@ -1,10 +1,15 @@
 import React from "react"
+import { useRouter } from "expo-router"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 const SeeAllButton = () => {
+  const router = useRouter()
   return (
     <View style={styles.seeAllContainer}>
-      <TouchableOpacity style={styles.seeAllButton}>
+      <TouchableOpacity
+        style={styles.seeAllButton}
+        onPress={() => router.push("/category")}
+      >
         <Text style={styles.seeAllText}>See All</Text>
       </TouchableOpacity>
     </View>

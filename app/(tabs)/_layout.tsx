@@ -64,7 +64,7 @@ export default function TabLayout() {
         }}
       />
 
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="category"
         options={{
           title: "Category",
@@ -72,7 +72,7 @@ export default function TabLayout() {
             <Feather size={26} name="grid" color={color} />
           ),
         }}
-      />
+      /> */}
     </Tabs>
   )
 }
