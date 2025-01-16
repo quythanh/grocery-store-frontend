@@ -8,16 +8,14 @@ import {
 import { Platform, View } from "react-native"
 
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button"
-import { Heading } from "@/components/ui/heading"
-import { HStack } from "@/components/ui/hstack"
 import {
   Toast,
   ToastDescription,
   ToastTitle,
   useToast,
 } from "@/components/ui/toast"
-import BackButton from "@/components/common/BackButton"
 import CheckoutProgress from "@/components/common/CheckoutProgress"
+import TopHeader from "@/components/common/TopHeader"
 
 import Confirm from "./confirm"
 import Payment from "./payment"
@@ -90,12 +88,7 @@ const Checkout = () => {
 
   return (
     <View className={`flex-1 ${Platform.OS === "ios" ? "pb-8" : "pb-4"}`}>
-      <HStack
-        className={`bg-mainGreen px-6 py-3 gap-3 items-center mb-6 ${Platform.OS === "ios" ? "pt-16" : "pt-12"}`}
-      >
-        <BackButton />
-        <Heading className="text-typography-0">Checkout</Heading>
-      </HStack>
+      <TopHeader>Checkout</TopHeader>
 
       <CheckoutProgress current={currentStep} steps={steps} />
 

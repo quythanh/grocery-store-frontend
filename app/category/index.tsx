@@ -14,9 +14,9 @@ import { Text } from "@/components/ui/text"
 import { VStack } from "@/components/ui/vstack"
 import groceryProducts from "@/components/category/data"
 import FilterModal from "@/components/category/FilterModal"
-import ProductCard from "@/components/category/ProductCard"
 import SortPopover from "@/components/category/SortPopover"
 import Pagination from "@/components/common/Pagination"
+import ProductCard from "@/components/product/ProductCard"
 
 const ProfileScreen = () => {
   const { open, searchKey, setSearchKey } = useCategoryFilterStore(
@@ -36,20 +36,19 @@ const ProfileScreen = () => {
             Fruits
           </Heading>
           <Text size="sm" className="text-white">
-            Fruits Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-            Aliquid, ad?
+            Find and order your fresh fruits and vegetables
           </Text>
         </View>
 
-        <View className="flex-1 bg-background-100  rounded-tl-3xl rounded-tr-3xl">
-          <HStack className="gap-2 items-center py-10 pb-4 px-4">
+        <View className="flex-1 bg-background-100 rounded-tl-3xl rounded-tr-3xl">
+          <HStack className="gap-2 items-center pt-6 pb-4 px-4">
             <Input
               variant="outline"
               isDisabled={false}
               isInvalid={false}
               isReadOnly={false}
               size="lg"
-              className="flex-1 pr-2 border border-white bg-white rounded-full"
+              className="flex-1 px-2 border border-white bg-white rounded-full"
             >
               <InputField
                 placeholder="Search anything..."
@@ -82,8 +81,9 @@ const ProfileScreen = () => {
                 <GridItem
                   key={i}
                   _extra={{
-                    className: "col-span-6 ",
+                    className: "col-span-6",
                   }}
+                  className="h-[260px]"
                 >
                   <ProductCard product={product} />
                 </GridItem>

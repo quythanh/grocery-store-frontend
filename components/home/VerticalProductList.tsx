@@ -11,7 +11,7 @@ import { Product } from "./HorizontalProductList"
 
 const VerticalProductList = () => {
   const containerWidth = Dimensions.get("window").width
-  const productWidth = (containerWidth - 50) / 2
+  const productWidth = (containerWidth - 60) / 2
   const [productList, setProductList] = React.useState<Product[]>([])
   const { data, loading, error } = useQuery(GET_PRODUCT_LIST, {
     variables: {
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     marginBottom: 20,
-    marginHorizontal: 5,
+    marginHorizontal: 10,
   },
   productImage: {
     borderWidth: 1,

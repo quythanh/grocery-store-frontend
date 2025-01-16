@@ -88,6 +88,18 @@ export default function RootLayout() {
                 }}
               />
               <Stack.Screen
+                name="category/index"
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="product/[id]"
+                options={{
+                  headerShown: false,
+                }}
+              ></Stack.Screen>
+              <Stack.Screen
                 name="(tabs)"
                 options={{ headerShown: false, gestureEnabled: false }}
               />
