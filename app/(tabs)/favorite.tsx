@@ -35,6 +35,7 @@ const FavoriteScreen = () => {
       },
     },
     fetchPolicy: "no-cache",
+    pollInterval: 5000
   })
 
   const [removeProductsFromWishlist] = useMutation(REMOVE_ITEM_FROM_WISHLIST, {
