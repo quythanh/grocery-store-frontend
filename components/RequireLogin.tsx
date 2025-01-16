@@ -1,14 +1,39 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Colors } from "@/constants/Colors"
 import { useTokenStore } from "@/store/tokenStore"
 import { useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { validateToken } from "@/utils/validateToken"
+import { deleteSecureStore, getSecureStore } from "@/store/secureStore"
+import { useCustomerInformationStore } from "@/store/customerInformationStore"
+import type { Customer } from "@/types/customer"
 
 const RequireLogin = (WrappedComponent: React.ComponentType) => {
   const HOC = (props: any) => {
     const route = useRouter()
-    const { token } = useTokenStore()
+    const { token, setToken } = useTokenStore()
+    const { setInformationState } = useCustomerInformationStore()
+
+    useEffect(() => {
+      if (token) return
+
+      const getStoredToken = async () => {
+        const storedToken = await getSecureStore("token")
+        if (!storedToken) return
+        
+        const { isValid, ...data } = await validateToken(storedToken)
+        if (!isValid) {
+          deleteSecureStore("token")
+          return
+        }
+  
+        setToken(storedToken)
+        setInformationState(data.customer as Customer)
+      }
+  
+      getStoredToken()
+    }, [])
 
     if (!token) {
       return (

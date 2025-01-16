@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react"
+
+import { Fragment, useEffect, useState } from "react"
 import {
   GET_CUSTOMER_INFORMATION,
   UPDATE_CUSTOMER_INFORMATION,
@@ -39,11 +40,11 @@ const ProfileScreen = () => {
   const [isEditing, setIsEditing] = useState(false)
   const { token, resetToken } = useTokenStore()
   const { resetIds } = useIdsStore()
-  const { informationState, setInformationState, resetInformationState } =
+  const { informationState, setInformationState, setInformationField, resetInformationState } =
     useCustomerInformationStore()
 
   const { data, loading, error } = useQuery(GET_CUSTOMER_INFORMATION, {
-    skip: !token,
+    skip: !!informationState.email,
     context: {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -71,14 +72,10 @@ const ProfileScreen = () => {
     if (data) {
       const { firstname, lastname, email, gender, date_of_birth } =
         data.customer
-      setInformationState("firstname", firstname)
-      setInformationState("lastname", lastname)
-      setInformationState("email", email)
-      setInformationState("gender", gender)
-      setInformationState("date_of_birth", date_of_birth)
-      return
+      
+      setInformationState({ firstname, lastname, email, gender, date_of_birth })
     }
-  }, [data, setInformationState])
+  }, [data, setInformationField])
 
   const handleLogOut = async () => {
     await deleteSecureStore("token")
@@ -93,7 +90,7 @@ const ProfileScreen = () => {
 
   const handleChange = (field: string, value: string | number) => {
     setIsEditing(true)
-    setInformationState(field, value)
+    setInformationField(field, value)
   }
 
   const handleUpdate = async () => {
@@ -104,11 +101,7 @@ const ProfileScreen = () => {
     try {
       const response = await updateCustomerInformation({
         variables: {
-          firstname: informationState.firstname,
-          lastname: informationState.lastname,
-          email: informationState.email,
-          gender: informationState.gender,
-          date_of_birth: informationState.date_of_birth,
+          ...informationState
         },
       })
 
@@ -118,11 +111,7 @@ const ProfileScreen = () => {
         const { firstname, lastname, email, gender, date_of_birth } =
           response.data.updateCustomerV2.customer
 
-        setInformationState("firstname", firstname)
-        setInformationState("lastname", lastname)
-        setInformationState("email", email)
-        setInformationState("gender", gender)
-        setInformationState("date_of_birth", date_of_birth)
+        setInformationState({ firstname, lastname, email, gender, date_of_birth })
 
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
@@ -141,7 +130,7 @@ const ProfileScreen = () => {
   }
 
   return (
-    <>
+    <Fragment>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
@@ -237,7 +226,7 @@ const ProfileScreen = () => {
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
       <LoadingModal visible={loading || updateLoading} />
-    </>
+    </Fragment>
   )
 }
 
@@ -273,10 +262,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 100,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 5,
+    ...Platform.select({
+      ios: {
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 6,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   avatar: {
     width: 150,
