@@ -12,7 +12,6 @@ import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 import { Box } from "@/components/ui/box"
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button"
 import { Grid, GridItem } from "@/components/ui/grid"
-import { Heading } from "@/components/ui/heading"
 import { Image } from "@/components/ui/image"
 import Pagination from "@/components/common/Pagination"
 import RemoveFavouriteDialog from "@/components/common/RemoveFavouriteDialog"
@@ -20,6 +19,7 @@ import TopHeader from "@/components/common/TopHeader"
 import ProductFavouriteCard from "@/components/product/ProductFavouriteCard"
 
 import emptyBackground from "../../assets/images/empty-favourite.png"
+import RequireLogin from "@/components/RequireLogin"
 
 const FavoriteScreen = () => {
   const { token } = useTokenStore()
@@ -65,23 +65,6 @@ const FavoriteScreen = () => {
       title: error.name,
     })
   }
-
-  if (!token)
-    return (
-      <View className="flex-1">
-        <TopHeader>Favourite</TopHeader>
-        <View className="flex-1 justify-center items-center">
-          <Heading>Please login to see favourite items!</Heading>
-          <Button
-            className="bg-mainGreen rounded-full mt-10 active:!bg-lightGreen"
-            size="lg"
-            onPress={() => router.push("/auth/login")}
-          >
-            <ButtonText>Login</ButtonText>
-          </Button>
-        </View>
-      </View>
-    )
 
   if (loading)
     return (
@@ -154,4 +137,4 @@ const FavoriteScreen = () => {
   )
 }
 
-export default FavoriteScreen
+export default RequireLogin(FavoriteScreen)

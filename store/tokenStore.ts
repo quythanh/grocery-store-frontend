@@ -9,5 +9,5 @@ interface TokenState {
 export const useTokenStore = create<TokenState>((set) => ({
   token: null,
   setToken: (token) => set({ token }),
-  resetToken: () => set({ token: "" }),
+  resetToken: () => set({ token: null }),
 }))
