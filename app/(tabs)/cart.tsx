@@ -2,8 +2,10 @@ import { ApolloError, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "expo-router"
 import { Fragment } from "react";
 import { StyleSheet, Text, View } from "react-native"
+import { GestureHandlerRootView, RectButton } from 'react-native-gesture-handler'
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 
-import { GET_CUSTOMER_CART, UPDATE_CART_ITEM } from "@/api/graphqlString/cart";
+import { GET_CUSTOMER_CART, REMOVE_ITEM_FROM_CART, UPDATE_CART_ITEM } from "@/api/graphqlString/cart";
 import { Button, ButtonText } from "@/components/ui/button"
 import CartItem from "@/components/CartItem"
 import LoadingModal from "@/components/LoadingModal";
@@ -12,6 +14,7 @@ import RequireLogin from "@/components/RequireLogin";
 import { ThemedText } from "@/components/ThemedText"
 import { useTokenStore } from "@/store/tokenStore"
 import type { Cart } from "@/types/cart";
+import { ThemedView } from "@/components/ThemedView";
 
 const showError = (e: ApolloError | undefined) => {
   if (e === undefined) return
@@ -40,8 +43,17 @@ const CartScreen = () => {
     refetchQueries: ["GetCustomerCart"],
   })
 
-  const error = getError || updateError
-  const loading = getLoading || updateLoading
+  const [removeCartItem, { error: removeError, loading: removeLoading }] = useMutation(REMOVE_ITEM_FROM_CART, {
+    context: {
+      headers: {
+        authorization: `Bearer ${token}`,
+      }
+    },
+    refetchQueries: ["GetCustomerCart"],
+  })
+
+  const error = getError || updateError || removeError
+  const loading = getLoading || updateLoading || removeLoading
 
   return (
     <Fragment>
@@ -57,10 +69,29 @@ const CartScreen = () => {
         headerBackgroundColor={{ light: "#64A86B", dark: "#1D3D47" }}
       >
         <View style={styles.wrapper}>
-          <View style={styles.listItems}>
+          <GestureHandlerRootView style={styles.listItems}>
             {data?.customerCart.itemsV2.items.map((item) => (
-              <CartItem
+              <Swipeable
                 key={item.uid}
+                renderRightActions={() => (
+                  <View style={styles.actionsContainer}>
+                    <RectButton
+                      style={[styles.actionButton, styles.deleteButton]}
+                      onPress={() => {
+                        removeCartItem({
+                          variables: {
+                            cartId: data.customerCart.id,
+                            cartItemUid: item.uid,
+                          }
+                        })
+                      }}
+                    >
+                      <Text style={styles.actionText}>Remove</Text>
+                    </RectButton>
+                  </View>
+                )}
+              >
+                <CartItem
                 name={item.product.name}
                 imgUrl={item.product.image.url}
                 price={item.prices.price.value}
@@ -76,16 +107,13 @@ const CartScreen = () => {
                   })
                 }}
               />
+              </Swipeable>
             ))}
-          </View>
+          </GestureHandlerRootView>
   
           {
-            (error)
-              ? (() => {
-                  showError(error)
-                  return null;
-                })()
-              : (
+            (data?.customerCart.itemsV2.total_count)
+              ? (
                 <Fragment>
                   <View style={styles.totalWrapper}>
                     <Text style={styles.totalText}>Total:</Text>
@@ -99,14 +127,27 @@ const CartScreen = () => {
                     style={styles.continueWrapper}
                     onPress={() => route.push("/checkout")}
                   >
-                    <ButtonText style={styles.continueText} className="text-white">
+                    <ButtonText style={styles.continueText}>
                       Continue
                     </ButtonText>
                   </Button>
                 </Fragment>
               )
-          }
-          
+              : (() => (
+                <ThemedView>
+                  <ThemedText className="w-full text-center font-bold">Cart is Empty.</ThemedText>
+                  <Button
+                    size="lg"
+                    style={styles.continueWrapper}
+                    onPress={() => route.push("/")}
+                  >
+                    <ButtonText style={styles.continueText}>
+                      Shopping now
+                    </ButtonText>
+                  </Button>
+                </ThemedView>
+              ))()
+          } 
         </View>
       </ParallaxScrollView>
       <LoadingModal visible={loading} />
@@ -171,6 +212,28 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   continueText: {
+    color: "#FFFFFF",
     fontSize: 18,
+  },
+  actionsContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 18,
+    marginLeft: 5
+  },
+  actionButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 80,
+    height: "100%",
+  },
+  deleteButton: {
+    backgroundColor: "#FF3B30",
+    borderRadius: 18,
+  },
+  actionText: {
+    color: "#FFF",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 })

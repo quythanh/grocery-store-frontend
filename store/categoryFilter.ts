@@ -2,6 +2,7 @@ import { create } from "zustand"
 
 type SortType = "desc" | "asc" | undefined
 interface CategoryFilterState {
+  isApplied: boolean
   isOpen: boolean
   available: boolean
   brands: string[]
@@ -19,15 +20,22 @@ interface CategoryFilterState {
   toggleAvailabel: () => void
   setSearchKey: (key: string) => void
   setSortType: (key: "desc" | "asc") => void
+  resetFilter: () => void
+  apply: () => void
 }
 
-export const useCategoryFilterStore = create<CategoryFilterState>()((set) => ({
+const initStore = {
+  isApplied: false,
   isOpen: false,
   available: false,
   brands: [],
   priceFrom: 0,
-  priceTo: 5,
+  priceTo: 10,
   star: 5,
+}
+
+export const useCategoryFilterStore = create<CategoryFilterState>()((set) => ({
+  ...initStore,
   searchKey: "",
   sortType: undefined,
   open: () => set(() => ({ isOpen: true })),
@@ -44,6 +52,8 @@ export const useCategoryFilterStore = create<CategoryFilterState>()((set) => ({
   toggleAvailabel: () => set((state) => ({ available: !state.available })),
   setSearchKey: (key: string) => set(() => ({ searchKey: key })),
   setSortType: (type: SortType) => set(() => ({ sortType: type })),
+  resetFilter: () => set(initStore),
+  apply: () => set((state) => ({ isApplied: !state.isApplied })),
 }))
 
 export const allBrands = [

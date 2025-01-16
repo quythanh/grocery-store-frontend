@@ -44,6 +44,22 @@ export const GET_CUSTOMER_CART = gql`
   }
 `
 
+export const ADD_ITEM_TO_CART = gql`
+    mutation AddItemToCart($cartId: String!, $itemSku: String!, $quantity: Float!) {
+        addProductsToCart(
+            cartId: $cartId
+            cartItems: {
+                sku: $itemSku,
+                quantity: $quantity
+            }
+        ) {
+            cart {
+                total_quantity
+            }
+        }
+    }
+`
+
 export const UPDATE_CART_ITEM = gql`
   mutation UpdateCartItems(
     $cartId: String!
@@ -74,4 +90,19 @@ export const ADD_PRODUCT_TO_CART = gql`
       }
     }
   }
+`
+
+export const REMOVE_ITEM_FROM_CART = gql`
+    mutation RemoveItemFromCart($cartId: String!, $cartItemUid: ID!) {
+        removeItemFromCart(
+            input: {
+                cart_id: $cartId,
+                cart_item_uid: $cartItemUid
+            }
+        ) {
+            cart {
+                id
+            }
+        }
+    }
 `
