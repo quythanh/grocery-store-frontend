@@ -3,9 +3,11 @@ import { ADD_PRODUCT_TO_CART } from "@/api/graphqlString/cart"
 import { useTokenStore } from "@/store/tokenStore"
 import { useMutation } from "@apollo/client"
 import { ALERT_TYPE, Toast } from "react-native-alert-notification"
+import { useRouter } from "expo-router"
 
 export const useAddToCart = () => {
   const [quantityToCart, setQuantityToCart] = useState(1)
+  const route = useRouter()
   const { token } = useTokenStore()
   const [addToCart, { data, error, loading }] = useMutation(ADD_PRODUCT_TO_CART)
   const adjustQuantity = (quantity: number) => {
@@ -19,6 +21,7 @@ export const useAddToCart = () => {
           type: ALERT_TYPE.DANGER,
           title: "Notification",
           textBody: "Please login to add product to cart!!",
+          onPress: () => route.push("/auth/login"),
         })
         return
       }

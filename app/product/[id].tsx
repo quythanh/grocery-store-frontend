@@ -4,7 +4,7 @@ import { GET_DETAIL_PRODUCT } from "@/api/graphqlString/product"
 import { useIdsStore } from "@/store/idsStore"
 import { useTokenStore } from "@/store/tokenStore"
 import { useMutation, useQuery } from "@apollo/client"
-import { useLocalSearchParams } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { Bookmark } from "lucide-react-native"
 import { Platform, View } from "react-native"
 import { ALERT_TYPE, Toast } from "react-native-alert-notification"
@@ -43,6 +43,7 @@ const productToCart: ProductToCart = {
 const ProductScreen = () => {
   const { id } = useLocalSearchParams()
   const { token } = useTokenStore()
+  const route = useRouter()
   const { wishlistId, cartId } = useIdsStore()
   //** [infor, setInfor]: Just for UI */
   const [infor, setInfor] = useState(productToCart)
@@ -86,6 +87,7 @@ const ProductScreen = () => {
           type: ALERT_TYPE.DANGER,
           title: "Notification",
           textBody: "Please login to add product to wishlist!!",
+          onPress: () => route.push("/auth/login"),
         })
         return
       }
