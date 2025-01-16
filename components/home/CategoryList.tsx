@@ -11,6 +11,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native"
+import { ALERT_TYPE, Toast } from "react-native-alert-notification"
+
+import LoadingModal from "../LoadingModal"
 
 const CategoryList = () => {
   const categorySliderPosition = useRef(new Animated.Value(0)).current
@@ -32,6 +35,18 @@ const CategoryList = () => {
       setCategoryList(data.categoryList[0]?.children || [])
     }
   }, [data, loading, setCategoryList])
+
+  useEffect(() => {
+    if (error) {
+      console.error(error)
+
+      Toast.show({
+        title: "Error",
+        textBody: "Failed to fetch categories.",
+        type: ALERT_TYPE.DANGER,
+      })
+    }
+  }, [error])
 
   useEffect(() => {
     if (categoryList.length > 0) {
@@ -87,36 +102,39 @@ const CategoryList = () => {
   }
 
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-      <View style={styles.categoryContainer}>
-        {categoryList.map((category, index) => {
-          return (
-            <TouchableOpacity
-              key={category.id}
-              style={styles.categoryItem}
-              onPress={() => handleCategorySelect(index)}
-              ref={(ref) => (categoryItemRefs.current[index] = ref)}
-              onLayout={(event) => handleLayoutCategory(index, event)}
-            >
-              <Text
-                style={[
-                  styles.categoryText,
-                  selectedCategory === index && styles.selectedCategoryText,
-                ]}
+    <>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.categoryContainer}>
+          {categoryList.map((category, index) => {
+            return (
+              <TouchableOpacity
+                key={category.id}
+                style={styles.categoryItem}
+                onPress={() => handleCategorySelect(index)}
+                ref={(ref) => (categoryItemRefs.current[index] = ref)}
+                onLayout={(event) => handleLayoutCategory(index, event)}
               >
-                {category.name}
-              </Text>
-            </TouchableOpacity>
-          )
-        })}
-        <Animated.View
-          style={[
-            styles.categorySlider,
-            { transform: [{ translateX: categorySliderPosition }] },
-          ]}
-        />
-      </View>
-    </ScrollView>
+                <Text
+                  style={[
+                    styles.categoryText,
+                    selectedCategory === index && styles.selectedCategoryText,
+                  ]}
+                >
+                  {category.name}
+                </Text>
+              </TouchableOpacity>
+            )
+          })}
+          <Animated.View
+            style={[
+              styles.categorySlider,
+              { transform: [{ translateX: categorySliderPosition }] },
+            ]}
+          />
+        </View>
+      </ScrollView>
+      <LoadingModal visible={loading} />
+    </>
   )
 }
 

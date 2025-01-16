@@ -4,8 +4,10 @@ import { useCategoryStore } from "@/store/home/categoryStore"
 import { useQuery } from "@apollo/client"
 import { Feather } from "@expo/vector-icons"
 import { ScrollView, StyleSheet, Text, View } from "react-native"
+import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 
 import Image from "../Image"
+import LoadingModal from "../LoadingModal"
 
 export interface Product {
   id: number
@@ -41,35 +43,49 @@ const HorizontalProductList = () => {
     }
   }, [data, loading, selectedCategoryId])
 
+  useEffect(() => {
+    if (error) {
+      console.error(error)
+      Toast.show({
+        title: "Error",
+        textBody: "Failed to fetch products.",
+        type: ALERT_TYPE.DANGER,
+      })
+    }
+  }, [error])
+
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-      <View style={styles.productContainer}>
-        {productList.map((product) => (
-          <View key={product.id} style={styles.productItem}>
-            <Image src={product.image.url} style={styles.productImage} />
-            <View style={styles.nameContainer}>
-              <Text
-                style={styles.productName}
-                numberOfLines={2}
-                ellipsizeMode="tail"
-              >
-                {product.name}
-              </Text>
+    <>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.productContainer}>
+          {productList.map((product) => (
+            <View key={product.id} style={styles.productItem}>
+              <Image src={product.image.url} style={styles.productImage} />
+              <View style={styles.nameContainer}>
+                <Text
+                  style={styles.productName}
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                >
+                  {product.name}
+                </Text>
+              </View>
+              <View style={styles.productDetails}>
+                <Feather name="dollar-sign" size={15} color="#000" />
+                <Text style={styles.productDetailText}>
+                  {product.price_range.minimum_price.final_price.value}
+                </Text>
+              </View>
+              <View style={styles.productDetails}>
+                <Feather name="shopping-bag" size={15} color="#000" />
+                <Text style={styles.productDetailText}>1 Kg</Text>
+              </View>
             </View>
-            <View style={styles.productDetails}>
-              <Feather name="dollar-sign" size={15} color="#000" />
-              <Text style={styles.productDetailText}>
-                {product.price_range.minimum_price.final_price.value}
-              </Text>
-            </View>
-            <View style={styles.productDetails}>
-              <Feather name="shopping-bag" size={15} color="#000" />
-              <Text style={styles.productDetailText}>1 Kg</Text>
-            </View>
-          </View>
-        ))}
-      </View>
-    </ScrollView>
+          ))}
+        </View>
+      </ScrollView>
+      <LoadingModal visible={loading} />
+    </>
   )
 }
 
