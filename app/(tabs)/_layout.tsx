@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Colors } from "@/constants/Colors"
 import { Feather } from "@expo/vector-icons"
-import { Tabs } from "expo-router"
+import { Tabs, useNavigation } from "expo-router"
 import { Platform } from "react-native"
 
 import { useColorScheme } from "@/hooks/useColorScheme"
@@ -10,6 +10,15 @@ import { HapticTab } from "@/components/HapticTab"
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()
+  const navigation = useNavigation()
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", (e) => {
+      e.preventDefault()
+    })
+
+    return unsubscribe
+  }, [navigation])
 
   return (
     <Tabs
