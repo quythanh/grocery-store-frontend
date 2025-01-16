@@ -48,9 +48,7 @@ const ProductCard = ({
     useAddToCart()
 
   if (!product)
-    return (
-      <Box className="bg-gray-200 animate-pulse rounded-xl h-56 shadow"></Box>
-    )
+    return <Box className="bg-gray-200 animate-pulse rounded-xl h-56"></Box>
 
   return (
     <Link
