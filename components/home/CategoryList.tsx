@@ -28,9 +28,7 @@ const CategoryList = () => {
     setSelectedCategoryId: setStoredSelectedCategory,
   } = useCategoryStore()
 
-  const { data, loading, error } = useQuery(GET_CATEGORY_LIST, {
-    fetchPolicy: "no-cache",
-  })
+  const { data, loading, error } = useQuery(GET_CATEGORY_LIST)
 
   useEffect(() => {
     if (!loading && data) {
