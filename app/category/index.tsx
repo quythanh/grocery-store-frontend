@@ -1,6 +1,7 @@
 import { Fragment, useLayoutEffect, useState } from "react"
 import { GET_PRODUCTS_BY_CATEGORY } from "@/api/graphqlString/category"
 import { useCategoryFilterStore } from "@/store/categoryFilter"
+import { useCategoryStore } from "@/store/home/categoryStore"
 import { useQuery } from "@apollo/client"
 import { LayoutGrid, Search } from "lucide-react-native"
 import { Platform, ScrollView, View } from "react-native"
@@ -28,10 +29,11 @@ const CategoryScreen = () => {
     useCategoryFilterStore((state) => state)
   const [products, setProducts] = useState<Product[]>([])
   const [currentPage, setCurrentPage] = useState(1)
+  const { selectedCategoryId } = useCategoryStore()
 
   const { data, loading, error } = useQuery(GET_PRODUCTS_BY_CATEGORY, {
     variables: {
-      categoryId: 10,
+      categoryId: selectedCategoryId,
       pageSize: 8,
       currentPage,
     },
@@ -73,8 +75,6 @@ const CategoryScreen = () => {
 
     setProducts(filterProducts)
   }, [data, sortType, priceFrom, priceTo])
-
-  
 
   useDebouce(() => {
     setProducts(mappedProducts.filter((p) => p.name.includes(searchKey)))
@@ -120,7 +120,7 @@ const CategoryScreen = () => {
             </Button>
           </HStack>
 
-          {products && products.length === 0 ? (
+          {products && !loading && products.length === 0 ? (
             <View className="flex-1 justify-center items-center">
               <Image alt="empty" source={emptyBackground} size="2xl" />
             </View>
@@ -132,7 +132,7 @@ const CategoryScreen = () => {
                   className: "col-span-12",
                 }}
               >
-                {loading && products.length === 0
+                {loading
                   ? Array(6)
                       .fill(0)
                       .map((_, i) => (
