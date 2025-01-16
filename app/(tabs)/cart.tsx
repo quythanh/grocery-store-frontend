@@ -31,6 +31,7 @@ const CartScreen = () => {
         authorization: `Bearer ${token}`,
       },
     },
+    fetchPolicy: "no-cache",
     pollInterval: 5000
   })
 
@@ -58,7 +59,7 @@ const CartScreen = () => {
   return (
     <Fragment>
       <ParallaxScrollView
-        headerImage={
+        header={
           <View style={styles.headerContainer}>
             <ThemedText style={styles.headerText}>Shopping Cart</ThemedText>
             <ThemedText style={styles.headerSubText}>
@@ -92,21 +93,21 @@ const CartScreen = () => {
                 )}
               >
                 <CartItem
-                name={item.product.name}
-                imgUrl={item.product.image.url}
-                price={item.prices.price.value}
-                unit={item.configurable_options ? item.configurable_options[0]?.value_label : "1 Kg"}
-                quantity={item.quantity}
-                quantityAdjustFn={(number) => {
-                  updateCartItem({
-                    variables: {
-                      cartId: data.customerCart.id,
-                      cartItemUid: item.uid,
-                      quantity: number
-                    }
-                  })
-                }}
-              />
+                  name={item.product.name}
+                  imgUrl={item.product.image.url}
+                  price={item.prices.price.value}
+                  unit={item.configurable_options ? item.configurable_options[0]?.value_label : "1 Kg"}
+                  quantity={item.quantity}
+                  quantityAdjustFn={(number) => {
+                    updateCartItem({
+                      variables: {
+                        cartId: data.customerCart.id,
+                        cartItemUid: item.uid,
+                        quantity: number
+                      }
+                    })
+                  }}
+                />
               </Swipeable>
             ))}
           </GestureHandlerRootView>
@@ -123,7 +124,7 @@ const CartScreen = () => {
                   </View>
   
                   <Button
-                    size="lg"
+                    size="xl"
                     style={styles.continueWrapper}
                     onPress={() => route.push("/checkout")}
                   >
