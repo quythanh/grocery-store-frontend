@@ -4,7 +4,7 @@ import { useTokenStore } from "@/store/tokenStore"
 import { useMutation } from "@apollo/client"
 import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 
-export const useAddToCart = (productId: string, cartId: String) => {
+export const useAddToCart = () => {
   const [quantityToCart, setQuantityToCart] = useState(1)
   const { token } = useTokenStore()
   const [addToCart, { data, error, loading }] = useMutation(ADD_PRODUCT_TO_CART)
@@ -12,7 +12,7 @@ export const useAddToCart = (productId: string, cartId: String) => {
     if (quantityToCart + quantity < 1) return
     setQuantityToCart(quantityToCart + quantity)
   }
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (cartId: string, productId: string) => {
     try {
       if (!token) {
         Toast.show({

@@ -75,7 +75,7 @@ const ProductScreen = () => {
     adjustQuantity,
     handleAddToCart,
     loading: addToCartLoading,
-  } = useAddToCart(product?.id.toString() || "", cartId)
+  } = useAddToCart()
 
   const [addToWishlist, { error }] = useMutation(ADD_PRODUCT_TO_WISHLIST)
 
@@ -85,7 +85,7 @@ const ProductScreen = () => {
         Toast.show({
           type: ALERT_TYPE.DANGER,
           title: "Notification",
-          textBody: "Please login to add product to cart!!",
+          textBody: "Please login to add product to wishlist!!",
         })
         return
       }
@@ -179,7 +179,7 @@ const ProductScreen = () => {
             </VStack>
 
             <AddToCartButton
-              onPress={handleAddToCart}
+              onPress={() => handleAddToCart(cartId, id.toString())}
               size="xl"
               loading={addToCartLoading}
             />
