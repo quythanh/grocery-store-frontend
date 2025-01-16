@@ -52,7 +52,6 @@ const ProductCard = ({
 
   return (
     <Link
-      className="h-full"
       href={{
         pathname: "/product/[id]",
         params: {
@@ -60,7 +59,7 @@ const ProductCard = ({
         },
       }}
     >
-      <Card className={`p-3 rounded-xl w-full h-full shadow-lg shadow-black ${className || ""}`}>
+      <Card className={`p-3 rounded-xl w-full h-full shadow ${className || ""}`}>
         <CustomImage
           src={product.image}
           className="mb-2 w-full h-36 rounded-md"
