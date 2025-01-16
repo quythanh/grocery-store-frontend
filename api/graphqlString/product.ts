@@ -17,6 +17,15 @@ export const GET_DETAIL_PRODUCT = gql`
             }
           }
         }
+        ... on ConfigurableProduct {
+          configurable_options {
+            label
+            values {
+              label
+              uid
+            }
+          }
+        }
         sku
         image {
           url
@@ -26,4 +35,3 @@ export const GET_DETAIL_PRODUCT = gql`
     }
   }
 `
-

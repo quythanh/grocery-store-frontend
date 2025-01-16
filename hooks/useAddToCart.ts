@@ -2,8 +2,8 @@ import { useState } from "react"
 import { ADD_PRODUCT_TO_CART } from "@/api/graphqlString/cart"
 import { useTokenStore } from "@/store/tokenStore"
 import { useMutation } from "@apollo/client"
-import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 import { useRouter } from "expo-router"
+import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 
 export const useAddToCart = () => {
   const [quantityToCart, setQuantityToCart] = useState(1)
@@ -14,7 +14,11 @@ export const useAddToCart = () => {
     if (quantityToCart + quantity < 1) return
     setQuantityToCart(quantityToCart + quantity)
   }
-  const handleAddToCart = async (cartId: string, productId: string) => {
+  const handleAddToCart = async (
+    cartId: string,
+    productId: string,
+    option?: string
+  ) => {
     try {
       if (!token) {
         Toast.show({
@@ -31,6 +35,7 @@ export const useAddToCart = () => {
           cartId: cartId,
           sku: productId,
           quantity: quantityToCart,
+          options: option ? [option] : [],
         },
         context: {
           headers: {

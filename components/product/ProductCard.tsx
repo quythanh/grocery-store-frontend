@@ -31,7 +31,7 @@ import { VStack } from "../ui/vstack"
 export type Product = {
   name: string
   price: number
-  qty: number
+  qty?: number | string
   image: string
   id: number | string
 }

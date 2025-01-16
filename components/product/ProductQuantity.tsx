@@ -6,31 +6,37 @@ import { ProductToCart } from "@/app/product/[id]"
 import { Button, ButtonText } from "../ui/button"
 import { Heading } from "../ui/heading"
 import { HStack } from "../ui/hstack"
+import { Text } from "../ui/text"
 
 const ProductQuantity = ({
+  options,
   handleChange,
   qty,
 }: {
+  options: any[]
   handleChange: (key: keyof ProductToCart, value: number) => void
-  qty: number
+  qty: string
 }) => {
   return (
     <View>
       <Heading size="sm">Quantity</Heading>
       <HStack className="mt-2 gap-3">
-        {["1 per Kg", "500 grams", "2 per Kg"].map((item, index) => (
+        {options?.map((item) => (
           <Button
             className={`${
-              index === qty ? " bg-mainGreen" : "bg-lightGreen"
-            } rounded-full`}
-            key={index}
-            onPress={() => handleChange("qty", index)}
+              item.uid === qty ? " bg-mainGreen" : "bg-lightGreen"
+            } rounded-full active:!bg-green-700`}
+            key={item.uid}
+            onPress={() => handleChange("qty", item.uid)}
           >
-            <ButtonText className={index === qty ? "" : "text-typography-700"}>
-              {item}
+            <ButtonText
+              className={item.uid === qty ? "" : "text-typography-700"}
+            >
+              {item.label}
             </ButtonText>
           </Button>
         ))}
+        {options.length == 0 && <Text>No options</Text>}
       </HStack>
     </View>
   )

@@ -80,10 +80,15 @@ export const UPDATE_CART_ITEM = gql`
 `
 
 export const ADD_PRODUCT_TO_CART = gql`
-  mutation AddProductsToCart($cartId: String!, $sku: String!, $quantity: Float!) {
+  mutation AddProductsToCart(
+    $cartId: String!
+    $sku: String!
+    $quantity: Float!
+    $options: [ID]
+  ) {
     addProductsToCart(
       cartId: $cartId
-      cartItems: { sku: $sku, quantity: $quantity }
+      cartItems: { sku: $sku, quantity: $quantity, selected_options: $options }
     ) {
       cart {
         total_quantity
@@ -93,16 +98,13 @@ export const ADD_PRODUCT_TO_CART = gql`
 `
 
 export const REMOVE_ITEM_FROM_CART = gql`
-    mutation RemoveItemFromCart($cartId: String!, $cartItemUid: ID!) {
-        removeItemFromCart(
-            input: {
-                cart_id: $cartId,
-                cart_item_uid: $cartItemUid
-            }
-        ) {
-            cart {
-                id
-            }
-        }
+  mutation RemoveItemFromCart($cartId: String!, $cartItemUid: ID!) {
+    removeItemFromCart(
+      input: { cart_id: $cartId, cart_item_uid: $cartItemUid }
+    ) {
+      cart {
+        id
+      }
     }
+  }
 `

@@ -34,11 +34,6 @@ export type ProductToCart = {
   count: number
   strength: number
 }
-const productToCart: ProductToCart = {
-  qty: 0,
-  count: 1,
-  strength: 1,
-}
 
 const ProductScreen = () => {
   const { id } = useLocalSearchParams()
@@ -46,6 +41,17 @@ const ProductScreen = () => {
   const route = useRouter()
   const { wishlistId, cartId } = useIdsStore()
   //** [infor, setInfor]: Just for UI */
+  const { data, loading } = useQuery(GET_DETAIL_PRODUCT, {
+    variables: {
+      productSku: id,
+    },
+    fetchPolicy: "no-cache",
+  })
+  const productToCart: ProductToCart = {
+    qty: data?.products?.items[0].configurable_options?.[0].values[0].uid,
+    count: 1,
+    strength: 1,
+  }
   const [infor, setInfor] = useState(productToCart)
   const handleChange = (key: keyof ProductToCart, value: number) => {
     if (key == "count" && value <= 0) return
@@ -54,12 +60,7 @@ const ProductScreen = () => {
       [key]: value,
     })
   }
-  const { data, loading } = useQuery(GET_DETAIL_PRODUCT, {
-    variables: {
-      productSku: id,
-    },
-    fetchPolicy: "no-cache",
-  })
+
   const product: Product | undefined = data?.products?.items[0]
     ? {
         id: data?.products?.items[0].sku,
@@ -67,7 +68,7 @@ const ProductScreen = () => {
         name: data?.products?.items[0].name,
         price:
           data?.products?.items[0].price_range.maximum_price.final_price.value,
-        qty: 1,
+        qty: data?.products?.items[0].configurable_options?.[0].values[0].uid,
       }
     : undefined
 
@@ -78,7 +79,7 @@ const ProductScreen = () => {
     loading: addToCartLoading,
   } = useAddToCart()
 
-  const [addToWishlist, { error }] = useMutation(ADD_PRODUCT_TO_WISHLIST)
+  const [addToWishlist] = useMutation(ADD_PRODUCT_TO_WISHLIST)
 
   const handleAddToWishlist = () => {
     try {
@@ -119,7 +120,6 @@ const ProductScreen = () => {
       console.error(error)
     }
   }
-
   if (loading)
     return (
       <View className="flex-1 justify-center items-center">
@@ -164,7 +164,14 @@ const ProductScreen = () => {
               </HStack>
 
               <VStack className="gap-6 mt-16">
-                <ProductQuantity qty={infor.qty} handleChange={handleChange} />
+                <ProductQuantity
+                  options={
+                    data?.products?.items[0].configurable_options?.[0].values ||
+                    []
+                  }
+                  qty={infor.qty.toString()}
+                  handleChange={handleChange}
+                />
 
                 <ProductCount
                   count={quantityToCart}
@@ -181,7 +188,9 @@ const ProductScreen = () => {
             </VStack>
 
             <AddToCartButton
-              onPress={() => handleAddToCart(cartId, id.toString())}
+              onPress={() =>
+                handleAddToCart(cartId, id.toString(), infor?.qty?.toString())
+              }
               size="xl"
               loading={addToCartLoading}
             />
