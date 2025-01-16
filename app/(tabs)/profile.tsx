@@ -41,7 +41,7 @@ const ProfileScreen = () => {
     useCustomerInformationStore()
 
   const { data, loading, error } = useQuery(GET_CUSTOMER_INFORMATION, {
-    skip: !token,
+    skip: !!informationState.email,
     context: {
       headers: {
         Authorization: `Bearer ${token}`,
