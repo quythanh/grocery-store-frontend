@@ -21,6 +21,7 @@ export const useGetIds = () => {
     }
   `
   const { data: wishlistData } = useQuery(GET_WISHLIST_ID, {
+    skip: !token,
     context: {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -29,6 +30,7 @@ export const useGetIds = () => {
   })
 
   const { data: cartData } = useQuery(GET_CART_ID, {
+    skip: !token,
     context: {
       headers: {
         Authorization: `Bearer ${token}`,
