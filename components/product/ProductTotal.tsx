@@ -7,7 +7,7 @@ const ProductTotal = ({ total }: { total: number }) => {
   return (
     <Button className="rounded-full bg-lightGreen mt-8" disabled>
       <ButtonText className="text-typo-700">Total: </ButtonText>
-      <Text className="text-green-700 font-bold">${total}</Text>
+      <Text className="text-green-700 font-bold">${total.toFixed(2)}</Text>
     </Button>
   )
 }

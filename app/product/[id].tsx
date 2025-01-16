@@ -176,7 +176,7 @@ const ProductScreen = () => {
                   handleChange={handleChange}
                 />
 
-                <ProductTotal total={15} />
+                <ProductTotal total={product.price * quantityToCart} />
               </VStack>
             </VStack>
 
