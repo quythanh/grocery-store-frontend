@@ -1,5 +1,10 @@
+import { useEffect, useState } from "react"
 import { allBrands, useCategoryFilterStore } from "@/store/categoryFilter"
-import { CheckIcon, ChevronDownIcon, StarIcon } from "lucide-react-native"
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  RotateCcw,
+} from "lucide-react-native"
 import { View } from "react-native"
 
 import Stars from "../common/Stars"
@@ -38,8 +43,21 @@ import { Text } from "../ui/text"
 import { VStack } from "../ui/vstack"
 
 const FilterModal = () => {
-  const { isOpen, close, star, brands, setStar, toggleBrand } =
-    useCategoryFilterStore((state) => state)
+  const {
+    isOpen,
+    close,
+    star,
+    brands,
+    setStar,
+    toggleBrand,
+    priceFrom,
+    priceTo,
+    setPriceFrom,
+    isApplied,
+    setPriceTo,
+    apply,
+    resetFilter,
+  } = useCategoryFilterStore((state) => state)
 
   return (
     <Modal
@@ -78,9 +96,13 @@ const FilterModal = () => {
             <View>
               <Heading size="sm">Price range</Heading>
               <HStack className="justify-between items-center mt-2">
-                <Select>
+                <Select onValueChange={(value) => setPriceFrom(+value)}>
                   <SelectTrigger variant="outline" size="md">
-                    <SelectInput className="py-2" placeholder="Select option" />
+                    <SelectInput
+                      className="py-2"
+                      value={priceFrom.toString()}
+                      placeholder="Select option"
+                    />
                     <SelectIcon className="mr-3" as={ChevronDownIcon} />
                   </SelectTrigger>
                   <SelectPortal>
@@ -89,20 +111,26 @@ const FilterModal = () => {
                       <SelectDragIndicatorWrapper>
                         <SelectDragIndicator />
                       </SelectDragIndicatorWrapper>
-                      <SelectItem label="5" value="5" />
-                      <SelectItem label="10" value="10" />
-                      <SelectItem label="15" value="15 " />
-                      <SelectItem label="20" value="20" />
-                      <SelectItem label="25" value="25" />
+                      {[0, 2, 4, 6, 8, 10].map((i) => (
+                        <SelectItem
+                          label={i.toString()}
+                          value={i.toString()}
+                          key={i}
+                        />
+                      ))}
                     </SelectContent>
                   </SelectPortal>
                 </Select>
 
                 <Text>to</Text>
 
-                <Select>
+                <Select onValueChange={(value) => setPriceTo(+value)}>
                   <SelectTrigger variant="outline" size="md">
-                    <SelectInput className="py-2" placeholder="Select option" />
+                    <SelectInput
+                      className="py-2"
+                      placeholder="Select option"
+                      value={priceTo.toString()}
+                    />
                     <SelectIcon className="mr-3" as={ChevronDownIcon} />
                   </SelectTrigger>
                   <SelectPortal>
@@ -111,11 +139,13 @@ const FilterModal = () => {
                       <SelectDragIndicatorWrapper>
                         <SelectDragIndicator />
                       </SelectDragIndicatorWrapper>
-                      <SelectItem label="5" value="5" />
-                      <SelectItem label="10" value="10" />
-                      <SelectItem label="15" value="15 " />
-                      <SelectItem label="20" value="20" />
-                      <SelectItem label="25" value="25" />
+                      {[0, 2, 4, 6, 8, 10].map((i) => (
+                        <SelectItem
+                          label={i.toString()}
+                          value={i.toString()}
+                          key={i}
+                        />
+                      ))}
                     </SelectContent>
                   </SelectPortal>
                 </Select>
@@ -161,12 +191,22 @@ const FilterModal = () => {
             <ButtonText>Cancel</ButtonText>
           </Button>
           <Button
+            variant="outline"
+            action="secondary"
             onPress={() => {
+              resetFilter()
+            }}
+          >
+            <ButtonIcon as={RotateCcw} />
+          </Button>
+          <Button
+            onPress={() => {
+              apply()
               close()
             }}
             className="bg-mainGreen hover:bg-green-700"
           >
-            <ButtonText>Apply</ButtonText>
+            <ButtonText>{isApplied ? "Remove filter" : "Apply"}</ButtonText>
           </Button>
         </ModalFooter>
       </ModalContent>

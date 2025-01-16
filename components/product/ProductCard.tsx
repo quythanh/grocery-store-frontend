@@ -8,13 +8,13 @@ import {
   Weight,
 } from "lucide-react-native"
 
+import CustomImage from "../Image"
 import { Box } from "../ui/box"
 import { Button, ButtonIcon, ButtonText } from "../ui/button"
 import { Card } from "../ui/card"
 import { Heading } from "../ui/heading"
 import { HStack } from "../ui/hstack"
 import { Icon } from "../ui/icon"
-import { Image } from "../ui/image"
 import {
   Popover,
   PopoverBackdrop,
@@ -37,7 +37,7 @@ const ProductCard = ({
   product,
 }: {
   className?: string
-  product: Product
+  product?: Product
 }) => {
   const [quantityToCart, setQuantityToCart] = useState(1)
   const handleAddToCart = () => {}
@@ -52,7 +52,6 @@ const ProductCard = ({
 
   return (
     <Link
-      className="h-full"
       href={{
         pathname: "/product/[id]",
         params: {
@@ -60,11 +59,9 @@ const ProductCard = ({
         },
       }}
     >
-      <Card className={`p-3 rounded-xl w-full ${className || ""}`}>
-        <Image
-          source={{
-            uri: product.image,
-          }}
+      <Card className={`p-3 rounded-xl w-full h-full shadow ${className || ""}`}>
+        <CustomImage
+          src={product.image}
           className="mb-2 w-full h-36 rounded-md"
           alt="image"
         />
@@ -73,10 +70,8 @@ const ProductCard = ({
         </Heading>
         <HStack className="items-end justify-between flex-1">
           <VStack>
-            <Text className="flex-1 font-bold text-lg">
-              {product.price}.000đ
-            </Text>
-            <HStack className="items-center gap-1">
+            <Text className="flex-1 font-bold text-lg">${product.price}</Text>
+            <HStack className=" items-center gap-1">
               <Icon as={Weight} size={"sm"} />
               <Text>{product.qty}gram</Text>
             </HStack>
