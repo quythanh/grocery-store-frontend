@@ -37,7 +37,7 @@ const ProfileScreen = () => {
   const inset = useSafeAreaInsets()
   const [isEditing, setIsEditing] = useState(false)
   const { token, resetToken } = useTokenStore()
-  const { informationState, setInformationField, resetInformationState } =
+  const { informationState, setInformationState, setInformationField, resetInformationState } =
     useCustomerInformationStore()
 
   const { data, loading, error } = useQuery(GET_CUSTOMER_INFORMATION, {
@@ -69,12 +69,8 @@ const ProfileScreen = () => {
     if (data) {
       const { firstname, lastname, email, gender, date_of_birth } =
         data.customer
-      setInformationField("firstname", firstname)
-      setInformationField("lastname", lastname)
-      setInformationField("email", email)
-      setInformationField("gender", gender)
-      setInformationField("date_of_birth", date_of_birth)
-      return
+      
+      setInformationState({ firstname, lastname, email, gender, date_of_birth })
     }
   }, [data, setInformationField])
 
@@ -98,11 +94,7 @@ const ProfileScreen = () => {
     try {
       const response = await updateCustomerInformation({
         variables: {
-          firstname: informationState.firstname,
-          lastname: informationState.lastname,
-          email: informationState.email,
-          gender: informationState.gender,
-          date_of_birth: informationState.date_of_birth,
+          ...informationState
         },
       })
 
@@ -112,11 +104,7 @@ const ProfileScreen = () => {
         const { firstname, lastname, email, gender, date_of_birth } =
           response.data.updateCustomerV2.customer
 
-        setInformationField("firstname", firstname)
-        setInformationField("lastname", lastname)
-        setInformationField("email", email)
-        setInformationField("gender", gender)
-        setInformationField("date_of_birth", date_of_birth)
+        setInformationState({ firstname, lastname, email, gender, date_of_birth })
 
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
