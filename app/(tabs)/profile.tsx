@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 import {
   GET_CUSTOMER_INFORMATION,
   UPDATE_CUSTOMER_INFORMATION,
@@ -135,7 +135,7 @@ const ProfileScreen = () => {
   }
 
   return (
-    <>
+    <Fragment>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
@@ -231,7 +231,7 @@ const ProfileScreen = () => {
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
       <LoadingModal visible={loading || updateLoading} />
-    </>
+    </Fragment>
   )
 }
 
