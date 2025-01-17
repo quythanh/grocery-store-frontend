@@ -8,24 +8,7 @@ import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 
 import Image from "../Image"
 import LoadingModal from "../LoadingModal"
-
-export interface Product {
-  uid: string
-  sku: string
-  name: string
-  image: {
-    label: string
-    url: string
-  }
-  price_range: {
-    minimum_price: {
-      final_price: {
-        currency: string
-        value: number
-      }
-    }
-  }
-}
+import type { Product } from "@/types/product"
 
 const HorizontalProductList = () => {
   const { selectedCategoryId } = useCategoryStore()

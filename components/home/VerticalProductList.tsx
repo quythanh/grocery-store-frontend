@@ -7,7 +7,7 @@ import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 
 import Image from "../Image"
 import LoadingModal from "../LoadingModal"
-import { Product } from "./HorizontalProductList"
+import type { Product } from "@/types/product"
 
 const VerticalProductList = () => {
   const containerWidth = Dimensions.get("window").width
