@@ -15,3 +15,9 @@ export type Product = {
     }
   }
 }
+
+export type ProductDTO = {
+  products: {
+    items: Product[]
+  }
+}
