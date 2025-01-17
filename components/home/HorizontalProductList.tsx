@@ -9,6 +9,7 @@ import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 import Image from "../Image"
 import LoadingModal from "../LoadingModal"
 import type { Product } from "@/types/product"
+import { Link } from "expo-router"
 
 const HorizontalProductList = () => {
   const { selectedCategoryId } = useCategoryStore()
@@ -43,28 +44,39 @@ const HorizontalProductList = () => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.productContainer}>
           {productList.map((product) => (
-            <View key={product.uid} style={styles.productItem}>
-              <Image src={product.image.url} style={styles.productImage} />
-              <View style={styles.nameContainer}>
-                <Text
-                  style={styles.productName}
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
-                >
-                  {product.name}
-                </Text>
+            <Link
+              key={product.uid}
+              style={styles.productItem}
+              href={{
+                pathname: "/product/[id]",
+                params: {
+                  id: product.sku,
+                },
+              }}
+            >
+              <View>
+                <Image src={product.image.url} style={styles.productImage} />
+                <View style={styles.nameContainer}>
+                  <Text
+                    style={styles.productName}
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                  >
+                    {product.name}
+                  </Text>
+                </View>
+                <View style={styles.productDetails}>
+                  <Feather name="dollar-sign" size={15} color="#000" />
+                  <Text style={styles.productDetailText}>
+                    {product.price_range.minimum_price.final_price.value}
+                  </Text>
+                </View>
+                <View style={styles.productDetails}>
+                  <Feather name="shopping-bag" size={15} color="#000" />
+                  <Text style={styles.productDetailText}>1 Kg</Text>
+                </View>
               </View>
-              <View style={styles.productDetails}>
-                <Feather name="dollar-sign" size={15} color="#000" />
-                <Text style={styles.productDetailText}>
-                  {product.price_range.minimum_price.final_price.value}
-                </Text>
-              </View>
-              <View style={styles.productDetails}>
-                <Feather name="shopping-bag" size={15} color="#000" />
-                <Text style={styles.productDetailText}>1 Kg</Text>
-              </View>
-            </View>
+            </Link>
           ))}
         </View>
       </ScrollView>
