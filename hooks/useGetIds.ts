@@ -1,45 +1,33 @@
 import { useTokenStore } from "@/store/tokenStore"
 import { gql, useQuery } from "@apollo/client"
 
-export const useGetIds = () => {
-  const token = useTokenStore()
-  const GET_WISHLIST_ID = gql`
-    query GetWishlist {
-      customer {
-        wishlist {
-          id
-        }
-      }
-    }
-  `
-
-  const GET_CART_ID = gql`
-    query GetCustomerCart {
-      customerCart {
+export const GET_ID = gql`
+  query GetWishlist {
+    customer {
+      wishlist {
         id
       }
     }
-  `
-  const { data: wishlistData } = useQuery(GET_WISHLIST_ID, {
-    skip: !token,
-    context: {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  })
+    customerCart {
+      id
+    }
+  }
+`
+export const useGetIds = () => {
+  const { token } = useTokenStore()
 
-  const { data: cartData } = useQuery(GET_CART_ID, {
+  const { data } = useQuery(GET_ID, {
     skip: !token,
     context: {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     },
+    fetchPolicy: "no-cache",
   })
 
   return {
-    wishlistId: wishlistData?.customer.wishlist.id || "",
-    cartId: cartData?.customerCart.id || "",
+    wishlistId: data?.customer.wishlist.id,
+    cartId: data?.customerCart.id,
   }
 }

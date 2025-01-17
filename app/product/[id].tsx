@@ -169,7 +169,7 @@ const ProductScreen = () => {
                     data?.products?.items[0].configurable_options?.[0].values ||
                     []
                   }
-                  qty={infor.qty.toString()}
+                  qty={infor.qty?.toString()}
                   handleChange={handleChange}
                 />
 
@@ -189,7 +189,7 @@ const ProductScreen = () => {
 
             <AddToCartButton
               onPress={() =>
-                handleAddToCart(cartId, id.toString(), infor?.qty?.toString())
+                handleAddToCart(cartId, id?.toString(), infor?.qty?.toString())
               }
               size="xl"
               loading={addToCartLoading}
