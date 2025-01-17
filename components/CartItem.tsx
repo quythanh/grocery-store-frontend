@@ -12,17 +12,26 @@ export interface CartItemProps {
     quantity: number;
     imgUrl: string;
     quantityAdjustFn: (quantity: number) => void;
+    disabled?: boolean
 }
 
-export default function CartItem({ name, price, quantity, imgUrl, unit, quantityAdjustFn }: CartItemProps) {
+export default function CartItem({
+    name,
+    price,
+    quantity,
+    imgUrl,
+    unit,
+    quantityAdjustFn,
+    disabled = false
+}: CartItemProps) {
     return (
-        <ThemedView style={styles.wrapper}>
+        <ThemedView style={[styles.wrapper, disabled && { backgroundColor: "#cccccc" }]}>
             <Image style={styles.image} src={imgUrl} />
 
             <View style={styles.info}>
                 <ThemedText style={styles.name}>{name}</ThemedText>
                 <ThemedText style={styles.price}>$ {price}</ThemedText>
-                <ThemedText style={styles.unit}>{unit}</ThemedText>
+                <ThemedText style={[styles.unit, disabled && { color: "#ff0000" }]}>{unit}</ThemedText>
             </View>
 
             <View style={styles.quantityAdjustmentWrapper}>
