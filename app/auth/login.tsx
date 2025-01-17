@@ -26,8 +26,8 @@ const Login = () => {
   )
   const { setToken } = useTokenStore()
   const { setCartId, setWishlistId } = useIdsStore()
-  const { cartId, wishlistId } = useGetIds()
-  
+  const { cartId, wishlistId, getIds } = useGetIds()
+
   const handleBack = () => {
     route.back()
   }
@@ -44,12 +44,18 @@ const Login = () => {
           password,
         },
       })
-
       await setSecureStore("token", response.data.generateCustomerToken.token)
       setToken(response.data.generateCustomerToken.token)
 
-      await setSecureStore("cartId", cartId)
-      await setSecureStore("wishlistId", wishlistId)
+      const { data } = await getIds({
+        context: {
+          headers: {
+            Authorization: `Bearer ${response.data.generateCustomerToken.token}`,
+          },
+        },
+      })
+      await setSecureStore("cartId", data?.customerCart.id)
+      await setSecureStore("wishlistId", data?.customer.wishlist.id)
       setCartId(cartId)
       setWishlistId(wishlistId)
 
