@@ -56,8 +56,8 @@ const Login = () => {
       })
       await setSecureStore("cartId", data?.customerCart.id)
       await setSecureStore("wishlistId", data?.customer.wishlist.id)
-      setCartId(cartId)
-      setWishlistId(wishlistId)
+      setCartId(data?.customerCart.id)
+      setWishlistId(data?.customer.wishlist.id)
 
       Toast.show({
         type: ALERT_TYPE.SUCCESS,

@@ -14,8 +14,6 @@ export const GET_ID = gql`
   }
 `
 export const useGetIds = () => {
-  const { token } = useTokenStore()
-
   const [getIds, { data }] = useLazyQuery(GET_ID, {
     fetchPolicy: "no-cache",
   })
