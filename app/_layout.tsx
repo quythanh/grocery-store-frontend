@@ -1,5 +1,4 @@
 import { useEffect } from "react"
-
 import "@/global.css"
 
 import {
@@ -18,6 +17,9 @@ import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider"
 import "react-native-reanimated"
 
 import client from "@/api/apolloClient"
+import { useIdsStore } from "@/store/idsStore"
+import { getSecureStore, setSecureStore } from "@/store/secureStore"
+import { useTokenStore } from "@/store/tokenStore"
 import { ApolloProvider } from "@apollo/client"
 
 import { useColorScheme } from "@/hooks/useColorScheme"
@@ -27,9 +29,11 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
+  const { setCartId, setWishlistId } = useIdsStore()
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   })
+  const { setToken } = useTokenStore()
 
   useEffect(() => {
     if (loaded) {

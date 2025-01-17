@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import React from "react"
+import { useIdsStore } from "@/store/idsStore"
 import { Link } from "expo-router"
 import {
   MinusIcon,
@@ -8,9 +9,12 @@ import {
   Weight,
 } from "lucide-react-native"
 
+import { useAddToCart } from "@/hooks/useAddToCart"
+
+import AddToCartButton from "../common/AddToCartButton"
 import CustomImage from "../Image"
 import { Box } from "../ui/box"
-import { Button, ButtonIcon, ButtonText } from "../ui/button"
+import { Button, ButtonIcon } from "../ui/button"
 import { Card } from "../ui/card"
 import { Heading } from "../ui/heading"
 import { HStack } from "../ui/hstack"
@@ -27,7 +31,7 @@ import { VStack } from "../ui/vstack"
 export type Product = {
   name: string
   price: number
-  qty: number
+  qty?: number | string
   image: string
   id: number | string
 }
@@ -39,16 +43,12 @@ const ProductCard = ({
   className?: string
   product?: Product
 }) => {
-  const [quantityToCart, setQuantityToCart] = useState(1)
-  const handleAddToCart = () => {}
-
-  const adjustQuantity = (quantity: number) => {
-    if (quantityToCart + quantity < 1) return
-    setQuantityToCart(quantityToCart + quantity)
-  }
+  const { cartId } = useIdsStore()
+  const { quantityToCart, adjustQuantity, loading, handleAddToCart } =
+    useAddToCart()
 
   if (!product)
-    return <Box className="bg-gray-200 animate-pulse rounded-xl h-52"></Box>
+    return <Box className="bg-gray-200 animate-pulse rounded-xl h-56"></Box>
 
   return (
     <Link
@@ -59,7 +59,9 @@ const ProductCard = ({
         },
       }}
     >
-      <Card className={`p-3 rounded-xl w-full h-full shadow ${className || ""}`}>
+      <Card
+        className={`p-3 rounded-xl w-full h-full shadow ${className || ""}`}
+      >
         <CustomImage
           src={product.image}
           className="mb-2 w-full h-36 rounded-md"
@@ -115,12 +117,10 @@ const ProductCard = ({
                     <ButtonIcon as={PlusIcon} />
                   </Button>
                 </HStack>
-                <Button
-                  onPress={handleAddToCart}
-                  className="bg-mainGreen active:!bg-green-700"
-                >
-                  <ButtonText>Add to cart</ButtonText>
-                </Button>
+                <AddToCartButton
+                  onPress={() => handleAddToCart(cartId, product.id.toString())}
+                  loading={loading}
+                />
               </PopoverBody>
             </PopoverContent>
           </Popover>

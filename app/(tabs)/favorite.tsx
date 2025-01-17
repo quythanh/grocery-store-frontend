@@ -35,6 +35,7 @@ const FavoriteScreen = () => {
       },
     },
     fetchPolicy: "no-cache",
+    pollInterval: 5000
   })
 
   const [removeProductsFromWishlist] = useMutation(REMOVE_ITEM_FROM_WISHLIST, {
@@ -77,7 +78,7 @@ const FavoriteScreen = () => {
     )
 
   return (
-    <View className={`flex-1 `}>
+    <View className={`flex-1 bg-background-0`}>
       <TopHeader>Favourite</TopHeader>
 
       {items.length === 0 ? (

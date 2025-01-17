@@ -61,7 +61,7 @@ const CategoryScreen = () => {
   const mappedProducts: Product[] = items?.map((item) => ({
     name: item.name,
     price: item.price_range.minimum_price.regular_price.value,
-    id: item.uid,
+    id: item.sku,
     image: item.image.url,
     qty: 1,
   }))
