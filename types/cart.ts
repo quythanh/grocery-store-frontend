@@ -29,7 +29,8 @@ export type CartItem = {
 export type Cart = {
     id: string;
     total_quantity: number;
-    itemsV2: {
+    items: CartItem[];
+    itemsV2?: {
         items: CartItem[];
         total_count: number;
     };

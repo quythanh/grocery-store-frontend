@@ -63,7 +63,7 @@ const CartScreen = () => {
           <View style={styles.headerContainer}>
             <ThemedText style={styles.headerText}>Shopping Cart</ThemedText>
             <ThemedText style={styles.headerSubText}>
-              A total of {data?.customerCart.itemsV2.total_count || 0} pieces
+              A total of {data?.customerCart.items.length || 0} pieces
             </ThemedText>
           </View>
         }
@@ -71,7 +71,7 @@ const CartScreen = () => {
       >
         <View style={styles.wrapper}>
           <GestureHandlerRootView style={styles.listItems}>
-            {data?.customerCart.itemsV2.items.map((item) => (
+            {data?.customerCart.items.map((item) => (
               <Swipeable
                 key={item.uid}
                 renderRightActions={() => (
@@ -93,10 +93,15 @@ const CartScreen = () => {
                 )}
               >
                 <CartItem
+                  disabled={item?.configurable_options?.length === 0}
                   name={item.product.name}
                   imgUrl={item.product.image.url}
                   price={item.prices.price.value}
-                  unit={item.configurable_options ? item.configurable_options[0]?.value_label : "1 Kg"}
+                  unit={(() => {
+                    if (item.configurable_options === undefined) return ""
+                    if (item.configurable_options.length === 0) return "Missing options."
+                    return item.configurable_options[0].value_label
+                  })()}
                   quantity={item.quantity}
                   quantityAdjustFn={(number) => {
                     updateCartItem({
@@ -113,27 +118,40 @@ const CartScreen = () => {
           </GestureHandlerRootView>
   
           {
-            (data?.customerCart.itemsV2.total_count)
-              ? (
-                <Fragment>
-                  <View style={styles.totalWrapper}>
-                    <Text style={styles.totalText}>Total:</Text>
-                    <Text style={styles.totalValue}>
-                      ${data?.customerCart.prices.subtotal_excluding_tax.value}
-                    </Text>
-                  </View>
-  
-                  <Button
-                    size="xl"
-                    style={styles.continueWrapper}
-                    onPress={() => route.push("/checkout")}
-                  >
-                    <ButtonText style={styles.continueText}>
-                      Continue
-                    </ButtonText>
-                  </Button>
-                </Fragment>
-              )
+            (data?.customerCart.items)
+              ? (() => {
+                const disabled = data
+                  ?.customerCart
+                  .items
+                  .some(item => {
+                    if (item.configurable_options !== undefined)
+                      if (item.configurable_options.length === 0)
+                        return true
+                    return false
+                  })
+
+                return (
+                  <Fragment>
+                    <View style={styles.totalWrapper}>
+                      <Text style={styles.totalText}>Total:</Text>
+                      <Text style={styles.totalValue}>
+                        ${data?.customerCart.prices.subtotal_excluding_tax.value}
+                      </Text>
+                    </View>
+    
+                    <Button
+                      disabled={disabled}
+                      size="xl"
+                      style={[styles.continueWrapper, disabled && { backgroundColor: "#999999" }]}
+                      onPress={() => route.push("/checkout")}
+                    >
+                      <ButtonText style={styles.continueText}>
+                        Continue
+                      </ButtonText>
+                    </Button>
+                  </Fragment>
+                )
+              })()
               : (() => (
                 <ThemedView>
                   <ThemedText className="w-full text-center font-bold">Cart is Empty.</ThemedText>

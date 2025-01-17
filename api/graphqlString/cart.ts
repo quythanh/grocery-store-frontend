@@ -11,53 +11,33 @@ export const GET_CUSTOMER_CART = gql`
           value
         }
       }
-      itemsV2 {
-        total_count
-        items {
-          id
-          uid
-          quantity
-          prices {
-            price {
-              currency
-              value
-            }
+      items {
+        uid
+        quantity
+        prices {
+          price {
+            currency
+            value
           }
-          product {
-            image {
-              label
-              url
-            }
-            name
+        }
+        product {
+          image {
+            label
+            url
           }
-          ... on ConfigurableCartItem {
-            configurable_options {
-              option_label
-              id
-              value_id
-              value_label
-            }
+          name
+        }
+        ... on ConfigurableCartItem {
+          configurable_options {
+            option_label
+            id
+            value_id
+            value_label
           }
         }
       }
     }
   }
-`
-
-export const ADD_ITEM_TO_CART = gql`
-    mutation AddItemToCart($cartId: String!, $itemSku: String!, $quantity: Float!) {
-        addProductsToCart(
-            cartId: $cartId
-            cartItems: {
-                sku: $itemSku,
-                quantity: $quantity
-            }
-        ) {
-            cart {
-                total_quantity
-            }
-        }
-    }
 `
 
 export const UPDATE_CART_ITEM = gql`
