@@ -63,7 +63,7 @@ const CartScreen = () => {
           <View style={styles.headerContainer}>
             <ThemedText style={styles.headerText}>Shopping Cart</ThemedText>
             <ThemedText style={styles.headerSubText}>
-              A total of {data?.customerCart.itemsV2.total_count || 0} pieces
+              A total of {data?.customerCart.items.length || 0} pieces
             </ThemedText>
           </View>
         }
@@ -71,7 +71,7 @@ const CartScreen = () => {
       >
         <View style={styles.wrapper}>
           <GestureHandlerRootView style={styles.listItems}>
-            {data?.customerCart.itemsV2.items.map((item) => (
+            {data?.customerCart.items.map((item) => (
               <Swipeable
                 key={item.uid}
                 renderRightActions={() => (
@@ -113,7 +113,7 @@ const CartScreen = () => {
           </GestureHandlerRootView>
   
           {
-            (data?.customerCart.itemsV2.total_count)
+            (data?.customerCart.items)
               ? (
                 <Fragment>
                   <View style={styles.totalWrapper}>
