@@ -1,20 +1,19 @@
-import React, { useEffect } from "react"
-import { GET_PRODUCT_LIST_BY_CATEGORY_ID } from "@/api/graphqlString/home"
-import { useCategoryStore } from "@/store/home/categoryStore"
 import { useQuery } from "@apollo/client"
 import { Feather } from "@expo/vector-icons"
+import { Link } from "expo-router"
+import { Fragment } from "react"
 import { ScrollView, StyleSheet, Text, View } from "react-native"
 import { ALERT_TYPE, Toast } from "react-native-alert-notification"
 
 import Image from "../Image"
 import LoadingModal from "../LoadingModal"
-import type { Product } from "@/types/product"
-import { Link } from "expo-router"
+import { GET_PRODUCT_LIST_BY_CATEGORY_ID } from "@/api/graphqlString/home"
+import { useCategoryStore } from "@/store/home/categoryStore"
+import type { ProductDTO } from "@/types/product"
 
 const HorizontalProductList = () => {
   const { selectedCategoryId } = useCategoryStore()
-  const [productList, setProductList] = React.useState<Product[]>([])
-  const { data, loading, error } = useQuery(GET_PRODUCT_LIST_BY_CATEGORY_ID, {
+  const { data, loading, error } = useQuery<ProductDTO>(GET_PRODUCT_LIST_BY_CATEGORY_ID, {
     variables: {
       categoryId: selectedCategoryId,
       pageSize: 5,
@@ -22,28 +21,20 @@ const HorizontalProductList = () => {
     skip: !selectedCategoryId,
   })
 
-  useEffect(() => {
-    if (!loading && data) {
-      setProductList(data.products.items)
-    }
-  }, [data, loading, selectedCategoryId])
-
-  useEffect(() => {
-    if (error) {
-      console.error(error)
-      Toast.show({
-        title: "Error",
-        textBody: "Failed to fetch products.",
-        type: ALERT_TYPE.DANGER,
-      })
-    }
-  }, [error])
+  if (error) {
+    console.error(error)
+    Toast.show({
+      title: "Error",
+      textBody: "Failed to fetch products.",
+      type: ALERT_TYPE.DANGER,
+    })
+  }
 
   return (
-    <>
+    <Fragment>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.productContainer}>
-          {productList.map((product) => (
+          {data?.products.items.map((product) => (
             <Link
               key={product.uid}
               style={styles.productItem}
@@ -81,7 +72,7 @@ const HorizontalProductList = () => {
         </View>
       </ScrollView>
       <LoadingModal visible={loading} />
-    </>
+    </Fragment>
   )
 }
 
