@@ -41,25 +41,6 @@ export default function RootLayout() {
     }
   }, [loaded])
 
-  useEffect(() => {
-    const getStoredToken = async () => {
-      const storedToken = await getSecureStore("token")
-      if (storedToken) {
-        setToken(storedToken)
-      }
-    }
-
-    const getIds = async () => {
-      const cartId = await getSecureStore("cartId")
-      const wishlistId = await getSecureStore("wishlistId")
-      if (cartId) setCartId(cartId)
-      if (wishlistId) setWishlistId(wishlistId)
-    }
-
-    getStoredToken()
-    getIds()
-  }, [])
-
   if (!loaded) {
     return null
   }

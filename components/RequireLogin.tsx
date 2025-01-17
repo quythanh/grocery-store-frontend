@@ -1,19 +1,22 @@
 import React, { useEffect } from "react"
 import { Colors } from "@/constants/Colors"
+import { useCustomerInformationStore } from "@/store/customerInformationStore"
+import { deleteSecureStore, getSecureStore } from "@/store/secureStore"
 import { useTokenStore } from "@/store/tokenStore"
+import { validateToken } from "@/utils/validateToken"
 import { useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { validateToken } from "@/utils/validateToken"
-import { deleteSecureStore, getSecureStore } from "@/store/secureStore"
-import { useCustomerInformationStore } from "@/store/customerInformationStore"
+
 import type { Customer } from "@/types/customer"
+import { useIdsStore } from "@/store/idsStore"
 
 const RequireLogin = (WrappedComponent: React.ComponentType) => {
   const HOC = (props: any) => {
     const route = useRouter()
     const { token, setToken } = useTokenStore()
     const { setInformationState } = useCustomerInformationStore()
+    const { setCartId, setWishlistId } = useIdsStore()
 
     useEffect(() => {
       if (token) return
@@ -21,17 +24,24 @@ const RequireLogin = (WrappedComponent: React.ComponentType) => {
       const getStoredToken = async () => {
         const storedToken = await getSecureStore("token")
         if (!storedToken) return
-        
+
         const { isValid, ...data } = await validateToken(storedToken)
         if (!isValid) {
           deleteSecureStore("token")
           return
         }
-  
+
         setToken(storedToken)
         setInformationState(data.customer as Customer)
       }
-  
+      const getIds = async () => {
+        const cartId = await getSecureStore("cartId")
+        const wishlistId = await getSecureStore("wishlistId")
+        if (cartId) setCartId(cartId)
+        if (wishlistId) setWishlistId(wishlistId)
+      }
+
+      getIds()
       getStoredToken()
     }, [])
 
