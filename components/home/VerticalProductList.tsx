@@ -42,7 +42,7 @@ const VerticalProductList = () => {
         <View style={styles.productContainer}>
           {productList.map((product) => (
             <View
-              key={product.id}
+              key={product.uid}
               style={[styles.productItem, { width: productWidth }]}
             >
               <View style={{ alignItems: "center" }}>

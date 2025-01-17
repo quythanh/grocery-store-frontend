@@ -10,7 +10,8 @@ import Image from "../Image"
 import LoadingModal from "../LoadingModal"
 
 export interface Product {
-  id: number
+  uid: string
+  sku: string
   name: string
   image: {
     label: string
@@ -59,7 +60,7 @@ const HorizontalProductList = () => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.productContainer}>
           {productList.map((product) => (
-            <View key={product.id} style={styles.productItem}>
+            <View key={product.uid} style={styles.productItem}>
               <Image src={product.image.url} style={styles.productImage} />
               <View style={styles.nameContainer}>
                 <Text

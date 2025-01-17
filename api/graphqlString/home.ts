@@ -18,7 +18,8 @@ export const GET_PRODUCT_LIST_BY_CATEGORY_ID = gql`
       pageSize: $pageSize
     ) {
       items {
-        id
+        uid
+        sku
         image {
           label
           url
@@ -41,7 +42,8 @@ export const GET_PRODUCT_LIST = gql`
   query Products($search: String!) {
     products(search: $search) {
       items {
-        id
+        uid
+        sku
         image {
           label
           url
