@@ -1,14 +1,8 @@
 import { useState } from "react"
 import { Colors } from "@/constants/Colors"
 import { Feather } from "@expo/vector-icons"
-import {
-  Modal,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native"
-import DatePicker from "react-native-neat-date-picker"
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native"
+import DateTimePickerModal from "react-native-modal-datetime-picker"
 
 interface DatePickerInputProps {
   style?: object
@@ -34,14 +28,20 @@ const DatePickerInput = ({ style, onChangeText }: DatePickerInputProps) => {
     return `${month}/${day}/${year}`
   }
 
-  const handleConfirm = (arg: any): void => {
-    const { date } = arg
+  const convertToDate = (dateStr: string) => {
+    const [month, day, year] = dateStr
+      .split("/")
+      .map((part) => parseInt(part, 10))
+    return new Date(year, month - 1, day)
+  }
+
+  const handleConfirm = (date: Date): void => {
+    hideDatePicker()
+
     const formattedDate = formatDate(date)
 
     setDate(formattedDate)
     onChangeText(formattedDate)
-
-    hideDatePicker()
   }
 
   return (
@@ -61,26 +61,22 @@ const DatePickerInput = ({ style, onChangeText }: DatePickerInputProps) => {
           <Feather name="calendar" size={22} color="#000" />
         </View>
       </TouchableOpacity>
-      <Modal
-        visible={isDatePickerVisible}
-        animationType="fade"
-        transparent={true}
-      >
-        <View style={styles.modalContainer}>
-          <DatePicker
-            isVisible={true}
-            mode="single"
-            onCancel={hideDatePicker}
-            onConfirm={handleConfirm}
-            colorOptions={{
-              headerColor: Colors.green,
-              weekDaysColor: Colors.green,
-              selectedDateBackgroundColor: Colors.green,
-              confirmButtonColor: Colors.green,
-            }}
-          />
-        </View>
-      </Modal>
+      <View style={styles.modalContainer}>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          date={date ? convertToDate(date) : new Date()}
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+          modalStyleIOS={{
+            flex: 1,
+            marginBottom: 44,
+          }}
+          pickerComponentStyleIOS={{
+            alignSelf: "center",
+          }}
+        />
+      </View>
     </>
   )
 }
