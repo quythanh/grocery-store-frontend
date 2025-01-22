@@ -2,15 +2,13 @@ import { useEffect, useState } from "react"
 import { Colors } from "@/constants/Colors"
 import { Feather } from "@expo/vector-icons"
 import {
-  Modal,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native"
-import DatePicker from "react-native-neat-date-picker"
+import DateTimePickerModal from "react-native-modal-datetime-picker"
 
 interface DatePickerInputProps {
   value?: string
@@ -54,14 +52,13 @@ const ProfileDatePicker = ({
     return `${year}-${month}-${day}`
   }
 
-  const handleConfirm = (arg: any): void => {
-    const { date } = arg
+  const handleConfirm = (date: Date): void => {
+    hideDatePicker()
+
     const formattedDate = formatDate(date)
 
     setDate(formattedDate)
     onChangeText(formattedDate)
-
-    hideDatePicker()
   }
 
   return (
@@ -76,34 +73,28 @@ const ProfileDatePicker = ({
           placeholder="Date of Birth"
           value={date}
           editable={false}
+          onTouchStart={showDatePicker}
         />
         <View style={{ position: "absolute", right: 10 }}>
           <Feather name="calendar" size={22} color="#000" />
         </View>
       </TouchableOpacity>
-      <Modal
-        visible={isDatePickerVisible}
-        animationType="fade"
-        transparent={true}
-      >
-        <TouchableWithoutFeedback onPress={hideDatePicker}>
-          <View style={styles.modalContainer}>
-            <DatePicker
-              isVisible={true}
-              mode="single"
-              onCancel={hideDatePicker}
-              onConfirm={handleConfirm}
-              colorOptions={{
-                headerColor: Colors.green,
-                weekDaysColor: Colors.green,
-                selectedDateBackgroundColor: Colors.green,
-                confirmButtonColor: Colors.green,
-              }}
-              initialDate={date ? convertToDate(date) : new Date()}
-            />
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
+      <View style={styles.modalContainer}>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          date={date ? convertToDate(date) : new Date()}
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+          modalStyleIOS={{
+            flex: 1,
+            marginBottom: 44,
+          }}
+          pickerComponentStyleIOS={{
+            alignSelf: "center",
+          }}
+        />
+      </View>
     </>
   )
 }
