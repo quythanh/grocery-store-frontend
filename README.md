@@ -58,6 +58,6 @@ Follow these steps to set up the project on your local machine:
 
 ## Contributing
 
-- Tsan Quy Thanh
-- Pham Do Minh Vuong
-- Nguyen Van Canh
+- [Tsan Quy Thanh](https://github.com/quythanh)
+- [Pham Do Minh Vuong](https://github.com/pdmv)
+- [Nguyen Van Canh](https://github.com/nvcan1236)
