@@ -134,54 +134,54 @@ const ProfileScreen = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
       >
-        <TouchableWithoutFeedback
-          onPress={() => {
-            Keyboard.dismiss()
-          }}
-        >
-          <View style={[styles.container, { paddingTop: inset.top }]}>
-            <View style={styles.header}>
-              <View style={styles.headerOptions}>
-                <TouchableOpacity
-                  style={{
-                    width: 40,
-                    height: 40,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  onPress={handleBack}
-                >
-                  <Feather name="chevron-left" size={30} color="#fff" />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    width: 40,
-                    height: 40,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  onPress={handleLogOut}
-                >
-                  <Feather name="log-out" size={30} color="#fff" />
-                </TouchableOpacity>
-              </View>
+        <View style={[styles.container, { paddingTop: inset.top }]}>
+          <View style={styles.header}>
+            <View style={styles.headerOptions}>
+              <TouchableOpacity
+                style={{
+                  width: 40,
+                  height: 40,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onPress={handleBack}
+              >
+                <Feather name="chevron-left" size={30} color="#fff" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  width: 40,
+                  height: 40,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onPress={handleLogOut}
+              >
+                <Feather name="log-out" size={30} color="#fff" />
+              </TouchableOpacity>
             </View>
+          </View>
 
-            <View style={styles.body}>
-              <View style={styles.avatarContainer}>
-                <Image
-                  source={{
-                    uri: "https://static.wixstatic.com/media/53e8bb_a1e88e551162485eb4ff962437300872~mv2.jpeg/v1/crop/x_0,y_105,w_1024,h_919/fill/w_840,h_754,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Banana.jpeg",
-                  }}
-                  style={styles.avatar}
-                />
-              </View>
-              <Text style={styles.fullname}>
-                {informationState.firstname} {informationState.lastname}
-              </Text>
+          <View style={styles.body}>
+            <View style={styles.avatarContainer}>
+              <Image
+                source={{
+                  uri: "https://static.wixstatic.com/media/53e8bb_a1e88e551162485eb4ff962437300872~mv2.jpeg/v1/crop/x_0,y_105,w_1024,h_919/fill/w_840,h_754,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Banana.jpeg",
+                }}
+                style={styles.avatar}
+              />
+            </View>
+            <Text style={styles.fullname}>
+              {informationState.firstname} {informationState.lastname}
+            </Text>
 
-              <View style={styles.seperateLine} />
+            <View style={styles.seperateLine} />
 
+            <TouchableWithoutFeedback
+              onPress={() => {
+                Keyboard.dismiss()
+              }}
+            >
               <ScrollView
                 style={[styles.formContainer]}
                 showsVerticalScrollIndicator={false}
@@ -220,9 +220,9 @@ const ProfileScreen = () => {
                 />
                 <View style={{ height: Platform.OS === "ios" ? 100 : 20 }} />
               </ScrollView>
-            </View>
+            </TouchableWithoutFeedback>
           </View>
-        </TouchableWithoutFeedback>
+        </View>
       </KeyboardAvoidingView>
       <LoadingModal visible={loading || updateLoading} />
     </Fragment>
