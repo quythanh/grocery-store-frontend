@@ -35,3 +35,18 @@ export const GET_DETAIL_PRODUCT = gql`
     }
   }
 `
+export const SEARCH_PRODUCT = gql`
+  query Products($key: String) {
+    products(search: $key) {
+      items {
+        id
+        image {
+          label
+          url
+        }
+        name
+        sku
+      }
+    }
+  }
+`
